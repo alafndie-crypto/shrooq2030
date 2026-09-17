@@ -205,18 +205,41 @@ border-radius:24px;padding:22px 24px;margin-bottom:15px;box-shadow:0 18px 45px #
 .stage-dot{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:#eee8df;color:#746b61;font-weight:800}
 .stage small{font-size:8px;color:#9a9086}.stage.done{background:#edf7f2;border-color:#d2eadf;color:#2d7256}.stage.done .stage-dot{background:#3d8a68;color:#fff}.stage.current{background:#fff7e4;border-color:#dfc57e;color:#765c20;box-shadow:0 5px 15px #c5a04d1c}.stage.current .stage-dot{background:var(--gold);color:#fff}
 
+
+/* ===== order form sections ===== */
+.fs{border:1px solid var(--line);background:var(--surface2);border-radius:17px;padding:13px 15px;margin-bottom:12px}
+.fs>summary{cursor:pointer;font-weight:800;font-size:14px;color:var(--ink);list-style:none;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fs>summary::-webkit-details-marker{display:none}
+.fs>summary:before{content:"\25BE";color:var(--gold);font-size:13px;transition:.2s;display:inline-block}
+.fs:not([open])>summary:before{transform:rotate(90deg)}
+.fs>summary .hint{font-weight:400;font-size:10px;color:var(--muted)}
+.fs .form{margin-top:13px}
+.fs[open]{box-shadow:0 6px 18px rgba(42,29,15,.04)}
+.pick{background:#fff;border:1px dashed var(--gold);border-radius:14px;padding:11px;margin-top:12px;display:grid;grid-template-columns:2fr 1fr;gap:10px;align-items:end}
+.pick .btn{width:100%}
+.readonly-box{border:1px solid #ded5ca;background:#f3efe8;border-radius:11px;padding:10px 11px;font-weight:800;color:#7a6528}
+.prod-pick{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px}
+.prod-pick img{width:96px;height:96px;object-fit:cover;border-radius:12px;background:#eee8df}
+.prod-pick .ph{width:96px;height:96px;border-radius:12px;background:#f1ece4;display:grid;place-items:center;font-size:10px;color:var(--muted);text-align:center}
+.prod-pick .meta{font-size:11px;color:var(--muted);margin-top:4px}
+.sumbar{position:sticky;bottom:-2px;background:linear-gradient(180deg,#fdfbf8cc,#fdfbf8);backdrop-filter:blur(6px);padding:11px 0 2px;margin-top:13px;border-top:1px solid var(--line);z-index:6}
+.sumbar .mini-grid{grid-template-columns:repeat(6,1fr)}
+.sumbar .mini{background:#fff;border:1px solid var(--line);font-weight:800;font-size:13px}
+@media(max-width:900px){.sumbar .mini-grid{grid-template-columns:repeat(3,1fr)}.pick{grid-template-columns:1fr}}
+@media(max-width:560px){.sumbar .mini-grid{grid-template-columns:repeat(2,1fr)}.prod-pick{flex-direction:column}}
+
 /* mobile */
 @media(max-width:1120px){
 .grid{grid-template-columns:repeat(2,1fr)}
 .product-grid{grid-template-columns:repeat(3,1fr)}
 }
 @media(max-width:1100px){
-.side{position:fixed;right:0;left:0;bottom:auto;width:100%;height:auto;padding:9px 10px}
+.side{position:fixed;right:0;left:auto;top:0;bottom:0;width:84px;height:100vh;height:100dvh;padding:10px 5px;overflow-y:auto;overflow-x:hidden}
 .brand{display:none}
-.nav{display:flex;overflow:auto;margin:0;gap:4px}
-.nav button{min-width:max-content;padding:9px 10px}
-.nav .ico{width:auto}
-.main{margin:63px 0 0;width:100%;padding:15px}
+.nav{display:grid;gap:6px;margin-top:4px}
+.nav button{flex-direction:column;gap:4px;padding:10px 3px;text-align:center;border-radius:11px;font-size:9.5px;line-height:1.25}
+.nav .ico{width:auto;font-size:17px}
+.main{margin:0 84px 0 0;width:calc(100% - 84px);padding:15px}
 .top{margin:-15px -15px 16px;padding:13px 15px}
 .title h1{font-size:22px}
 .two,.three,.form{grid-template-columns:1fr}
@@ -235,26 +258,14 @@ border-radius:24px;padding:22px 24px;margin-bottom:15px;box-shadow:0 18px 45px #
 /* Strong responsive layout for phones, tablets and "Desktop site" browsers */
 @media(max-width:1100px){
   html,body{width:100%;max-width:100%;overflow-x:hidden}
-  .app{display:block;width:100%;min-width:0}
-  .side{position:sticky;top:0;right:auto;left:auto;bottom:auto;width:100%;height:auto;max-height:none;padding:8px 10px;z-index:90;border-left:0;border-bottom:1px solid #ffffff14;box-shadow:0 8px 24px rgba(0,0,0,.16)}
-  .brand{display:none}
-  .nav{display:flex;overflow-x:auto;overflow-y:hidden;margin:0;gap:5px;padding:1px 0 3px;scrollbar-width:none}
-  .nav::-webkit-scrollbar{display:none}
-  .nav button{flex:0 0 auto;min-width:max-content;padding:9px 11px;white-space:nowrap;font-size:12px}
-  .nav .ico{width:auto}
-  .main{margin:0;width:100%;max-width:100%;padding:15px}
-  .top{position:sticky;top:57px;margin:-15px -15px 16px;padding:12px 15px}
-  .title h1{font-size:21px}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .two,.three,.form{grid-template-columns:1fr}
-  .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .app{width:100%;min-width:0}
   .card{min-width:0}
 }
 @media(max-width:560px){
-  .side{padding:7px 8px}
-  .nav button{padding:8px 9px;font-size:11px}
-  .top{top:50px}
+  .side{width:68px;padding:8px 4px}
+  .main{margin:0 68px 0 0;width:calc(100% - 68px)}
+  .nav button{padding:8px 2px;font-size:8.5px}
+  .nav .ico{font-size:15px}
   .grid,.product-grid,.quick-grid{grid-template-columns:1fr}
   .toolbar input{min-width:0}
   .actions .btn{flex:1;min-width:120px}
@@ -353,6 +364,7 @@ let arrow=cm.profit>=pm.profit?'▲':'▼';
 let needsFollowUp=late.length+due.length;
 let active=activeOrdersCount(), completed=completedOrdersCount();
 return `<div class="greet-hero"><div><h2>🌷 ${greetingWord()}، ${esc(S.settings.owner)}</h2><p>${arabicFullDate()} — لديك <b>${active}</b> طلب نشط الآن</p><div class="quick-grid"><button class="btn" onclick="openOrder()">＋ طلب جديد</button><button class="btn" onclick="setPage('products')">✦ إضافة منتج</button><button class="btn" onclick="setPage('payments')">﷼ تسجيل دفعة</button><button class="btn" onclick="setPage('reports')">◫ التقارير</button></div></div><div class="hero-mark">✦</div></div>
+${backupReminderHtml()}
 ${needsFollowUp?`<div class="notice danger" style="margin-bottom:15px">⚠️ لديك <b>${needsFollowUp}</b> طلب${needsFollowUp>1?'ات':''} تحتاج متابعة الآن — ${late.length} متأخر و${due.length} موعده اليوم. <button class="btn" style="float:left;padding:5px 9px" onclick="setPage('orders')">مراجعة</button></div>`:`<div class="notice success" style="margin-bottom:15px">✅ لا توجد طلبات تحتاج متابعة عاجلة الآن — عمل ممتاز!</div>`}
 <div class="grid">
 ${kpi('إجمالي المبيعات',fmt(sales),'صافي القيمة بعد الخصومات')}${kpi('إجمالي الطلبات',S.orders.length,active+' نشط • '+completed+' مكتمل')}${kpi('مبالغ متبقية على العميلات',fmt(remain),fmt(paid)+' تم تحصيله')}${kpi('صافي الربح',fmt(profit),arrow+' '+Math.abs(pct).toFixed(0)+'% عن الشهر الماضي')}
@@ -385,8 +397,8 @@ function activeOrdersCount(){return S.orders.filter(o=>!/مكتمل|ملغي|م�
 function completedOrdersCount(){return S.orders.filter(o=>/مكتمل|تم التسليم/.test(o.status||'')).length}
 function todayOrders(){let t=today();return S.orders.filter(o=>dateOnly(o.date)===t||dateOnly(o.createdAt)===t).sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''))}
 function todayOrdersHtml(){let a=todayOrders();if(!a.length)return '<div class="empty">لا توجد طلبات مسجلة اليوم بعد.</div>';return a.map(o=>`<div class="today-card"><div><b>${esc(o.no)}</b> — ${esc(o.customerName)}<div class="meta">${esc(o.productName||'')} ${status(o.status)}</div></div><div style="text-align:left"><div class="today-time">${timeStr(o.createdAt)}</div><div class="meta" style="margin-top:4px">${fmt(o.net)}</div></div></div>`).join('')}
-function notifCount(){let a=getFactoryAlerts();return a.filter(x=>x.kind==='late'||x.kind==='due').length}
-function notifPanelHtml(){let a=getFactoryAlerts();if(!a.length)return '<h4>التنبيهات</h4><div class="empty" style="padding:18px 8px">لا توجد تنبيهات حالية ✅</div>';return '<h4>التنبيهات</h4>'+a.slice(0,15).map(o=>{let text=o.kind==='late'?`متأخر ${o.daysLate} يوم`:o.kind==='due'?'موعد التجهيز اليوم':`متبقي ${o.daysLeft} يوم`;return `<div class="notice ${o.kind==='late'?'danger':o.kind==='due'?'':'info'}" style="margin:6px 0;cursor:pointer" onclick="toggleNotif();openOrder('${o.id}')"><b>${esc(o.no)}</b> — ${esc(o.customerName)}<br>${text}</div>`}).join('')}
+function notifCount(){let a=getFactoryAlerts();let d=daysSinceBackup();return a.filter(x=>x.kind==='late'||x.kind==='due').length+((d===null||d>=7)?1:0)}
+function notifPanelHtml(){let a=getFactoryAlerts();let d=daysSinceBackup();let backupNote=(d===null||d>=7)?`<div class="notice danger" style="margin:6px 0;cursor:pointer" onclick="toggleNotif();setPage('settings')">💾 <b>${backupStatusText()}</b> — يفضّل أخذ نسخة احتياطية الآن</div>`:'';if(!a.length)return '<h4>التنبيهات</h4>'+backupNote+(backupNote?'':'<div class="empty" style="padding:18px 8px">لا توجد تنبيهات حالية ✅</div>');return '<h4>التنبيهات</h4>'+backupNote+a.slice(0,15).map(o=>{let text=o.kind==='late'?`متأخر ${o.daysLate} يوم`:o.kind==='due'?'موعد التجهيز اليوم':`متبقي ${o.daysLeft} يوم`;return `<div class="notice ${o.kind==='late'?'danger':o.kind==='due'?'':'info'}" style="margin:6px 0;cursor:pointer" onclick="toggleNotif();openOrder('${o.id}')"><b>${esc(o.no)}</b> — ${esc(o.customerName)}<br>${text}</div>`}).join('')}
 function toggleNotif(){let p=document.getElementById('notifPanel');if(!p)return;let open=p.classList.toggle('open');if(open)p.innerHTML=notifPanelHtml()}
 function refreshNotifBadge(){let el=document.getElementById('notifBadge');if(!el)return;let c=notifCount();if(c){el.style.display='grid';el.textContent=c>9?'9+':c}else{el.style.display='none'}}
 document.addEventListener('click',e=>{let w=document.querySelector('.notif-wrap');if(w&&!w.contains(e.target))document.getElementById('notifPanel')?.classList.remove('open')});
@@ -401,7 +413,7 @@ function recent(){let a=S.orders.slice().sort((x,y)=>(y.createdAt||'').localeCom
 function alerts(){let a=S.orders.filter(o=>Number(o.remaining||0)>0||/بانتظار|قيد|جديد|جاهز/.test(o.status||'')).slice(0,10);return a.length?a.map(o=>`<div class="notice" style="margin:7px 0"><b>${esc(o.no)}</b> — ${esc(o.customerName)}<br>${status(o.status)} ${Number(o.remaining||0)>0?' • متبقي '+fmt(o.remaining):''}</div>`).join(''):'<div class="empty">لا توجد تنبيهات حالية.</div>'}
 
 function orders(){return `<div class="card"><div class="toolbar no-print"><input id="oq" placeholder="بحث برقم الطلب، العميل، الجوال، المنتج، الشحنة..."><select id="of"><option value="">كل الحالات</option></select><select id="op"><option value="">كل الدفعات</option><option value="paid">مدفوع بالكامل</option><option value="remain">عليه متبقي</option></select><button class="btn" onclick="window.print()">طباعة / PDF</button><button class="btn primary" onclick="openOrder()">+ طلب</button></div><div id="ordersT"></div></div>`}
-async function drawOrders(){let q=(document.getElementById('oq')?.value||'').toLowerCase(),f=document.getElementById('of')?.value||'',p=document.getElementById('op')?.value||'';let a=S.orders.filter(o=>{let t=[o.no,o.customerName,o.phone,o.productName,o.shipmentNo,o.supplier].join(' ').toLowerCase();return(!q||t.includes(q))&&(!f||o.status===f)&&(!p||(p==='paid'?o.remaining<=0:o.remaining>0))});document.getElementById('ordersT').innerHTML=a.length?`<div class="table-wrap"><table><thead><tr><th>الطلب</th><th>التاريخ</th><th>العميلة</th><th>المنتج</th><th>المصنع</th><th>التكلفة</th><th>الصافي</th><th>المدفوع</th><th>المتبقي</th><th>الحالة</th><th>الشحنة</th><th></th></tr></thead><tbody>${a.map(o=>`<tr><td>${esc(o.no)}</td><td>${esc(o.date)}</td><td>${esc(o.customerName)}<br>${esc(o.phone)}</td><td>${esc(o.productName)}<br>${esc(o.specs)}</td><td>${esc(o.supplier)}</td><td>${fmt(o.totalCost)}</td><td>${fmt(o.net)}</td><td>${fmt(o.paid)}</td><td>${fmt(o.remaining)}</td><td>${status(o.status)}</td><td>${esc(o.shipmentNo||'—')}</td><td><button class="btn" onclick="openOrder('${o.id}')">فتح</button><button class="btn blue" onclick="customerTrackingPrint('${o.id}')">متابعة PDF</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">لا توجد نتائج.</div>'}
+async function drawOrders(){let q=(document.getElementById('oq')?.value||'').toLowerCase(),f=document.getElementById('of')?.value||'',p=document.getElementById('op')?.value||'';let a=S.orders.filter(o=>{let t=[o.no,o.customerName,o.phone,o.productName,o.shipmentNo,o.supplier].join(' ').toLowerCase();return(!q||t.includes(q))&&(!f||o.status===f)&&(!p||(p==='paid'?o.remaining<=0:o.remaining>0))});document.getElementById('ordersT').innerHTML=a.length?`<div class="table-wrap"><table><thead><tr><th>الطلب</th><th>التاريخ</th><th>العميلة</th><th>المنتج</th><th>المصنع</th><th>التكلفة</th><th>الخصم</th><th>الصافي</th><th>الربح</th><th>المدفوع</th><th>المتبقي</th><th>الحالة</th><th>الشحنة</th><th></th></tr></thead><tbody>${a.map(o=>`<tr><td>${esc(o.no)}</td><td>${esc(o.date)}</td><td>${esc(o.customerName)}<br>${esc(o.phone)}</td><td>${esc(o.productName)}<br>${esc(o.specs)}</td><td>${esc(o.supplier)}</td><td>${fmt(o.totalCost)}</td><td>${Number(o.discount||0)>0?'<b style=\"color:#a33d38\">− '+fmt(o.discount)+'</b>':'—'}</td><td>${fmt(o.net)}</td><td class=\"${Number(o.profit||0)>=0?'profit-positive':'profit-negative'}\">${fmt(o.profit)}</td><td>${fmt(o.paid)}</td><td>${fmt(o.remaining)}</td><td>${status(o.status)}</td><td>${esc(o.shipmentNo||'—')}</td><td><button class="btn" onclick="openOrder('${o.id}')">فتح</button><button class="btn blue" onclick="customerTrackingPrint('${o.id}')">متابعة PDF</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">لا توجد نتائج.</div>'}
 
 const STAGES=[
  {key:'new',label:'طلب جديد',status:'جديد',date:'orderDate'},
@@ -417,33 +429,254 @@ const STAGES=[
 ];
 function stageIndex(o){let i=STAGES.findIndex(x=>x.status===o.status);if(i<0){if(o.status==='بانتظار الدفع')return 0;if(o.status==='مؤكد')return 1;if(o.status==='قيد التصنيع')return 3;if(o.status==='جاهز للشحن')return 5;if(o.status==='تم الشحن')return 7}return i}
 function stageTracker(o){let idx=stageIndex(o);return `<div class="stage-wrap"><div class="stage-title"><div><b>مسار الطلب</b><span>غيّري المرحلة بضغطة واحدة وسيحفظ النظام تاريخها في سجل الطلب.</span></div><span class="badge info">المرحلة الحالية: ${esc(o.status||'جديد')}</span></div><div class="stage-track">${STAGES.map((st,i)=>`<button type="button" class="stage ${i<idx?'done':''} ${i===idx?'current':''}" onclick="advanceStage('${o.id}','${st.key}')"><span class="stage-dot">${i<idx?'✓':i+1}</span><span>${esc(st.label)}</span>${o[st.date]?`<small>${esc(o[st.date])}</small>`:''}</button>`).join('')}</div></div>`}
-async function openOrder(oid){
- let o=S.orders.find(x=>x.id===oid)||{id:id('ord'),no:'LW-'+String(S.orders.length+1).padStart(5,'0'),date:today(),orderDate:today(),qty:1,status:'جديد',productType:'باروكة',factoryStatus:'لم يُكلّف',paymentMethod:'تحويل بنكي',createdAt:new Date().toISOString()};
- let [st,fs,tp,ch,pm,sh,sups]=await Promise.all([opts('حالات الطلب',o.status),opts('حالات المصنع',o.factoryStatus),opts('أنواع المنتجات',o.productType),opts('قنوات الطلب',o.channel),opts('طرق الدفع',o.paymentMethod),opts('شركات الشحن',o.shipmentCompany),supplierOptions(o.supplier)]);
- modal(oid?'إدارة الطلب '+o.no:'إنشاء طلب جديد',`${stageTracker(o)}${o.expectedDate&&stageIndex(o)<4?`<div class="notice ${dateOnly(o.expectedDate)<today()?'danger':'info'}" style="margin-bottom:12px"><b>موعد تجهيز المصنع:</b> ${esc(o.expectedDate)} ${dateOnly(o.expectedDate)<today()?`— متأخر ${daysBetween(o.expectedDate,today())} يوم`:`— متبقّي ${daysBetween(today(),o.expectedDate)} يوم`}</div>`:''}<div class="order-layout"><div class="order-side-tabs tabs no-print"><button class="tab active" onclick="this.classList.add('active')">بيانات الطلب</button><button class="tab" type="button" onclick="setPage('payments');closeModal()">الدفعات</button></div><div class="order-main"><form id="orderF" class="form">
-${fld('رقم الطلب','no',o.no,true)}${fld('تاريخ الطلب','date',o.date||today(),'date')}${sel('قناة الطلب','channel',ch)}
-${fld('اسم العميل','customerName',o.customerName,true)}${fld('الجوال','phone',o.phone)}${fld('المدينة','city',o.city)}
-${fld('المنتج / الباروكة','productName',o.productName,true)}${sel('نوع المنتج','productType',tp)}${fld('الموديل والمواصفات','specs',o.specs)}
-${fld('الكمية','qty',o.qty||1,'number')}${sel('الشركة / المصنع','supplier',sups)}${fld('رقم طلب المصنع','factoryOrderNo',o.factoryOrderNo)}
-${fld('تاريخ التكليف','assignedDate',o.assignedDate,'date')}${fld('مدة التجهيز المتوقعة (يوم)','productionDays',o.productionDays||7,'number')}${fld('موعد التجهيز المتوقع من المصنع','expectedDate',o.expectedDate,'date')}${sel('حالة المصنع','factoryStatus',fs)}
-${fld('تاريخ بداية التفصيل','productionStartDate',o.productionStartDate,'date')}${fld('تاريخ اكتمال التفصيل','productionEndDate',o.productionEndDate,'date')}${fld('تاريخ شحن المصنع','factoryShippedDate',o.factoryShippedDate,'date')}
-${fld('شركة شحن المصنع → شروق','factoryShipmentCompany',o.factoryShipmentCompany)}${fld('رقم شحنة المصنع','factoryShipmentNo',o.factoryShipmentNo)}${fld('رابط تتبع شحنة المصنع','factoryTrackingUrl',o.factoryTrackingUrl)}
-${fld('تاريخ استلام شروق','receivedDate',o.receivedDate,'date')}${fld('تاريخ شحن للعميلة','customerShippedDate',o.customerShippedDate,'date')}${fld('شركة شحن شروق → العميلة','customerShipmentCompany',o.customerShipmentCompany)}
-${fld('رقم الشحنة للعميلة','customerShipmentNo',o.customerShipmentNo)}${fld('رابط التتبع للعميلة','customerTrackingUrl',o.customerTrackingUrl)}${fld('تاريخ التسليم','deliveredDate',o.deliveredDate,'date')}
-${fld('تاريخ اكتمال الطلب','completedDate',o.completedDate,'date')}${fld('تاريخ الدفع الكامل','paymentDate',o.paymentDate,'date')}${sel('حالة الطلب','status',st)}
-${fld('تكلفة المنتج','costProduct',o.costProduct||0,'number')}${fld('شحن المصنع','factoryShipping',o.factoryShipping||0,'number')}${fld('التغليف','packaging',o.packaging||0,'number')}
-${fld('الشحن المحلي','localShipping',o.localShipping||0,'number')}${fld('مصاريف الطلب الأخرى','otherCost',o.otherCost||0,'number')}${fld('سعر المنتج للعميل','productPrice',o.productPrice||0,'number')}
-${fld('رسوم الشحن على العميل','customerShipping',o.customerShipping||0,'number')}${fld('الخصم','discount',o.discount||0,'number')}${fld('رسوم الدفع','paymentFees',o.paymentFees||0,'number')}
-${sel('طريقة الدفع','paymentMethod',pm)}${fld('المبلغ المدفوع سابقًا','paidLegacy',o.paid||0,'number')}${sel('شركة الشحن (قديمة)','shipmentCompany',sh)}
-${fld('رقم الشحنة (قديمة)','shipmentNo',o.shipmentNo)}${fld('رابط التتبع (قديم)','trackingUrl',o.trackingUrl)}${fld('العنوان','address',o.address)}
-<div class="field full"><label>ملاحظات داخلية</label><textarea name="internalNotes" rows="3">${esc(o.internalNotes||'')}</textarea></div><div class="field full"><label>ملاحظات للعميلة</label><textarea name="notes" rows="3">${esc(o.notes||'')}</textarea></div>
-<div class="field full"><div class="mini-grid"><div class="mini"><b>إجمالي التكلفة</b>${fmt(o.totalCost)}</div><div class="mini"><b>صافي الطلب</b>${fmt(o.net)}</div><div class="mini"><b>المدفوع</b>${fmt(o.paid)}</div><div class="mini"><b>المتبقي</b>${fmt(o.remaining)}</div></div></div>
-<div class="actions full"><button class="btn primary">حفظ الطلب</button><button class="btn gold" type="button" onclick="openPaymentForOrder('${o.id}')">+ تسجيل دفعة</button><button class="btn" type="button" onclick="printOrder('${o.id}')">فاتورة العميلة PDF</button><button class="btn blue" type="button" onclick="customerTrackingPrint('${o.id}')">متابعة الشحنة PDF</button>${oid?`<button class="btn danger" type="button" onclick="deleteOrder('${o.id}')">حذف</button>`:''}</div></form><div class="section"><h3>سجل الأحداث والانتقالات</h3><div id="orderTimeline">${await timeline(o.id)}</div></div></div></div>`);
- document.getElementById('orderF').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));for(let k of ['qty','productionDays','costProduct','factoryShipping','packaging','localShipping','otherCost','productPrice','customerShipping','discount','paymentFees','paidLegacy'])x[k]=Number(x[k]||0);if(x.assignedDate&&x.productionDays>0&&!x.expectedDate)x.expectedDate=addDays(x.assignedDate,x.productionDays);x.totalCost=x.costProduct+x.factoryShipping+x.packaging+x.localShipping+x.otherCost;x.net=Math.max(0,x.productPrice+x.customerShipping-x.discount);x.paid=sum(S.payments.filter(p=>p.orderId===o.id),'amount')||x.paidLegacy;x.remaining=Math.max(0,x.net-x.paid);x.profit=x.net-x.totalCost-x.paymentFees;x.id=o.id;x.createdAt=o.createdAt||new Date().toISOString();x.customerId=o.customerId||id('cus');x.orderDate=x.date||today();
- if(x.paid>=x.net&&x.net>0&&!x.paymentDate)x.paymentDate=today(); await put('orders',x);await syncCustomer(x);await event(x.id,'تم حفظ/تحديث بيانات الطلب — '+x.status);closeModal();await load();render();toast('تم حفظ الطلب')};
+function r2(n){return Math.round((Number(n)||0)*100)/100}
+function nextOrderNo(){let mx=0;for(let o of S.orders){let m=/(\d+)\s*$/.exec(String(o.no||''));if(m)mx=Math.max(mx,Number(m[1]))}return 'LW-'+String(mx+1).padStart(5,'0')}
+function orderCustomerOptions(selId){return '<option value="">— عميلة جديدة (إدخال يدوي) —</option>'+S.customers.slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'ar')).map(c=>`<option value="${c.id}" ${c.id===selId?'selected':''}>${esc(c.name||'بدون اسم')}${c.phone?' — '+esc(c.phone):''}${c.city?' — '+esc(c.city):''}</option>`).join('')}
+function orderProductOptions(selId){return '<option value="">— إدخال يدوي —</option>'+S.products.slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'ar')).map(p=>`<option value="${p.id}" ${p.id===selId?'selected':''}>${esc(p.name||'بدون اسم')}${p.model?' — '+esc(p.model):''}${p.color?' — '+esc(p.color):''}${p.length?' — '+esc(p.length):''} • ${fmt(p.price)}</option>`).join('')}
+function ofld(n){let f=document.getElementById('orderF');return f?f.querySelector('[name="'+n+'"]'):null}
+function oval(n){let e=ofld(n);return e?Number(e.value||0):0}
+function otxt(n){let e=ofld(n);return e?e.value:''}
+function oset(n,v){let e=ofld(n);if(e&&(v!==undefined&&v!==null))e.value=v}
+
+function applyCustomerToOrder(cid){
+ let box=document.getElementById('custInfo');
+ if(!cid){if(box)box.innerHTML='<div class="notice">عميلة جديدة — عبّئي البيانات يدويًا وسيتم إنشاء ملف لها تلقائيًا عند الحفظ.</div>';return}
+ let c=S.customers.find(x=>x.id===cid);if(!c)return;
+ oset('customerName',c.name||'');oset('phone',c.phone||'');oset('city',c.city||'');oset('address',c.address||'');
+ if(ofld('customerPrefs'))oset('customerPrefs',c.notes||'');
+ if(box){
+  let os=S.orders.filter(x=>x.customerId===cid);
+  let remain=os.reduce((t,x)=>t+Math.max(0,Number(x.net||0)-orderPaid(x.id)),0);
+  let last=os.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')))[0];
+  box.innerHTML=`<div class="notice info">🧾 طلبات سابقة: <b>${os.length}</b> · المتبقي عليها: <b>${fmt(remain)}</b>${last?` · آخر طلب: ${esc(last.no)} (${esc(last.date||'')}) — ${esc(last.productName||'')}`:''}${c.notes?`<br>💡 تفضيلاتها: ${esc(c.notes)}`:''}</div>`;
+ }
+ recalcOrderForm();
 }
+
+async function quickSaveCustomer(){
+ let name=(otxt('customerName')||'').trim();
+ if(!name){toast('اكتبي اسم العميلة أولًا');return}
+ let phone=(otxt('phone')||'').trim();
+ let cid=otxt('customerId');
+ let c=S.customers.find(x=>x.id===cid)||(phone?S.customers.find(x=>x.phone===phone):null)||{id:id('cus'),createdAt:new Date().toISOString()};
+ let isNew=!S.customers.find(x=>x.id===c.id);
+ c.name=name;c.phone=phone;c.city=otxt('city');c.address=otxt('address');
+ let pr=otxt('customerPrefs');if(pr)c.notes=pr;
+ await put('customers',c);await load();
+ let selEl=ofld('customerId');if(selEl)selEl.innerHTML=orderCustomerOptions(c.id);
+ applyCustomerToOrder(c.id);
+ toast(isNew?'تمت إضافة ملف العميلة':'تم تحديث ملف العميلة');
+}
+
+function applyProductToOrder(pid){
+ let prev=document.getElementById('prodPreview');
+ if(!pid){if(prev)prev.innerHTML='';return}
+ let p=S.products.find(x=>x.id===pid);if(!p)return;
+ oset('productName',p.name||'');
+ let tsel=ofld('productType');if(tsel&&p.type){tsel.value=p.type;if(tsel.value!==p.type){tsel.insertAdjacentHTML('beforeend',`<option selected>${esc(p.type)}</option>`)}}
+ oset('model',p.model||'');oset('hairLength',p.length||'');oset('color',p.color||'');oset('size',p.size||'');oset('material',p.material||'');oset('density',p.density||'');
+ let sp=[p.model,p.length,p.color,p.size,p.density,p.material].filter(Boolean).join(' · ');
+ if(sp)oset('specs',sp);
+ oset('unitPrice',r2(p.price));
+ if(!oval('unitCost'))oset('unitCost',r2(p.cost));
+ if(prev)prev.innerHTML=`<div class="prod-pick">${p.image?`<img src="${p.image}" alt="">`:'<div class="ph">لا توجد صورة</div>'}<div><b>${esc(p.name||'')}</b><div class="meta">${esc(sp||'—')}</div><div class="meta">سعر الكتالوج: <b>${fmt(p.price)}</b> · التكلفة: ${fmt(p.cost)}</div>${p.description?`<div class="meta">${esc(p.description)}</div>`:''}</div></div>`;
+ recalcOrderForm();
+}
+
+function setDiscountPercent(v){let t=ofld('discountType');if(t)t.value='percent';oset('discountValue',v);recalcOrderForm()}
+function calcExpectedDate(){let a=otxt('assignedDate');let d=oval('productionDays');if(!a){toast('حددي تاريخ التكليف أولًا');return}oset('expectedDate',addDays(a,d||7));recalcOrderForm();toast('تم حساب موعد التجهيز')}
+
+function recalcOrderForm(){
+ let f=document.getElementById('orderF');if(!f)return;
+ let qty=Math.max(1,oval('qty')||1);
+ let unitPrice=oval('unitPrice'),gross=r2(unitPrice*qty),ship=oval('customerShipping');
+ let dType=otxt('discountType')||'amount',dVal=oval('discountValue');
+ let discount=dType==='percent'?r2((gross+ship)*dVal/100):r2(dVal);
+ if(discount>gross+ship)discount=gross+ship;
+ let net=Math.max(0,r2(gross+ship-discount));
+ let cost=r2(oval('unitCost')*qty+oval('factoryShipping')+oval('packaging')+oval('localShipping')+oval('otherCost'));
+ let fees=oval('paymentFees');
+ let paid=Number(f.dataset.paid||0)||oval('paidLegacy');
+ let remaining=Math.max(0,r2(net-paid));
+ let profit=r2(net-cost-fees);
+ let margin=net>0?Math.round(profit/net*100):0;
+ const P=(elid,val,cls)=>{let e=document.getElementById(elid);if(e){e.textContent=val;if(cls!==undefined)e.className=cls}};
+ P('sumGross',fmt(gross+ship));P('sumDiscount',discount>0?'− '+fmt(discount):fmt(0));
+ P('sumNet',fmt(net));P('sumPaid',fmt(paid));P('sumRemain',fmt(remaining));
+ P('sumProfit',fmt(profit)+(net>0?` (${margin}%)`:''),profit>=0?'profit-positive':'profit-negative');
+ P('sumCost',fmt(cost));
+ let dl=document.getElementById('discLabel');if(dl)dl.textContent=dType==='percent'?'قيمة الخصم (%)':'قيمة الخصم ('+(S.settings.currency||'ر.س')+')';
+ let lp=document.getElementById('lineTotal');if(lp)lp.textContent=fmt(gross);
+}
+
+async function openOrder(oid){
+ let o=S.orders.find(x=>x.id===oid)||{id:id('ord'),no:nextOrderNo(),date:today(),orderDate:today(),qty:1,status:'جديد',productType:'باروكة',factoryStatus:'لم يُكلّف',paymentMethod:'تحويل بنكي',productionDays:7,createdAt:new Date().toISOString()};
+ let [st,fs,tp,ch,pm,sh,sups]=await Promise.all([opts('حالات الطلب',o.status),opts('حالات المصنع',o.factoryStatus),opts('أنواع المنتجات',o.productType),opts('قنوات الطلب',o.channel),opts('طرق الدفع',o.paymentMethod),opts('شركات الشحن',o.customerShipmentCompany||o.shipmentCompany),supplierOptions(o.supplier)]);
+ let qty=Math.max(1,Number(o.qty||1));
+ let unitPrice=Number(o.unitPrice!==undefined?o.unitPrice:r2(Number(o.productPrice||0)/qty));
+ let unitCost=Number(o.unitCost!==undefined?o.unitCost:r2(Number(o.costProduct||0)/qty));
+ let dType=o.discountType||'amount';
+ let dVal=o.discountValue!==undefined?o.discountValue:Number(o.discount||0);
+ let paidNow=orderPaid(o.id)||Number(o.paid||0);
+ let cur=esc(S.settings.currency||'ر.س');
+ let prefs=o.customerPrefs||(S.customers.find(c=>c.id===o.customerId)||{}).notes||'';
+
+ modal(oid?'إدارة الطلب '+o.no:'إنشاء طلب جديد',`${stageTracker(o)}${o.expectedDate&&stageIndex(o)<4?`<div class="notice ${dateOnly(o.expectedDate)<today()?'danger':'info'}" style="margin-bottom:12px"><b>موعد تجهيز المصنع:</b> ${esc(o.expectedDate)} ${dateOnly(o.expectedDate)<today()?`— متأخر ${daysBetween(o.expectedDate,today())} يوم`:`— متبقّي ${daysBetween(today(),o.expectedDate)} يوم`}</div>`:''}
+<form id="orderF" data-paid="${paidNow}">
+
+<details class="fs" open><summary>👤 بيانات العميلة <span class="hint">اختاري عميلة مسجلة لتعبئة بياناتها تلقائيًا</span></summary>
+ <div class="pick">
+  <div class="field"><label>اختيار عميلة مسجلة</label><select name="customerId" onchange="applyCustomerToOrder(this.value)">${orderCustomerOptions(o.customerId)}</select></div>
+  <div class="field"><label>&nbsp;</label><button class="btn gold" type="button" onclick="quickSaveCustomer()">💾 حفظ / تحديث ملف العميلة</button></div>
+ </div>
+ <div id="custInfo" style="margin-top:10px"></div>
+ <div class="form">
+  ${fld('اسم العميلة','customerName',o.customerName,'text',true)}${fld('الجوال','phone',o.phone)}${fld('المدينة','city',o.city)}
+  <div class="field full"><label>العنوان بالتفصيل</label><input name="address" value="${esc(o.address||'')}"></div>
+  <div class="field full"><label>تفضيلات العميلة (طول، لون، كثافة، مقاس...)</label><textarea name="customerPrefs" rows="2">${esc(prefs)}</textarea></div>
+ </div>
+</details>
+
+<details class="fs" open><summary>🧾 بيانات الطلب</summary>
+ <div class="form">
+  ${fld('رقم الطلب','no',o.no,'text',true)}${fld('تاريخ الطلب','date',o.date||today(),'date')}${sel('قناة الطلب','channel',ch)}${sel('حالة الطلب','status',st)}
+ </div>
+</details>
+
+<details class="fs" open><summary>💇‍♀️ بيانات الباروكة <span class="hint">من كتالوج الباروكات — كل البيانات والسعر تُجلب تلقائيًا وتبقى قابلة للتعديل</span></summary>
+ <div class="pick">
+  <div class="field"><label>اختيار من الكتالوج</label><select name="productId" onchange="applyProductToOrder(this.value)">${orderProductOptions(o.productId)}</select></div>
+  <div class="field"><label>&nbsp;</label><button class="btn" type="button" onclick="closeModal();setPage('products')">📖 فتح الكتالوج لإضافة منتج</button></div>
+ </div>
+ <div id="prodPreview" style="margin-top:10px"></div>
+ <div class="form">
+  ${fld('اسم المنتج','productName',o.productName,'text',true)}${sel('نوع المنتج','productType',tp)}${fld('الموديل','model',o.model)}
+  ${fld('الطول','hairLength',o.hairLength||o.length)}${fld('اللون','color',o.color)}${fld('المقاس','size',o.size)}
+  ${fld('الخامة','material',o.material)}${fld('الكثافة','density',o.density)}${fld('الكمية','qty',qty,'number')}
+  <div class="field full"><label>المواصفات / ملاحظات التفصيل</label><input name="specs" value="${esc(o.specs||'')}"></div>
+ </div>
+</details>
+
+<details class="fs" open><summary>💰 التسعير والخصم</summary>
+ <div class="form">
+  ${fld('سعر الوحدة للعميلة','unitPrice',unitPrice,'number')}
+  <div class="field"><label>إجمالي المنتج (السعر × الكمية)</label><div class="readonly-box" id="lineTotal">—</div></div>
+  ${fld('رسوم الشحن على العميلة','customerShipping',o.customerShipping||0,'number')}
+  ${sel('نوع الخصم','discountType',`<option value="amount" ${dType==='amount'?'selected':''}>مبلغ (${cur})</option><option value="percent" ${dType==='percent'?'selected':''}>نسبة مئوية %</option>`)}
+  <div class="field"><label id="discLabel">قيمة الخصم</label><input name="discountValue" type="number" step="any" value="${esc(dVal)}"><div class="actions" style="margin-top:6px;gap:5px"><button class="btn" type="button" style="padding:5px 9px;font-size:11px" onclick="setDiscountPercent(5)">5%</button><button class="btn" type="button" style="padding:5px 9px;font-size:11px" onclick="setDiscountPercent(10)">10%</button><button class="btn" type="button" style="padding:5px 9px;font-size:11px" onclick="setDiscountPercent(15)">15%</button><button class="btn" type="button" style="padding:5px 9px;font-size:11px" onclick="setDiscountPercent(0)">بدون</button></div></div>
+  ${fld('رسوم الدفع (بوابة/تقسيط)','paymentFees',o.paymentFees||0,'number')}
+  ${sel('طريقة الدفع','paymentMethod',pm)}
+ </div>
+ <div class="sumbar"><div class="mini-grid">
+  <div class="mini"><b>الإجمالي قبل الخصم</b><span id="sumGross">—</span></div>
+  <div class="mini"><b>الخصم</b><span id="sumDiscount">—</span></div>
+  <div class="mini"><b>صافي الطلب</b><span id="sumNet">—</span></div>
+  <div class="mini"><b>المدفوع</b><span id="sumPaid">—</span></div>
+  <div class="mini"><b>المتبقي</b><span id="sumRemain">—</span></div>
+  <div class="mini"><b>الربح المتوقع</b><span id="sumProfit">—</span></div>
+ </div></div>
+</details>
+
+<details class="fs" open><summary>🧮 التكاليف <span class="hint">إجمالي التكلفة: <b id="sumCost">—</b></span></summary>
+ <div class="form">
+  ${fld('تكلفة الوحدة من المصنع','unitCost',unitCost,'number')}${fld('شحن المصنع','factoryShipping',o.factoryShipping||0,'number')}${fld('التغليف','packaging',o.packaging||0,'number')}
+  ${fld('الشحن المحلي','localShipping',o.localShipping||0,'number')}${fld('مصاريف أخرى','otherCost',o.otherCost||0,'number')}
+ </div>
+</details>
+
+<details class="fs"><summary>🏭 المصنع والتكليف</summary>
+ <div class="form">
+  ${sel('الشركة / المصنع','supplier',sups)}${fld('رقم طلب المصنع','factoryOrderNo',o.factoryOrderNo)}${sel('حالة المصنع','factoryStatus',fs)}
+  ${fld('شركة شحن المصنع → شروق','factoryShipmentCompany',o.factoryShipmentCompany)}${fld('رقم شحنة المصنع','factoryShipmentNo',o.factoryShipmentNo)}${fld('رابط تتبع شحنة المصنع','factoryTrackingUrl',o.factoryTrackingUrl)}
+ </div>
+</details>
+
+<details class="fs"><summary>🗓️ المواعيد والتواريخ</summary>
+ <div class="form">
+  ${fld('تاريخ التكليف','assignedDate',o.assignedDate,'date')}${fld('مدة التجهيز (يوم)','productionDays',o.productionDays||7,'number')}
+  <div class="field"><label>موعد التجهيز المتوقع</label><input name="expectedDate" type="date" value="${esc(o.expectedDate||'')}"><button class="btn" type="button" style="margin-top:6px;padding:5px 9px;font-size:11px" onclick="calcExpectedDate()">احسب من تاريخ التكليف</button></div>
+  ${fld('بداية التفصيل','productionStartDate',o.productionStartDate,'date')}${fld('اكتمال التفصيل','productionEndDate',o.productionEndDate,'date')}${fld('تاريخ شحن المصنع','factoryShippedDate',o.factoryShippedDate,'date')}
+  ${fld('تاريخ استلام شروق','receivedDate',o.receivedDate,'date')}${fld('تاريخ الشحن للعميلة','customerShippedDate',o.customerShippedDate,'date')}${fld('تاريخ التسليم','deliveredDate',o.deliveredDate,'date')}
+  ${fld('تاريخ اكتمال الطلب','completedDate',o.completedDate,'date')}${fld('تاريخ سداد كامل المبلغ','paymentDate',o.paymentDate,'date')}
+ </div>
+</details>
+
+<details class="fs"><summary>🚚 الشحن للعميلة</summary>
+ <div class="form">
+  ${sel('شركة الشحن','customerShipmentCompany',sh)}${fld('رقم الشحنة','customerShipmentNo',o.customerShipmentNo)}${fld('رابط التتبع','customerTrackingUrl',o.customerTrackingUrl)}
+ </div>
+</details>
+
+<details class="fs"><summary>📝 الملاحظات</summary>
+ <div class="form">
+  <div class="field full"><label>ملاحظات داخلية</label><textarea name="internalNotes" rows="3">${esc(o.internalNotes||'')}</textarea></div>
+  <div class="field full"><label>ملاحظات للعميلة (تظهر في الفاتورة)</label><textarea name="notes" rows="3">${esc(o.notes||'')}</textarea></div>
+ </div>
+</details>
+
+<details class="fs"><summary>⚙️ حقول قديمة <span class="hint">محفوظة للتوافق مع الطلبات السابقة</span></summary>
+ <div class="form">
+  ${fld('المبلغ المدفوع سابقًا (قبل نظام الدفعات)','paidLegacy',o.paid||0,'number')}${fld('شركة الشحن (قديمة)','shipmentCompany',o.shipmentCompany)}${fld('رقم الشحنة (قديمة)','shipmentNo',o.shipmentNo)}
+  ${fld('رابط التتبع (قديم)','trackingUrl',o.trackingUrl)}
+ </div>
+</details>
+
+<div class="actions full" style="margin-top:6px"><button class="btn primary">💾 حفظ الطلب</button><button class="btn gold" type="button" onclick="openPaymentForOrder('${o.id}')">+ تسجيل دفعة</button><select class="btn no-print" style="padding:9px 8px" onchange="if(this.value){waTemplate('${o.id}',this.value);this.value=''}"><option value="">📩 رسالة واتساب...</option><option value="confirm">تأكيد الطلب</option><option value="shipping">إشعار الشحن</option><option value="payment">تذكير بالدفعة</option></select><button class="btn" type="button" onclick="printOrder('${o.id}')">فاتورة العميلة PDF</button><button class="btn blue" type="button" onclick="customerTrackingPrint('${o.id}')">متابعة الشحنة PDF</button>${oid?`<button class="btn danger" type="button" onclick="deleteOrder('${o.id}')">حذف</button>`:''}</div>
+</form>${installmentsHtml(o)}<div class="section"><h3>سجل الأحداث والانتقالات</h3><div id="orderTimeline">${await timeline(o.id)}</div></div>`);
+
+ let F=document.getElementById('orderF');
+ F.addEventListener('input',recalcOrderForm);
+ F.addEventListener('change',recalcOrderForm);
+ if(o.productId)applyProductToOrder(o.productId);
+ if(o.customerId&&S.customers.find(c=>c.id===o.customerId))applyCustomerToOrder(o.customerId);else if(!oid)applyCustomerToOrder('');
+ recalcOrderForm();
+
+ F.onsubmit=async e=>{e.preventDefault();
+  let x=Object.fromEntries(new FormData(e.target));
+  for(let k of ['qty','productionDays','unitPrice','unitCost','factoryShipping','packaging','localShipping','otherCost','customerShipping','discountValue','paymentFees','paidLegacy'])x[k]=Number(x[k]||0);
+  x.qty=Math.max(1,x.qty||1);
+  x.productPrice=r2(x.unitPrice*x.qty);
+  x.costProduct=r2(x.unitCost*x.qty);
+  let base=x.productPrice+x.customerShipping;
+  x.discount=x.discountType==='percent'?r2(base*x.discountValue/100):r2(x.discountValue);
+  if(x.discount>base)x.discount=base;
+  if(x.assignedDate&&x.productionDays>0&&!x.expectedDate)x.expectedDate=addDays(x.assignedDate,x.productionDays);
+  x.totalCost=r2(x.costProduct+x.factoryShipping+x.packaging+x.localShipping+x.otherCost);
+  x.net=Math.max(0,r2(base-x.discount));
+  x.paid=orderPaid(o.id)||x.paidLegacy;
+  x.remaining=Math.max(0,r2(x.net-x.paid));
+  x.profit=r2(x.net-x.totalCost-x.paymentFees);
+  x.id=o.id;x.createdAt=o.createdAt||new Date().toISOString();
+  x.customerId=x.customerId||o.customerId||id('cus');
+  x.orderDate=x.date||today();
+  x.length=x.hairLength||'';
+  if(!x.shipmentCompany)x.shipmentCompany=x.customerShipmentCompany||'';
+  if(!x.shipmentNo)x.shipmentNo=x.customerShipmentNo||'';
+  if(x.paid>=x.net&&x.net>0&&!x.paymentDate)x.paymentDate=today();
+  await put('orders',x);await syncCustomer(x);await event(x.id,'تم حفظ/تحديث بيانات الطلب — '+x.status);
+  closeModal();await load();render();toast('تم حفظ الطلب')};
+}
+
 async function advanceStage(oid,key){let o=S.orders.find(x=>x.id===oid);if(!o)return;let st=STAGES.find(x=>x.key===key);if(!st)return;if(!confirm('تأكيد نقل الطلب إلى: '+st.label+'؟'))return;o.status=st.status;o[st.date]=today();if(key==='assigned'){o.factoryStatus='تم التكليف';o.assignedDate=o.assignedDate||today();o.productionDays=Number(o.productionDays||7);o.expectedDate=o.expectedDate||addDays(o.assignedDate,o.productionDays);}if(key==='making')o.factoryStatus='قيد التفصيل';if(key==='ready')o.factoryStatus='جاهز';if(key==='factoryShipped')o.factoryStatus='تم الشحن';if(key==='received')o.factoryStatus='تم الاستلام';if(key==='payment'&&o.paid<o.net)toast('تنبيه: المرحلة تم تغييرها، لكن تأكدي من تسجيل الدفعة');if(key==='delivered'&&!o.deliveredDate)o.deliveredDate=today();if(key==='closed')o.completedDate=today();await put('orders',o);await event(o.id,'انتقال المرحلة: '+st.label);await load();closeModal();await openOrder(o.id);toast('تم تحديث مرحلة الطلب')}
 async function openPaymentForOrder(oid){closeModal();await openPayment(oid)}
+function waPhone(p){p=(p||'').replace(/[^0-9]/g,'');if(!p)return '';if(p.startsWith('966'))return p;if(p.startsWith('0'))return '966'+p.slice(1);return '966'+p}
+function waSend(phone,text){let p=waPhone(phone);if(!p){toast('لا يوجد رقم جوال مسجّل لهذه العميلة');return}window.open('https://wa.me/'+p+'?text='+encodeURIComponent(text),'_blank')}
+function waTemplate(oid,type){let o=S.orders.find(x=>x.id===oid);if(!o)return;let name=o.customerName||'';let text='';
+if(type==='confirm')text=`مرحباً ${name} 🌸\nتم استلام طلبك رقم ${o.no} بنجاح.\nالمنتج: ${o.productName||''}\nالإجمالي: ${fmt(o.net)}\nسيتم إشعارك فور جهوزيته بإذن الله. شكراً لثقتك بنا 🤍`;
+else if(type==='shipping'){let comp=o.customerShipmentCompany||o.shipmentCompany||'—',num=o.customerShipmentNo||o.shipmentNo||'—',url=o.customerTrackingUrl||o.trackingUrl;text=`مرحباً ${name} 🌸\nطلبك رقم ${o.no} تم شحنه إليك.\nشركة الشحن: ${comp}\nرقم الشحنة: ${num}\n${url?'رابط التتبع: '+url+'\\n':''}نتمنى لك تجربة ممتعة 🤍`}
+else if(type==='payment')text=`مرحباً ${name} 🌸\nتذكير بخصوص طلبك رقم ${o.no}.\nالمبلغ المتبقي: ${fmt(o.remaining)}\nنرجو التكرم بإتمام السداد في أقرب وقت لإكمال إجراءات طلبك. شكراً لتعاونك 🤍`;
+waSend(o.phone,text)}
+function waCustomerReminder(cid){let c=S.customers.find(x=>x.id===cid);if(!c)return;let remain=sum(customerOpenOrders(cid),'remaining');let text=`مرحباً ${c.name||''} 🌸\nتذكير ودّي بخصوص رصيدك المتبقي لدينا: ${fmt(remain)}\nيسعدنا تواصلك لإتمام السداد. شكراً لثقتك بنا 🤍`;waSend(c.phone,text)}
+function installmentsHtml(o){let list=o.installments||[];let planned=sum(list,'amount');
+let rows=list.length?list.map((x,i)=>{let cls=x.paid?'ok':dateOnly(x.dueDate)<today()?'bad':dateOnly(x.dueDate)===today()?'warn':'info';let label=x.paid?'مسدد '+esc(x.paidDate||''):dateOnly(x.dueDate)<today()?'متأخر':dateOnly(x.dueDate)===today()?'مستحق اليوم':'قادم';
+return `<div class="event"><div><b>قسط ${i+1}:</b> ${fmt(x.amount)} — استحقاق ${esc(x.dueDate)} <span class="badge ${cls}">${label}</span></div><div class="actions no-print" style="margin-top:6px">${!x.paid?`<button class="btn primary" type="button" onclick="markInstallmentPaid('${o.id}','${x.id}')">تحديد كمسدد</button>`:''}<button class="btn danger" type="button" onclick="deleteInstallment('${o.id}','${x.id}')">حذف</button></div></div>`}).join(''):'<div class="empty">لا توجد أقساط مضافة بعد.</div>';
+return `<div class="section"><h3>خطة تقسيط الدفعات</h3><div class="notice info" style="margin-bottom:10px">إجمالي المخطط للأقساط: ${fmt(planned)} من إجمالي الطلب ${fmt(o.net)}</div>${rows}<button class="btn gold no-print" type="button" style="margin-top:10px" onclick="addInstallment('${o.id}')">+ إضافة قسط</button></div>`}
+async function addInstallment(oid){let amt=prompt('قيمة القسط؟');if(!amt||isNaN(amt)||Number(amt)<=0)return;let due=prompt('تاريخ الاستحقاق (YYYY-MM-DD)؟',today());if(!due)return;let o=S.orders.find(x=>x.id===oid);if(!o)return;o.installments=o.installments||[];o.installments.push({id:id('inst'),amount:Number(amt),dueDate:due,paid:false});await put('orders',o);closeModal();await load();await openOrder(oid);toast('تمت إضافة القسط للخطة')}
+async function markInstallmentPaid(oid,iid){let o=S.orders.find(x=>x.id===oid);if(!o)return;let inst=(o.installments||[]).find(x=>x.id===iid);if(!inst)return;inst.paid=true;inst.paidDate=today();await put('orders',o);let idx=o.installments.indexOf(inst);let pay={id:id('pay'),orderId:oid,customerId:o.customerId,amount:inst.amount,date:today(),method:o.paymentMethod||'',ref:'قسط '+(idx+1)};await put('payments',pay);await recalcOrderPayments();await event(oid,'تم سداد القسط رقم '+(idx+1)+' بقيمة '+fmt(inst.amount));closeModal();await load();await openOrder(oid);toast('تم تسجيل سداد القسط وربطه بالدفعات')}
+async function deleteInstallment(oid,iid){if(!confirm('حذف هذا القسط من الخطة؟'))return;let o=S.orders.find(x=>x.id===oid);if(!o)return;o.installments=(o.installments||[]).filter(x=>x.id!==iid);await put('orders',o);closeModal();await load();await openOrder(oid)}
+function daysSinceBackup(){let v=localStorage.getItem('lw_last_backup');if(!v)return null;return daysBetween(v.slice(0,10),today())}
+function backupReminderHtml(){let d=daysSinceBackup();if(d===null&&S.orders.length===0)return '';if(d===null)return `<div class="notice danger" style="margin-bottom:15px">💾 لم يتم أخذ أي نسخة احتياطية بعد. <button class="btn" style="float:left;padding:5px 9px" onclick="setPage('settings')">أخذ نسخة الآن</button></div>`;if(d>=7)return `<div class="notice ${d>=14?'danger':'info'}" style="margin-bottom:15px">💾 مر ${d} يوم منذ آخر نسخة احتياطية. يفضّل أخذ نسخة جديدة الآن لحماية بياناتك. <button class="btn" style="float:left;padding:5px 9px" onclick="setPage('settings')">أخذ نسخة الآن</button></div>`;return ''}
+function backupStatusText(){let d=daysSinceBackup();if(d===null)return 'لم يتم أخذ نسخة احتياطية بعد';if(d===0)return 'تم أخذ نسخة اليوم';return 'قبل '+d+' يوم'}
 
 function fld(l,n,v,type='text',req=false){return `<div class="field"><label>${l}</label><input name="${n}" type="${type}" value="${esc(v??'')}" ${req?'required':''}></div>`}
 function sel(l,n,v){return `<div class="field"><label>${l}</label><select name="${n}">${v}</select></div>`}
@@ -467,7 +700,7 @@ async function recalcOrderPayments(){for(let o of S.orders){o.paid=orderPaid(o.i
 function paymentCredit(p){let allocated=sum(paymentAllocations(p),'amount');return Math.max(0,Number(p.amount||0)-allocated)}
 function customerOpenOrders(cid){return S.orders.filter(o=>o.customerId===cid&&Number(o.remaining||0)>0)}
 function customerAvailableCredit(cid){return Math.max(0,sum(customerPayments(cid),'amount')-sum(S.orders.filter(o=>o.customerId===cid),'paid'))}
-function drawCustomers(){let q=(document.getElementById('cq')?.value||'').toLowerCase(),a=S.customers.filter(c=>[c.name,c.phone,c.city,c.address].join(' ').toLowerCase().includes(q)||S.orders.some(o=>o.customerId===c.id&&[o.productName,o.productType,o.specs].join(' ').toLowerCase().includes(q)));document.getElementById('cg').innerHTML=a.length?`<div class="table-wrap"><table><thead><tr><th>العميلة</th><th>الجوال</th><th>المدينة</th><th>طلبات</th><th>إجمالي مشتريات</th><th>المدفوع</th><th>المتبقي</th><th>رصيد دائن</th><th>آخر شراء</th><th></th></tr></thead><tbody>${a.map(c=>{let z=customerStats(c.id),last=z.o.slice().sort((x,y)=>(y.date||'').localeCompare(x.date||''))[0];return `<tr><td><b>${esc(c.name)}</b></td><td>${esc(c.phone)}</td><td>${esc(c.city)}</td><td>${z.o.length}</td><td>${fmt(z.sales)}</td><td>${fmt(z.paid)}</td><td>${fmt(z.remain)}</td><td>${fmt(z.credit)}</td><td>${esc(last?.date||'—')}</td><td><button class="btn" onclick="openCustomer('${c.id}')">ملف العميل</button></td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty">لا توجد نتائج.</div>'}
+function drawCustomers(){let q=(document.getElementById('cq')?.value||'').toLowerCase(),a=S.customers.filter(c=>[c.name,c.phone,c.city,c.address].join(' ').toLowerCase().includes(q)||S.orders.some(o=>o.customerId===c.id&&[o.productName,o.productType,o.specs].join(' ').toLowerCase().includes(q)));document.getElementById('cg').innerHTML=a.length?`<div class="table-wrap"><table><thead><tr><th>العميلة</th><th>الجوال</th><th>المدينة</th><th>طلبات</th><th>إجمالي مشتريات</th><th>المدفوع</th><th>المتبقي</th><th>رصيد دائن</th><th>آخر شراء</th><th></th></tr></thead><tbody>${a.map(c=>{let z=customerStats(c.id),last=z.o.slice().sort((x,y)=>(y.date||'').localeCompare(x.date||''))[0];return `<tr><td><b>${esc(c.name)}</b></td><td>${esc(c.phone)}</td><td>${esc(c.city)}</td><td>${z.o.length}</td><td>${fmt(z.sales)}</td><td>${fmt(z.paid)}</td><td>${fmt(z.remain)}</td><td>${fmt(z.credit)}</td><td>${esc(last?.date||'—')}</td><td><button class="btn" onclick="openCustomer('${c.id}')">ملف العميل</button>${z.remain>0?`<button class="btn gold" onclick="waCustomerReminder('${c.id}')">📩 تذكير</button>`:''}</td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty">لا توجد نتائج.</div>'}
 function customerHistoryHtml(cid){let c=S.customers.find(x=>x.id===cid),z=customerStats(cid);if(!c)return '';let typeRows=Object.entries(z.types).map(([k,v])=>`<div class="notice"><b>${esc(k)}</b><span>${v} قطعة/طلب</span></div>`).join('');return `<div class="grid">${kpi('عدد الطلبات',z.o.length,'تاريخ الشراء')}${kpi('إجمالي المشتريات',fmt(z.sales),'أسعار العملاء فقط')}${kpi('المدفوع',fmt(z.paid),'إجمالي التحصيل')}${kpi('المتبقي',fmt(z.remain),'الرصيد المستحق')}</div><div class="two section"><div class="card"><h3>المنتجات التي اشترتها سابقًا</h3>${typeRows||'<div class="empty">لا يوجد سجل منتجات.</div>'}</div><div class="card"><h3>سجل الطلبات</h3>${z.o.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')).map(o=>`<div class="notice" style="margin:7px 0"><b>${esc(o.no)}</b> — ${esc(o.productName)}</div>`).join('')||'<div class="empty">لا توجد طلبات.</div>'}</div></div>`}
 async function openCustomer(cid){let c=S.customers.find(x=>x.id===cid)||{id:id('cus'),name:'',phone:'',city:'',notes:''};let existing=!!S.customers.find(x=>x.id===cid);modal(existing?'ملف العميلة — سجل كامل':'عميلة جديدة',`<form id="cf" class="form">${fld('الاسم','name',c.name,'text',true)}${fld('الجوال','phone',c.phone)}${fld('المدينة','city',c.city)}<div class="field full"><label>العنوان</label><input name="address" value="${esc(c.address||'')}"></div><div class="field full"><label>التفضيلات (الطول، اللون، الكثافة، المقاس...)</label><textarea name="notes" rows="4">${esc(c.notes||'')}</textarea></div><div class="actions full"><button class="btn primary">حفظ</button>${existing?`<button type="button" class="btn gold" onclick="customerStatementPrint('${c.id}')">كشف الحساب PDF</button><button type="button" class="btn" onclick="openPayment()">تسجيل دفعة</button><button type="button" class="btn blue" onclick="openCreditTransfer()">نقل رصيد دائن</button><button type="button" class="btn blue" onclick="customerHistoryPrint('${c.id}')">السجل PDF</button><button type="button" class="btn danger" onclick="deleteCustomer('${c.id}')">حذف</button>`:''}</div></form>${existing?`<div class="section">${customerHistoryHtml(c.id)}</div>`:''}`);document.getElementById('cf').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));x.id=c.id;x.createdAt=c.createdAt||new Date().toISOString();await put('customers',x);closeModal();await load();render();toast('تم حفظ ملف العميلة')}}
 async function deleteCustomer(cid){if(confirm('حذف ملف العميلة؟')){await del('customers',cid);closeModal();await load();render()}}
@@ -493,7 +726,7 @@ function reports(){let sales=sum(S.orders,'net'),cost=sum(S.orders,'totalCost'),
 <div class="two section"><div class="card"><div class="section-head"><h2>المبيعات حسب النوع</h2><button class="btn" onclick="window.print()">PDF</button></div>${Object.entries(by).map(([k,v])=>`<div style="margin:13px 0"><div style="display:flex;justify-content:space-between;font-size:12px"><span>${esc(k)}</span><b>${fmt(v)}</b></div><div class="progress"><span style="width:${sales?Math.min(100,v/sales*100):0}%"></span></div></div>`).join('')||'<div class="empty">لا توجد بيانات.</div>'}</div><div class="card"><h2>توزيع الحالات</h2>${Object.entries(S.orders.reduce((a,o)=>(a[o.status]=(a[o.status]||0)+1,a),{})).map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:9px;border-bottom:1px solid var(--line)">${status(k)}<b>${v}</b></div>`).join('')||'<div class="empty">لا توجد بيانات.</div>'}</div></div>`}
 function printMonthlyReport(){let months=lastMonths(12);printHTML('ملخص الأرباح الشهري',`<div class="head"><div><h1>${esc(S.settings.company)}</h1><div>${esc(S.settings.owner)}</div></div><div>${today()}</div></div><h2>ملخص الأرباح الشهري</h2><table><tr><th>الشهر</th><th>الطلبات</th><th>المبيعات</th><th>التكاليف</th><th>رسوم الدفع</th><th>المصروفات</th><th>الربح</th><th>الهامش</th></tr>${months.map(m=>`<tr><td>${esc(m.label)}</td><td>${m.orders}</td><td>${fmt(m.sales)}</td><td>${fmt(m.cost)}</td><td>${fmt(m.fees)}</td><td>${fmt(m.exp)}</td><td>${fmt(m.profit)}</td><td>${(m.sales?m.profit/m.sales*100:0).toFixed(1)}%</td></tr>`).join('')}</table>`)}
 
-async function settings(){let ls=await all('lists');return `<div class="two"><div class="card"><h2 style="margin-top:0">بيانات المنشأة</h2><div class="form">${fld('الاسم التجاري','company',S.settings.company)}${fld('اسم المسؤولة','owner',S.settings.owner)}${fld('المسمى الوظيفي','role',S.settings.role)}${fld('العملة','currency',S.settings.currency)}</div><button class="btn primary" style="margin-top:10px" onclick="saveSettings()">حفظ</button><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><h2>البيانات</h2><p style="color:var(--muted);font-size:12px">البرنامج يعمل كملف HTML واحد، والبيانات محفوظة في IndexedDB داخل المتصفح. استخدمي النسخة الاحتياطية بانتظام.</p><div class="actions"><button class="btn gold" onclick="backup()">تصدير JSON</button><label class="btn">استيراد JSON<input type="file" accept=".json" hidden onchange="restore(this.files[0])"></label><button class="btn danger" onclick="wipe()">مسح بيانات النظام</button></div></div><div class="card"><h2 style="margin-top:0">القوائم</h2>${ls.map(x=>`<div style="margin:12px 0"><label style="font-size:11px;color:var(--muted)">${esc(x.id)}</label><textarea data-list="${esc(x.id)}" rows="3" style="margin-top:5px">${esc((x.values||[]).join('\\n'))}</textarea></div>`).join('')}<button class="btn primary" onclick="saveLists()">حفظ القوائم</button></div></div>`}
+async function settings(){let ls=await all('lists');return `<div class="two"><div class="card"><h2 style="margin-top:0">بيانات المنشأة</h2><div class="form">${fld('الاسم التجاري','company',S.settings.company)}${fld('اسم المسؤولة','owner',S.settings.owner)}${fld('المسمى الوظيفي','role',S.settings.role)}${fld('العملة','currency',S.settings.currency)}</div><button class="btn primary" style="margin-top:10px" onclick="saveSettings()">حفظ</button><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><h2>البيانات</h2><p style="color:var(--muted);font-size:12px">البرنامج يعمل كملف HTML واحد، والبيانات محفوظة في IndexedDB داخل المتصفح. استخدمي النسخة الاحتياطية بانتظام.</p><div class="notice ${(daysSinceBackup()===null||daysSinceBackup()>=7)?'danger':'success'}" style="margin-bottom:12px">💾 آخر نسخة احتياطية: ${backupStatusText()}</div><div class="actions"><button class="btn gold" onclick="backup()">تصدير JSON</button><label class="btn">استيراد JSON<input type="file" accept=".json" hidden onchange="restore(this.files[0])"></label><button class="btn danger" onclick="wipe()">مسح بيانات النظام</button></div></div><div class="card"><h2 style="margin-top:0">القوائم</h2>${ls.map(x=>`<div style="margin:12px 0"><label style="font-size:11px;color:var(--muted)">${esc(x.id)}</label><textarea data-list="${esc(x.id)}" rows="3" style="margin-top:5px">${esc((x.values||[]).join('\\n'))}</textarea></div>`).join('')}<button class="btn primary" onclick="saveLists()">حفظ القوائم</button></div></div>`}
 async function saveSettings(){let x={id:'main',company:document.querySelector('[name=company]').value,owner:document.querySelector('[name=owner]').value,role:document.querySelector('[name=role]').value,currency:document.querySelector('[name=currency]').value};await put('settings',x);await load();render();toast('تم حفظ الإعدادات')}
 async function saveLists(){for(let e of document.querySelectorAll('[data-list]'))await put('lists',{id:e.dataset.list,values:e.value.split('\\n').map(x=>x.trim()).filter(Boolean)});toast('تم حفظ القوائم');render()}
 
@@ -511,10 +744,10 @@ function customerStatementAllPrint(){let rows=S.customers.map(c=>{let z=customer
 function printProduct(pid){let p=S.products.find(x=>x.id===pid);if(!p)return;printHTML(p.name,`<div style="text-align:center"><h1>${esc(S.settings.company)}</h1><img src="${p.image||''}" style="max-width:430px;max-height:430px;object-fit:contain"><h2>${esc(p.name)}</h2><div>${esc(p.type||'')} ${p.model?' — '+esc(p.model):''}</div><h2>${fmt(p.price)}</h2><p>${esc(p.description||'')}</p><table><tr><th>الطول</th><th>اللون</th><th>المقاس</th><th>الخامة</th><th>الكثافة</th></tr><tr><td>${esc(p.length||'—')}</td><td>${esc(p.color||'—')}</td><td>${esc(p.size||'—')}</td><td>${esc(p.material||'—')}</td><td>${esc(p.density||'—')}</td></tr></table></div>`)}
 function catalogPrint(){let a=S.products;printHTML('كتالوج Luxurious Wigs',`<div class="head"><h1>${esc(S.settings.company)}</h1><div>${esc(S.settings.owner)}</div></div><div class="grid">${a.map(p=>`<div class="box" style="text-align:center"><img src="${p.image||''}" style="width:100%;height:180px;object-fit:cover"><h3>${esc(p.name)}</h3><b>${fmt(p.price)}</b><p>${esc(p.description||'')}</p></div>`).join('')}</div>`)}
 
-async function backup(){let data={version:4,exportedAt:new Date().toISOString(),settings:S.settings,orders:S.orders,products:S.products,customers:S.customers,suppliers:S.suppliers,payments:S.payments,expenses:S.expenses,events:await all('events')};let b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Luxurious_Wigs_Backup_'+today()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+async function backup(){let data={version:4,exportedAt:new Date().toISOString(),settings:S.settings,orders:S.orders,products:S.products,customers:S.customers,suppliers:S.suppliers,payments:S.payments,expenses:S.expenses,events:await all('events')};let b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Luxurious_Wigs_Backup_'+today()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);localStorage.setItem('lw_last_backup',new Date().toISOString());toast('تم تصدير النسخة الاحتياطية')}
 async function restore(file){if(!file)return;try{let d=JSON.parse(await file.text());for(let k of ['orders','products','customers','suppliers','payments','expenses','events'])for(let x of d[k]||[])await put(k,x);if(d.settings)await put('settings',{id:'main',...d.settings});alert('تمت الاستعادة/الإضافة بنجاح.');await load();render()}catch(e){alert('ملف النسخة الاحتياطية غير صالح.')}}
 async function wipe(){if(!confirm('سيتم حذف كل بيانات البرنامج من هذا المتصفح. هل أنت متأكد؟'))return;for(let n of ['orders','products','customers','suppliers','payments','expenses','events'])for(let x of await all(n))await del(n,x.id);await load();render();toast('تم مسح البيانات')}
-async function syncCustomer(o){let c=S.customers.find(x=>x.id===o.customerId)||S.customers.find(x=>x.phone&&o.phone&&x.phone===o.phone)||{id:o.customerId||id('cus'),createdAt:new Date().toISOString()};o.customerId=c.id;c.name=o.customerName;c.phone=o.phone;c.city=o.city;c.address=o.address||c.address||'';await put('customers',c);await put('orders',o)}
+async function syncCustomer(o){let c=S.customers.find(x=>x.id===o.customerId)||S.customers.find(x=>x.phone&&o.phone&&x.phone===o.phone)||{id:o.customerId||id('cus'),createdAt:new Date().toISOString()};o.customerId=c.id;c.name=o.customerName;c.phone=o.phone;c.city=o.city;c.address=o.address||c.address||'';if(o.customerPrefs)c.notes=o.customerPrefs;await put('customers',c);await put('orders',o)}
 async function enableBrowserNotifications(){if(!('Notification' in window)){toast('المتصفح لا يدعم إشعارات النظام');return}let p=await Notification.requestPermission();if(p==='granted'){let a=getFactoryAlerts();if(a.length)new Notification('Luxurious Wigs — تنبيهات الطلبات',{body:`لديك ${a.length} طلب يحتاج متابعة، منها ${a.filter(x=>x.kind==='late').length} متأخر.`});toast('تم تفعيل إشعارات المتصفح')}else toast('لم يتم السماح بالإشعارات')}
 function notifyFactoryAlerts(){if(!('Notification' in window)||Notification.permission!=='granted')return;let a=getFactoryAlerts();if(a.length)new Notification('Luxurious Wigs — متابعة المصنع',{body:`${a.filter(x=>x.kind==='late').length} متأخر، ${a.filter(x=>x.kind==='due').length} موعده اليوم، ${a.filter(x=>x.kind==='soon').length} قريب.`})}
 function bind(){
