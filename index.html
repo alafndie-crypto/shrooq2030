@@ -385,7 +385,7 @@ body{background:#fff}.side,.top,.no-print,.modal{display:none!important}.main{ma
 <input type="file" id="restoreInput" accept=".json" hidden>
 
 <script>
-const DB='LW_PRO_DB',VER=2;
+const DB='LW_PRO_DB',VER=3;
 const DEFAULT_LISTS={"المدن": ["الرياض","جدة","مكة المكرمة","المدينة المنورة","الدمام","الخبر","الظهران","الأحساء","الطائف","تبوك","بريدة","عنيزة","حائل","نجران","جازان","أبها","خميس مشيط","ينبع","القطيف","الجبيل","سكاكا","عرعر","الباحة","القريات","بيشة","رابغ","الخرج","حفر الباطن","أخرى"],"المصانع": ["غير محدد", "مصنع 1 - عدّلي الاسم", "مصنع 2 - عدّلي الاسم"], "طرق الدفع": ["تحويل بنكي", "مدى", "فيزا/ماستركارد", "Apple Pay", "تابي", "تمارا", "نقدي", "أخرى"], "حالات الطلب": ["جديد", "بانتظار الدفع", "مؤكد", "قيد التصنيع", "جاهز للشحن", "تم الشحن", "مكتمل", "ملغي", "مرتجع"], "حالات المصنع": ["لم يُكلّف", "تم التكليف", "قيد التصنيع", "بانتظار تعديل", "جاهز", "تم الاستلام", "ملغي"], "قنوات الطلب": ["متجر سلة", "واتساب", "إنستغرام", "تيك توك", "طلب مباشر", "أخرى"], "أنواع المنتجات": ["باروكة", "توبر", "فرونتال", "كلوجر", "إكستنشن", "إكسسوار", "أخرى"], "شركات الشحن": ["سمسا", "أرامكس", "سبل", "ناقل", "DHL", "أخرى"]};
 let db, page='dashboard';
 let S={orders:[],products:[],customers:[],suppliers:[],payments:[],expenses:[],settings:{company:'Luxurious Wigs',owner:'شروق عابد',role:'مسؤولة التسويق والمبيعات وإدارة الطلبات',currency:'ر.س'}};
@@ -404,11 +404,23 @@ function today(){return new Date().toISOString().slice(0,10)}
 function id(p){return p+'_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7)}
 function toast(t){let e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2300)}
 function status(s){let c=/مكتمل|تم التسليم|تم الاستلام/.test(s)?'ok':/ملغي|مرتجع/.test(s)?'bad':/جديد|بانتظار|قيد|تم التكليف|جاهز|تم الشحن/.test(s)?'warn':'info';return `<span class="badge ${c}">${esc(s||'—')}</span>`}
-function openDB(){return new Promise((res,rej)=>{let r=indexedDB.open(DB,VER);r.onupgradeneeded=e=>{let d=e.target.result;['orders','products','customers','suppliers','payments','expenses','settings','lists','events','archive'].forEach(x=>{if(!d.objectStoreNames.contains(x))d.createObjectStore(x,{keyPath:'id'})})};r.onsuccess=e=>{db=e.target.result;res()};r.onerror=e=>rej(e)})}
+const STORES=['orders','products','customers','suppliers','payments','expenses','settings','lists','events','archive'];
+let memMode=false;const MEM={};
+function openDB(){return new Promise((res,rej)=>{
+ try{
+  if(!window.indexedDB)throw new Error('IndexedDB غير متاح');
+  let r=indexedDB.open(DB,VER);
+  r.onupgradeneeded=e=>{let d=e.target.result;STORES.forEach(x=>{if(!d.objectStoreNames.contains(x))d.createObjectStore(x,{keyPath:'id'})})};
+  r.onsuccess=e=>{db=e.target.result;db.onversionchange=()=>{db.close()};res()};
+  r.onerror=e=>rej(r.error||e);
+  r.onblocked=()=>rej(new Error('قاعدة البيانات مقفلة بواسطة تبويب آخر — أغلقي التبويبات الأخرى للموقع ثم أعيدي التحميل'));
+ }catch(err){rej(err)}
+})}
 function store(n,m='readonly'){return db.transaction(n,m).objectStore(n)}
-function all(n){return new Promise((r,j)=>{let q=store(n).getAll();q.onsuccess=()=>r(q.result);q.onerror=()=>j(q.error)})}
-function put(n,o){return new Promise((r,j)=>{let q=store(n,'readwrite').put(o);q.onsuccess=()=>r(o);q.onerror=()=>j(q.error)})}
-function del(n,k){return new Promise((r,j)=>{let q=store(n,'readwrite').delete(k);q.onsuccess=()=>r();q.onerror=()=>j(q.error)})}
+function memArr(n){return MEM[n]||(MEM[n]=new Map())}
+function all(n){if(memMode)return Promise.resolve([...memArr(n).values()]);return new Promise((r,j)=>{try{let q=store(n).getAll();q.onsuccess=()=>r(q.result);q.onerror=()=>j(q.error)}catch(e){console.warn('store read failed',n,e);r([])}})}
+function put(n,o){if(memMode){memArr(n).set(o.id,o);return Promise.resolve(o)}return new Promise((r,j)=>{try{let q=store(n,'readwrite').put(o);q.onsuccess=()=>r(o);q.onerror=()=>j(q.error)}catch(e){j(e)}})}
+function del(n,k){if(memMode){memArr(n).delete(k);return Promise.resolve()}return new Promise((r,j)=>{try{let q=store(n,'readwrite').delete(k);q.onsuccess=()=>r();q.onerror=()=>j(q.error)}catch(e){j(e)}})}
 async function load(){for(let k of ['orders','products','customers','suppliers','payments','expenses','events'])S[k]=await all(k);let st=await all('settings');if(st[0])S.settings={...S.settings,...st[0]};applyEffAll()}
 // ===== Archive (soft-delete) =====
 async function archiveRecord(storeName,record,label){
@@ -581,7 +593,7 @@ async function render(){
 if(page==='dashboard'){document.getElementById('title').innerHTML='🌷 '+greetingWord()+'، '+esc(S.settings.owner);document.getElementById('subtitle').innerHTML=arabicFullDate()+' — لديك <b>'+activeOrdersCount()+'</b> طلب نشط الآن'}
 else{document.getElementById('title').textContent=meta[0];document.getElementById('subtitle').textContent=meta[1]}
 let fn={dashboard:dashboard,calendar:calendar,orders:orders,products:products,customers:customers,suppliers:suppliers,shipments:shipments,payments:payments,expenses:expenses,reports:reports,settings:settings,archive:archive}[page];
-document.getElementById('app').innerHTML=await fn();bind();refreshNotifBadge();}
+try{document.getElementById('app').innerHTML=await fn();bind();refreshNotifBadge()}catch(err){showFatal(err)}}
 
 function dashboard(){
 let sales=sum(S.orders,'effNet'),cost=sum(S.orders,'effCost'),fees=sum(S.orders,'effFees'),paid=sum(S.payments,'amount'),exp=sum(S.expenses,'amount'),remain=S.orders.reduce((t,o)=>t+Math.max(0,effNetOf(o)-orderPaid(o.id)),0),profit=sales-cost-fees-exp;
@@ -2041,7 +2053,26 @@ function bind(){
  if(page==='archive'){wire(['arcq','arctype'],drawArchive)}
 }
 async function seed(){let ls=await all('lists');if(!ls.length){let src={...fallback,...DEFAULT_LISTS};for(let [k,v] of Object.entries(src))if(v?.length)await put('lists',{id:k,values:[...new Set(v)]})}else if(!ls.find(x=>x.id==='المدن')){await put('lists',{id:'المدن',values:DEFAULT_LISTS['المدن']})}if(!(await all('settings')).length)await put('settings',{id:'main',...S.settings})}
-(async()=>{await openDB();await seed();await load();let blocked=await pinGateCheck();if(!blocked)await render();setTimeout(()=>notifyFactoryAlerts(),700)})();
+// ربط التبويبات فورًا حتى لا تتوقف عن العمل إذا تأخر التحميل أو فشل
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>setPage(b.dataset.p));
+function showFatal(err){
+ console.error(err);
+ let box=document.getElementById('app');
+ if(box)box.innerHTML='<div class="card" style="border-color:#b94d4b"><h2 style="margin-top:0">⚠️ تعذّر تحميل البيانات</h2><p style="font-size:13px;line-height:1.9">'+esc(err&&err.message||err)+'</p><button class="btn primary" onclick="location.reload()">إعادة المحاولة</button></div>';
+}
+(async()=>{
+ try{await openDB()}catch(err){
+  console.warn('IndexedDB failed, using memory mode',err);
+  memMode=true;
+  setTimeout(()=>toast('⚠️ المتصفح يمنع حفظ البيانات (وضع خاص؟) — البيانات مؤقتة ولن تُحفظ'),800);
+ }
+ try{
+  await seed();await load();
+  let blocked=await pinGateCheck();
+  if(!blocked)await render();
+  setTimeout(()=>{try{notifyFactoryAlerts()}catch(e){}},700);
+ }catch(err){showFatal(err)}
+})();
 setInterval(()=>{if(page==='dashboard')render()},60000);
 </script>
 </body>
