@@ -413,15 +413,31 @@ function openDB(){return new Promise((res,rej)=>{
   r.onupgradeneeded=e=>{let d=e.target.result;STORES.forEach(x=>{if(!d.objectStoreNames.contains(x))d.createObjectStore(x,{keyPath:'id'})})};
   r.onsuccess=e=>{db=e.target.result;db.onversionchange=()=>{db.close()};res()};
   r.onerror=e=>rej(r.error||e);
-  r.onblocked=()=>rej(new Error('قاعدة البيانات مقفلة بواسطة تبويب آخر — أغلقي التبويبات الأخرى للموقع ثم أعيدي التحميل'));
+  r.onblocked=()=>{let a=document.getElementById('app');if(a&&!a.innerHTML)a.innerHTML='<div class="card"><b>⏳ الموقع مفتوح في تبويب آخر</b><p style="font-size:13px">أغلقي بقية التبويبات المفتوحة لهذا الموقع وسيكمل التحميل تلقائيًا.</p></div>'};
  }catch(err){rej(err)}
 })}
 function store(n,m='readonly'){return db.transaction(n,m).objectStore(n)}
+let dataVer=0,_cache={v:-1};
+function cache(){
+ if(_cache.v===dataVer&&_cache.o===S.orders&&_cache.p===S.payments&&_cache.ol===S.orders.length&&_cache.pl===S.payments.length)return _cache;
+ let orderCust=new Map(),ordersByCust=new Map(),paidByOrder=new Map(),custPays=new Map();
+ for(let o of S.orders){orderCust.set(o.id,o.customerId);let a=ordersByCust.get(o.customerId);if(!a)ordersByCust.set(o.customerId,a=[]);a.push(o)}
+ for(let p of S.payments){
+  let ids=new Set();if(p.customerId!==undefined&&p.customerId!==null)ids.add(p.customerId);
+  for(let a of paymentAllocations(p)){
+   paidByOrder.set(a.orderId,(paidByOrder.get(a.orderId)||0)+Number(a.amount||0));
+   let c=orderCust.get(a.orderId);if(c!==undefined&&c!==null)ids.add(c);
+  }
+  for(let c of ids){let a=custPays.get(c);if(!a)custPays.set(c,a=[]);a.push(p)}
+ }
+ _cache={v:dataVer,o:S.orders,p:S.payments,ol:S.orders.length,pl:S.payments.length,ordersByCust,paidByOrder,custPays};
+ return _cache;
+}
 function memArr(n){return MEM[n]||(MEM[n]=new Map())}
 function all(n){if(memMode)return Promise.resolve([...memArr(n).values()]);return new Promise((r,j)=>{try{let q=store(n).getAll();q.onsuccess=()=>r(q.result);q.onerror=()=>j(q.error)}catch(e){console.warn('store read failed',n,e);r([])}})}
-function put(n,o){if(memMode){memArr(n).set(o.id,o);return Promise.resolve(o)}return new Promise((r,j)=>{try{let q=store(n,'readwrite').put(o);q.onsuccess=()=>r(o);q.onerror=()=>j(q.error)}catch(e){j(e)}})}
-function del(n,k){if(memMode){memArr(n).delete(k);return Promise.resolve()}return new Promise((r,j)=>{try{let q=store(n,'readwrite').delete(k);q.onsuccess=()=>r();q.onerror=()=>j(q.error)}catch(e){j(e)}})}
-async function load(){for(let k of ['orders','products','customers','suppliers','payments','expenses','events'])S[k]=await all(k);let st=await all('settings');if(st[0])S.settings={...S.settings,...st[0]};applyEffAll()}
+function put(n,o){dataVer++;if(memMode){memArr(n).set(o.id,o);return Promise.resolve(o)}return new Promise((r,j)=>{try{let q=store(n,'readwrite').put(o);q.onsuccess=()=>r(o);q.onerror=()=>j(q.error)}catch(e){j(e)}})}
+function del(n,k){dataVer++;if(memMode){memArr(n).delete(k);return Promise.resolve()}return new Promise((r,j)=>{try{let q=store(n,'readwrite').delete(k);q.onsuccess=()=>r();q.onerror=()=>j(q.error)}catch(e){j(e)}})}
+async function load(){dataVer++;for(let k of ['orders','products','customers','suppliers','payments','expenses','events'])S[k]=await all(k);let st=await all('settings');if(st[0])S.settings={...S.settings,...st[0]};applyEffAll()}
 // ===== Archive (soft-delete) =====
 async function archiveRecord(storeName,record,label){
  let arc={id:id('arc'),store:storeName,recordId:record.id,label:label||record.name||record.no||record.id,data:record,archivedAt:new Date().toISOString()};
@@ -1357,23 +1373,24 @@ function customerSortBy(v){custSort.key=v;drawCustomers()}
 async function newOrderForCustomer(cid){let c=S.customers.find(x=>x.id===cid);if(!c)return;closeModal();await openOrderWithData({id:id('ord'),no:nextOrderNo(),date:today(),orderDate:today(),qty:1,status:'جديد',productType:'باروكة',factoryStatus:'لم يُكلّف',paymentMethod:'تحويل بنكي',productionDays:S.settings.defaultProductionDays||7,createdAt:new Date().toISOString(),customerId:c.id,customerName:c.name,phone:c.phone,city:c.city,address:c.address,customerPrefs:c.notes})}
 async function repeatLastOrderForCustomer(cid){let z=customerStats(cid);let last=z.o.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''))[0];if(!last){toast('لا يوجد طلب سابق لتكراره');return}closeModal();await duplicateOrder(last.id)}
 function paymentAllocations(p){if(Array.isArray(p.allocations)&&p.allocations.length)return p.allocations;return p.orderId?[{orderId:p.orderId,amount:Number(p.amount||0)}]:[]}
-function orderPaid(oid){return sum(S.payments.flatMap(p=>paymentAllocations(p).filter(a=>a.orderId===oid)),'amount')}
-function customerPayments(cid){return S.payments.filter(p=>p.customerId===cid||paymentAllocations(p).some(a=>S.orders.some(o=>o.id===a.orderId&&o.customerId===cid)))}
+function orderPaid(oid){return cache().paidByOrder.get(oid)||0}
+function customerPayments(cid){return (cache().custPays.get(cid)||[]).slice()}
 function customerCredit(cid){return Math.max(0,sum(customerPayments(cid),'amount')-sum(S.orders.filter(o=>o.customerId===cid),'effNet')+sum(S.orders.filter(o=>o.customerId===cid),'remaining'))}
-function customerStats(cid){let o=S.orders.filter(x=>x.customerId===cid);o.forEach(x=>{x.paid=orderPaid(x.id);x.remaining=Math.max(0,r2(effNetOf(x)-x.paid))});let sales=sum(o,'effNet'),paid=sum(o,'paid'),remain=Math.max(0,sales-paid),credit=Math.max(0,sum(customerPayments(cid),'amount')-paid);let types={};o.forEach(x=>{let k=x.productType||'غير محدد';types[k]=(types[k]||0)+Number(x.qty||1)});return {o,sales,paid,remain,credit,types}}
+function customerStats(cid){let o=(cache().ordersByCust.get(cid)||[]).slice();o.forEach(x=>{x.paid=orderPaid(x.id);x.remaining=Math.max(0,r2(effNetOf(x)-x.paid))});let sales=sum(o,'effNet'),paid=sum(o,'paid'),remain=Math.max(0,sales-paid),credit=Math.max(0,sum(customerPayments(cid),'amount')-paid);let types={};o.forEach(x=>{let k=x.productType||'غير محدد';types[k]=(types[k]||0)+Number(x.qty||1)});return {o,sales,paid,remain,credit,types}}
 async function recalcOrderPayments(){applyEffAll();for(let o of S.orders){o.paid=orderPaid(o.id);o.remaining=Math.max(0,r2(effNetOf(o)-o.paid));if(o.paid>=effNetOf(o)&&effNetOf(o)>0&&!o.paymentDate)o.paymentDate=today();await put('orders',o)}}
 
 /* ===== v17: المالية الفعلية (إلغاء / استرجاع) ===== */
 function isVoid(o){return /ملغي|مرتجع/.test((o&&o.status)||'')}
 function applyEff(o){
  let net=Number(o.net||0),cost=Number(o.totalCost||0),fees=Number(o.paymentFees||0);
- let adj=r2(-sum(S.payments.filter(p=>p.type==='refund'&&p.affectsProfit&&p.orderId===o.id),'amount'));
+ let adj=r2(-(_refunds?(_refunds.get(o.id)||0):sum(S.payments.filter(p=>p.type==='refund'&&p.affectsProfit&&p.orderId===o.id),'amount')));
  o.refundAdjust=adj;
  if(isVoid(o)){o.effNet=r2(Number(o.keptAmount||0));o.effCost=r2(Number(o.cancelCost||0));o.effFees=0}
  else{o.effNet=r2(Math.max(0,net-adj));o.effCost=cost;o.effFees=fees}
  o.effProfit=r2(o.effNet-o.effCost-o.effFees);
  return o}
-function applyEffAll(){S.orders.forEach(applyEff)}
+let _refunds=null;
+function applyEffAll(){_refunds=new Map();for(let p of S.payments)if(p.type==='refund'&&p.affectsProfit&&p.orderId!==undefined)_refunds.set(p.orderId,(_refunds.get(p.orderId)||0)+Number(p.amount||0));try{S.orders.forEach(o=>applyEff(o))}finally{_refunds=null}}
 function effNetOf(o){return o.effNet!==undefined?Number(o.effNet):Number(o.net||0)}
 function payTypeTag(p){return p.type==='refund'?'<span class="badge bad">↩ استرجاع</span> ':p.type==='release'?'<span class="badge info">↔ تحويل لرصيد العميلة</span> ':''}
 function paymentCredit(p){let allocated=sum(paymentAllocations(p),'amount');return Math.max(0,Number(p.amount||0)-allocated)}
@@ -2055,6 +2072,7 @@ function bind(){
 async function seed(){let ls=await all('lists');if(!ls.length){let src={...fallback,...DEFAULT_LISTS};for(let [k,v] of Object.entries(src))if(v?.length)await put('lists',{id:k,values:[...new Set(v)]})}else if(!ls.find(x=>x.id==='المدن')){await put('lists',{id:'المدن',values:DEFAULT_LISTS['المدن']})}if(!(await all('settings')).length)await put('settings',{id:'main',...S.settings})}
 // ربط التبويبات فورًا حتى لا تتوقف عن العمل إذا تأخر التحميل أو فشل
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>setPage(b.dataset.p));
+(function(){let a=document.getElementById('app');if(a&&!a.innerHTML)a.innerHTML='<div class="card" style="text-align:center;color:var(--muted)">⏳ جارٍ تحميل البيانات…</div>'})();
 function showFatal(err){
  console.error(err);
  let box=document.getElementById('app');
