@@ -852,18 +852,26 @@ async function drawOrders(){
  if(spf&&!spf.dataset.filled){let cur=spf.value;S.suppliers.forEach(s=>spf.insertAdjacentHTML('beforeend',`<option value="${esc(s.name)}">${esc(s.name)}</option>`));spf.value=cur;spf.dataset.filled='1'}
  let statusList=await fullStatusList();
 
- let all=filteredOrders();
- let pages=Math.max(1,Math.ceil(all.length/ORDERS_PAGE_SIZE));
+ let allFiltered=filteredOrders();
+ let isDone=o=>(/تم التسليم|مكتمل/.test(o.status||'')||isVoid(o))&&Number(o.remaining||0)<=0.009;
+ let active=allFiltered.filter(o=>!isDone(o));
+ let completed=allFiltered.filter(o=>isDone(o));
+
+ let pages=Math.max(1,Math.ceil(active.length/ORDERS_PAGE_SIZE));
  if(ordersPage>pages)ordersPage=pages;
- let a=all.slice((ordersPage-1)*ORDERS_PAGE_SIZE,ordersPage*ORDERS_PAGE_SIZE);
+ let a=active.slice((ordersPage-1)*ORDERS_PAGE_SIZE,ordersPage*ORDERS_PAGE_SIZE);
  const arrow=k=>ordersSort.key===k?(ordersSort.dir===1?' ▲':' ▼'):'';
  const th=(label,key)=>`<th style="cursor:pointer;user-select:none" onclick="ordersSortBy('${key}')">${label}${arrow(key)}</th>`;
+ const theadRow=`<tr>${th('الطلب','no')}${th('التاريخ','date')}${th('العميلة','customerName')}${th('المنتج','productName')}${th('المصنع','supplier')}${th('التكلفة','totalCost')}${th('الخصم','discount')}${th('الصافي','net')}${th('الربح','profit')}${th('المدفوع','paid')}${th('المتبقي','remaining')}${th('الحالة','status')}<th>الشحنة</th><th></th></tr>`;
+ const rowHTML=o=>`<tr><td>${esc(o.no)}</td><td>${esc(o.date)}</td><td>${esc(o.customerName)}<br>${esc(o.phone)}</td><td>${esc(o.productName)}<br>${esc(o.specs)}</td><td>${esc(o.supplier)}</td><td>${fmt(o.totalCost)}</td><td>${Number(o.discount||0)>0?'<b style="color:#a33d38">− '+fmt(o.discount)+'</b>':'—'}</td><td>${fmt(o.net)}</td><td class="${Number(o.effProfit??o.profit??0)>=0?'profit-positive':'profit-negative'}">${fmt(o.effProfit??o.profit)}</td><td>${fmt(o.paid)}</td><td>${fmt(o.remaining)}</td><td>${statusQuickSelect(o,statusList)}</td><td>${esc(orderShipmentNo(o)||'—')}</td><td><button class="btn" onclick="openOrder('${o.id}')">فتح</button>${Number(o.remaining||0)>0.009?`<button class="btn gold" onclick="openPaymentForOrder('${o.id}')" title="تسجيل دفعة لهذا الطلب">💰 دفعة</button>`:''}<button class="btn" onclick="duplicateOrder('${o.id}')" title="نسخ كطلب جديد">⧉ نسخ</button><button class="btn blue" onclick="customerTrackingPrint('${o.id}')">متابعة PDF</button></td></tr>`;
 
- document.getElementById('ordersT').innerHTML=all.length?`<div class="table-wrap"><table><thead><tr>
-${th('الطلب','no')}${th('التاريخ','date')}${th('العميلة','customerName')}${th('المنتج','productName')}${th('المصنع','supplier')}${th('التكلفة','totalCost')}${th('الخصم','discount')}${th('الصافي','net')}${th('الربح','profit')}${th('المدفوع','paid')}${th('المتبقي','remaining')}${th('الحالة','status')}<th>الشحنة</th><th></th>
-</tr></thead><tbody>${a.map(o=>`<tr><td>${esc(o.no)}</td><td>${esc(o.date)}</td><td>${esc(o.customerName)}<br>${esc(o.phone)}</td><td>${esc(o.productName)}<br>${esc(o.specs)}</td><td>${esc(o.supplier)}</td><td>${fmt(o.totalCost)}</td><td>${Number(o.discount||0)>0?'<b style="color:#a33d38">− '+fmt(o.discount)+'</b>':'—'}</td><td>${fmt(o.net)}</td><td class="${Number(o.effProfit??o.profit??0)>=0?'profit-positive':'profit-negative'}">${fmt(o.effProfit??o.profit)}</td><td>${fmt(o.paid)}</td><td>${fmt(o.remaining)}</td><td>${statusQuickSelect(o,statusList)}</td><td>${esc(orderShipmentNo(o)||'—')}</td><td><button class="btn" onclick="openOrder('${o.id}')">فتح</button><button class="btn" onclick="duplicateOrder('${o.id}')" title="نسخ كطلب جديد">⧉ نسخ</button><button class="btn blue" onclick="customerTrackingPrint('${o.id}')">متابعة PDF</button></td></tr>`).join('')}</tbody></table></div>
+ document.getElementById('ordersT').innerHTML=allFiltered.length?`
+${active.length?`<div class="table-wrap"><table><thead>${theadRow}</thead><tbody>${a.map(rowHTML).join('')}</tbody></table></div>
 ${pages>1?`<div class="pager no-print" style="display:flex;gap:6px;justify-content:center;margin-top:12px;flex-wrap:wrap">${Array.from({length:pages},(_,i)=>i+1).map(n=>`<button class="btn ${n===ordersPage?'primary':''}" style="padding:6px 12px" onclick="ordersGoPage(${n})">${n}</button>`).join('')}</div>`:''}
-<div class="meta" style="text-align:center;margin-top:8px;color:var(--muted);font-size:11px">عرض ${a.length} من ${all.length} طلب</div>`:'<div class="empty">لا توجد نتائج.</div>';
+<div class="meta" style="text-align:center;margin-top:8px;color:var(--muted);font-size:11px">عرض ${a.length} من ${active.length} طلب نشط</div>`:'<div class="empty">🎉 لا توجد طلبات نشطة — كل الطلبات مسلَّمة ومسدَّدة بالكامل.</div>'}
+${completed.length?`<details class="fs" style="margin-top:16px"><summary>✅ طلبات مكتملة ومُسلَّمة (${completed.length}) <span class="hint">تم تسليمها وتحصيل كامل المبلغ — لا تحتاج متابعة</span></summary>
+ <div class="table-wrap"><table><thead>${theadRow}</thead><tbody>${completed.map(rowHTML).join('')}</tbody></table></div>
+</details>`:''}`:'<div class="empty">لا توجد نتائج.</div>';
 }
 
 async function duplicateOrder(oid){
@@ -895,7 +903,7 @@ function nextOrderNo(){let mx=0;for(let o of S.orders){let m=/(\d+)\s*$/.exec(St
 function orderCustomerOptions(selId){return '<option value="">— عميلة جديدة (إدخال يدوي) —</option>'+S.customers.slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'ar')).map(c=>`<option value="${c.id}" ${c.id===selId?'selected':''}>${esc(c.name||'بدون اسم')}${c.phone?' — '+esc(c.phone):''}${c.city?' — '+esc(c.city):''}</option>`).join('')}
 function orderProductOptions(selId){return '<option value="">— إدخال يدوي —</option>'+S.products.slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'ar')).map(p=>`<option value="${p.id}" ${p.id===selId?'selected':''}>${esc(p.name||'بدون اسم')}${p.model?' — '+esc(p.model):''}${p.color?' — '+esc(p.color):''}${p.length?' — '+esc(p.length):''} • ${fmt(p.price)}</option>`).join('')}
 function ofld(n){let f=document.getElementById('orderF');return f?f.querySelector('[name="'+n+'"]'):null}
-function oval(n){let e=ofld(n);return e?Number(e.value||0):0}
+function oval(n){let e=ofld(n);return e?Number(String(e.value||0).replace(/,/g,'')):0}
 function otxt(n){let e=ofld(n);return e?e.value:''}
 function oset(n,v){let e=ofld(n);if(e&&(v!==undefined&&v!==null))e.value=v}
 
@@ -1030,6 +1038,19 @@ function renderRefImagesPreview(){
 }
 function removeRefImage(i){pendingRefImages.splice(i,1);renderRefImagesPreview();markModalDirty();scheduleDraftSave()}
 
+function formatMoneyLive(raw){
+ raw=normalizeDigits(String(raw??''));
+ raw=raw.replace(/[^0-9.]/g,'');
+ let firstDot=raw.indexOf('.');
+ if(firstDot>-1)raw=raw.slice(0,firstDot+1)+raw.slice(firstDot+1).replace(/\./g,'');
+ let parts=raw.split('.');
+ let intPart=parts[0].replace(/\D/g,'');
+ let withCommas=intPart.replace(/\B(?=(\d{3})+(?!\d))/g,',');
+ let dec=parts.length>1?'.'+parts[1].slice(0,2):'';
+ return withCommas+dec;
+}
+function moneyValue(str){return Number(String(str??'0').replace(/,/g,''))||0}
+function fldMoney(l,n,v,req=false){let isEmpty=(v===0||v==='0'||v===undefined||v===null||v==='');let val=isEmpty?'':formatMoneyLive(v);return `<div class="field"><label>${l}</label><input name="${n}" type="text" inputmode="decimal" data-money="1" value="${esc(val)}" placeholder="0" ${req?'required':''}></div>`}
 function normalizeDigits(s){
  const map={'٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9','۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9','٫':'.','،':','};
  return s.replace(/[٠-٩۰-۹٫،]/g,c=>map[c]||c);
@@ -1040,6 +1061,18 @@ document.addEventListener('input',e=>{
  if(t.type==='number'){
   let pos=t.selectionStart;let before=t.value;let after=normalizeDigits(before);
   if(after!==before){t.value=after;try{t.setSelectionRange(pos,pos)}catch(err){}}
+  return;
+ }
+ if(t.dataset.money==='1'){
+  let pos=t.selectionStart;let before=t.value;
+  let digitsBefore=(before.slice(0,pos).match(/[0-9]/g)||[]).length;
+  let after=formatMoneyLive(before);
+  if(after!==before){
+   t.value=after;
+   let count=0,newPos=after.length;
+   for(let i=0;i<after.length;i++){if(/[0-9]/.test(after[i]))count++;if(count===digitsBefore){newPos=i+1;break}}
+   try{t.setSelectionRange(newPos,newPos)}catch(err){}
+  }
   return;
  }
  if(t.dataset.phoneStrict==='1'){
@@ -1180,12 +1213,12 @@ async function openOrder(oid,draft){
 
 <details class="fs" open><summary>💰 التسعير والخصم</summary>
  <div class="form">
-  ${fld('سعر الوحدة للعميلة','unitPrice',unitPrice,'number')}
+  ${fldMoney('سعر الوحدة للعميلة','unitPrice',unitPrice)}
   <div class="field"><label>إجمالي المنتج (السعر × الكمية)</label><div class="readonly-box" id="lineTotal">—</div></div>
-  ${fld('رسوم الشحن على العميلة','customerShipping',o.customerShipping||0,'number')}
+  ${fldMoney('رسوم الشحن على العميلة','customerShipping',o.customerShipping||0)}
   ${sel('نوع الخصم','discountType',`<option value="amount" ${dType==='amount'?'selected':''}>مبلغ (${cur})</option><option value="percent" ${dType==='percent'?'selected':''}>نسبة مئوية %</option>`)}
   <div class="field"><label id="discLabel">قيمة الخصم</label><input name="discountValue" type="number" step="any" value="${esc(dVal)}"><div class="actions" style="margin-top:6px;gap:5px"><button class="btn" type="button" style="padding:5px 9px;font-size:11px" onclick="setDiscountPercent(5)">5%</button><button class="btn" type="button" style="padding:5px 9px;font-size:11px" onclick="setDiscountPercent(10)">10%</button><button class="btn" type="button" style="padding:5px 9px;font-size:11px" onclick="setDiscountPercent(15)">15%</button><button class="btn" type="button" style="padding:5px 9px;font-size:11px" onclick="setDiscountPercent(0)">بدون</button></div></div>
-  ${fld('رسوم الدفع (بوابة/تقسيط)','paymentFees',o.paymentFees||0,'number')}
+  ${fldMoney('رسوم الدفع (بوابة/تقسيط)','paymentFees',o.paymentFees||0)}
   ${sel('طريقة الدفع','paymentMethod',pm)}
  </div>
  <div class="sumbar"><div class="mini-grid">
@@ -1197,18 +1230,17 @@ async function openOrder(oid,draft){
   <div class="mini"><b>الربح المتوقع</b><span id="sumProfit">—</span></div>
  </div></div>
  <div class="notice info" id="quickPayBox" style="margin-top:10px">
-  <label style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;cursor:default">💰 <b>هل دفعت العميلة الآن؟</b> اكتبي المبلغ المستلم فعليًا:
-   <input type="number" id="quickPayAmount" placeholder="0" step="any" style="width:130px">
-   <button type="button" class="btn primary" style="padding:7px 14px" onclick="quickRecordPayment()">✅ تسجيل هذا المبلغ كدفعة الآن</button>
+  <label style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;cursor:default">💰 <b>كم دفعت العميلة؟</b>
+   <input type="text" inputmode="decimal" data-money="1" id="quickPayAmount" placeholder="0" style="width:140px">
   </label>
-  <div class="hint" style="margin-top:6px">اتركي الحقل فارغًا إن لم تدفع شيئًا بعد — سيبقى كامل المبلغ «متبقٍ» على حسابها حتى تُسجَّل دفعة فعلية، هنا أو من تبويب الدفعات.</div>
+  <div class="hint" style="margin-top:6px">اكتبي المبلغ المستلم فعليًا ثم انتقلي لأي حقل آخر — يُسجَّل تلقائيًا كدفعة بدون أي زر. اتركيه فارغًا أو صفرًا إن لم تدفع شيئًا بعد — سيبقى كامل المبلغ «متبقٍ» حتى تكتبي رقمًا هنا.</div>
  </div>
 </details>
 
 <details class="fs" open><summary>🧮 التكاليف <span class="hint">إجمالي التكلفة: <b id="sumCost">—</b></span></summary>
  <div class="form">
-  ${fld('تكلفة الوحدة من المصنع','unitCost',unitCost,'number')}${fld('شحن المصنع','factoryShipping',o.factoryShipping||0,'number')}${fld('التغليف','packaging',o.packaging||0,'number')}
-  ${fld('الشحن المحلي','localShipping',o.localShipping||0,'number')}${fld('مصاريف أخرى','otherCost',o.otherCost||0,'number')}
+  ${fldMoney('تكلفة الوحدة من المصنع','unitCost',unitCost)}${fldMoney('شحن المصنع','factoryShipping',o.factoryShipping||0)}${fldMoney('التغليف','packaging',o.packaging||0)}
+  ${fldMoney('الشحن المحلي','localShipping',o.localShipping||0)}${fldMoney('مصاريف أخرى','otherCost',o.otherCost||0)}
  </div>
 </details>
 
@@ -1244,12 +1276,12 @@ async function openOrder(oid,draft){
 
 <details class="fs"><summary>⚙️ حقول قديمة <span class="hint">محفوظة للتوافق مع الطلبات السابقة</span></summary>
  <div class="form">
-  ${fld('المبلغ المدفوع سابقًا (قبل نظام الدفعات)','paidLegacy',o.paid||0,'number')}${fld('شركة الشحن (قديمة)','shipmentCompany',o.shipmentCompany)}${fld('رقم الشحنة (قديمة)','shipmentNo',o.shipmentNo)}
+  ${fldMoney('المبلغ المدفوع سابقًا (قبل نظام الدفعات)','paidLegacy',o.paid||0)}${fld('شركة الشحن (قديمة)','shipmentCompany',o.shipmentCompany)}${fld('رقم الشحنة (قديمة)','shipmentNo',o.shipmentNo)}
   ${fld('رابط التتبع (قديم)','trackingUrl',o.trackingUrl)}
  </div>
 </details>
 
-<div class="actions full" style="margin-top:6px"><button class="btn primary">💾 حفظ الطلب</button><button class="btn gold" type="button" onclick="openPaymentForOrder('${o.id}')">+ تسجيل دفعة</button><select class="btn no-print" style="padding:9px 8px" onchange="if(this.value){waTemplate('${o.id}',this.value);this.value=''}"><option value="">📩 رسالة واتساب...</option><option value="confirm">تأكيد الطلب</option><option value="shipping">إشعار الشحن</option><option value="payment">تذكير بالدفعة</option></select><button class="btn" type="button" onclick="printOrder('${o.id}')">فاتورة العميلة PDF</button><button class="btn blue" type="button" onclick="customerTrackingPrint('${o.id}')">متابعة الشحنة PDF</button>${oid&&!isVoid(o)?`<button class="btn danger" type="button" onclick="closeModal(true);cancelOrder('${o.id}')">⛔ إلغاء الطلب</button>`:''}${oid&&isVoid(o)&&orderPaid(o.id)>Number(o.keptAmount||0)+0.009?`<button class="btn danger" type="button" onclick="closeModal(true);cancelOrder('${o.id}',true,'${esc(o.status)}')">⚠️ تسوية أموال الطلب الملغي</button>`:''}${oid&&orderPaid(o.id)>0?`<button class="btn" type="button" onclick="closeModal(true);openRefund('${o.customerId||''}','${o.id}')">↩ استرجاع مبلغ</button>`:''}${oid?`<button class="btn danger" type="button" onclick="deleteOrder('${o.id}')">حذف</button>`:''}</div>
+<div class="actions full" style="margin-top:6px"><button class="btn primary">💾 حفظ الطلب</button><select class="btn no-print" style="padding:9px 8px" onchange="if(this.value){waTemplate('${o.id}',this.value);this.value=''}"><option value="">📩 رسالة واتساب...</option><option value="confirm">تأكيد الطلب</option><option value="shipping">إشعار الشحن</option><option value="payment">تذكير بالدفعة</option></select><button class="btn" type="button" onclick="printOrder('${o.id}')">فاتورة العميلة PDF</button><button class="btn blue" type="button" onclick="customerTrackingPrint('${o.id}')">متابعة الشحنة PDF</button>${oid&&!isVoid(o)?`<button class="btn danger" type="button" onclick="closeModal(true);cancelOrder('${o.id}')">⛔ إلغاء الطلب</button>`:''}${oid&&isVoid(o)&&orderPaid(o.id)>Number(o.keptAmount||0)+0.009?`<button class="btn danger" type="button" onclick="closeModal(true);cancelOrder('${o.id}',true,'${esc(o.status)}')">⚠️ تسوية أموال الطلب الملغي</button>`:''}${oid&&orderPaid(o.id)>0?`<button class="btn" type="button" onclick="closeModal(true);openRefund('${o.customerId||''}','${o.id}')">↩ استرجاع مبلغ</button>`:''}${oid?`<button class="btn danger" type="button" onclick="deleteOrder('${o.id}')">حذف</button>`:''}</div>
 </form>${installmentsHtml(o)}<div class="section"><h3>سجل الأحداث والانتقالات</h3><div id="orderTimeline">${await timeline(o.id)}</div></div>`);
 
  let F=document.getElementById('orderF');
@@ -1271,6 +1303,9 @@ async function openOrder(oid,draft){
   renderRefImagesPreview();e.target.value='';markModalDirty();scheduleDraftSave();
  });
  renderRefImagesPreview();
+ let existingQuickPay=S.payments.find(p=>p.orderId===o.id&&p.quickEntry);
+ let qpEl=document.getElementById('quickPayAmount');
+ if(qpEl){qpEl.value=existingQuickPay?formatMoneyLive(existingQuickPay.amount):'';qpEl.addEventListener('change',()=>syncQuickPayment())}
  if(o.productId)applyProductToOrder(o.productId);
  if(o.customerId&&S.customers.find(c=>c.id===o.customerId))applyCustomerToOrder(o.customerId);else if(!oid)applyCustomerToOrder('');
  recalcOrderForm();checkNewProduct();checkPhoneFormat();
@@ -1284,7 +1319,8 @@ async function openOrder(oid,draft){
  async function saveOrderForm(closeAfter){
   if(!otxt('customerName').trim()){alert('أدخلي اسم العميلة أولًا.');return null}
   let x=Object.fromEntries(new FormData(F));
-  for(let k of ['qty','productionDays','unitPrice','unitCost','factoryShipping','packaging','localShipping','otherCost','customerShipping','discountValue','paymentFees','paidLegacy'])x[k]=Number(x[k]||0);
+  for(let k of ['qty','productionDays','discountValue'])x[k]=Number(x[k]||0);
+  for(let k of ['unitPrice','unitCost','factoryShipping','packaging','localShipping','otherCost','customerShipping','paymentFees','paidLegacy'])x[k]=moneyValue(x[k]);
   x.qty=Math.max(1,x.qty||1);
   x.productPrice=r2(x.unitPrice*x.qty);
   x.costProduct=r2(x.unitCost*x.qty);
@@ -1322,7 +1358,7 @@ async function openOrder(oid,draft){
   o=x;S.orders=S.orders.filter(y=>y.id!==x.id).concat([x]);
   clearOrderDraft(x.id);
   if(closeAfter){modalDirty=false;closeModal(true);await load();render();toast('تم حفظ الطلب');if(isVoid(x)&&!wasVoid&&Number(x.paid||0)>0){await cancelOrder(x.id,true,x.status)}}
-  else{await load();modalDirty=false;toast('تم حفظ الطلب تلقائيًا قبل المتابعة');}
+  else{await load();modalDirty=false;}
   return x;
  }
  window.saveOrderFormSilently=async()=>{if(F.dataset.oid!==o.id)return null;return saveOrderForm(false)};
@@ -1343,29 +1379,52 @@ else if(type==='shipping'){let comp=o.customerShipmentCompany||o.shipmentCompany
 else if(type==='payment')text=`مرحباً ${name} 🌸\nتذكير بخصوص طلبك رقم ${o.no}.\nالمبلغ المتبقي: ${fmt(o.remaining)}\nنرجو التكرم بإتمام السداد في أقرب وقت لإكمال إجراءات طلبك. شكراً لتعاونك 🤍`;
 waSend(o.phone,text)}
 function waCustomerReminder(cid){let c=S.customers.find(x=>x.id===cid);if(!c)return;let remain=sum(customerOpenOrders(cid),'remaining');let text=`مرحباً ${c.name||''} 🌸\nتذكير ودّي بخصوص رصيدك المتبقي لدينا: ${fmt(remain)}\nيسعدنا تواصلك لإتمام السداد. شكراً لثقتك بنا 🤍`;waSend(c.phone,text)}
-function installmentsHtml(o){let list=o.installments||[];let planned=sum(list,'amount');
+function installmentsHtml(o){let list=o.installments||[];if(!list.length)return '';let planned=sum(list,'amount');
 let rows=list.length?list.map((x,i)=>{let cls=x.paid?'ok':dateOnly(x.dueDate)<today()?'bad':dateOnly(x.dueDate)===today()?'warn':'info';let label=x.paid?'مسدد '+esc(x.paidDate||''):dateOnly(x.dueDate)<today()?'متأخر':dateOnly(x.dueDate)===today()?'مستحق اليوم':'قادم';
 return `<div class="event"><div><b>قسط ${i+1}:</b> ${fmt(x.amount)} — استحقاق ${esc(x.dueDate)} <span class="badge ${cls}">${label}</span></div><div class="actions no-print" style="margin-top:6px">${!x.paid?`<button class="btn primary" type="button" onclick="markInstallmentPaid('${o.id}','${x.id}')">تحديد كمسدد</button>`:''}<button class="btn danger" type="button" onclick="deleteInstallment('${o.id}','${x.id}')">حذف</button></div></div>`}).join(''):'<div class="empty">لا توجد أقساط مضافة بعد.</div>';
-return `<div class="section"><h3>خطة تقسيط الدفعات</h3><div class="notice info" style="margin-bottom:10px">إجمالي المخطط للأقساط: ${fmt(planned)} من إجمالي الطلب ${fmt(o.net)}</div>${rows}<button class="btn gold no-print" type="button" style="margin-top:10px" onclick="addInstallment('${o.id}')">+ إضافة قسط</button></div>`}
+return `<div class="section"><h3>خطة تقسيط الدفعات</h3><div class="notice info" style="margin-bottom:10px">إجمالي المخطط للأقساط: ${fmt(planned)} من إجمالي الطلب ${fmt(o.net)}</div>${rows}</div>`}
 async function addInstallment(oid){let amt=prompt('قيمة القسط؟');if(!amt||isNaN(amt)||Number(amt)<=0)return;let due=prompt('تاريخ الاستحقاق (YYYY-MM-DD)؟',today());if(!due)return;let o=S.orders.find(x=>x.id===oid);if(!o&&window.saveOrderFormSilently){o=await window.saveOrderFormSilently();if(!o)return;oid=o.id}if(!o)return;o.installments=o.installments||[];o.installments.push({id:id('inst'),amount:Number(amt),dueDate:due,paid:false});await put('orders',o);closeModal(true);await load();await openOrder(oid);toast('تمت إضافة القسط للخطة')}
-async function quickRecordPayment(){
- let inputEl=document.getElementById('quickPayAmount');
- let amt=r2(Number(inputEl?.value||0));
- if(!amt||amt<=0){toast('أدخلي مبلغًا أكبر من صفر لتسجيله كدفعة');return}
- if(!window.saveOrderFormSilently){toast('تعذّر الوصول لنموذج الطلب');return}
+async function syncQuickPayment(){
+ let inputEl=document.getElementById('quickPayAmount');if(!inputEl)return;
+ if(!window.saveOrderFormSilently)return;
+ let amt=r2(moneyValue(inputEl.value));
  let saved=await window.saveOrderFormSilently();
  if(!saved)return;
- let remaining=Math.max(0,r2(effNetOf(saved)-orderPaid(saved.id)));
- if(amt>remaining+0.009){
-  if(!confirm('⚠️ المبلغ المدخل ('+fmt(amt)+') أكبر من المتبقي على هذا الطلب ('+fmt(remaining)+').\nالزائد سيُحفظ كرصيد دائن لهذه العميلة ويمكن تطبيقه لاحقًا على أي طلب.\n\nهل تريدين المتابعة؟'))return;
+ let F=document.getElementById('orderF');
+ let existing=S.payments.find(p=>p.orderId===saved.id&&p.quickEntry);
+ let othersPaid=r2(orderPaid(saved.id)-(existing?Number(existing.amount||0):0));
+ if(amt<=0.009){
+  if(existing){
+   await del('payments',existing.id);
+   S.payments=S.payments.filter(p=>p.id!==existing.id);
+   await recalcOrderPayments();
+   await event(saved.id,'تم إلغاء الدفعة السريعة المسجَّلة من شاشة الطلب');
+   await load();
+   if(F){F.dataset.paid=orderPaid(saved.id)||0;recalcOrderForm()}
+   toast('تم إلغاء تسجيل هذه الدفعة');
+  }
+  return;
  }
- let pay={id:id('pay'),orderId:saved.id,customerId:saved.customerId,customerName:saved.customerName,amount:amt,date:today(),method:saved.paymentMethod||'',reference:'دفعة سريعة من شاشة الطلب',orderNo:saved.no,allocations:[{orderId:saved.id,amount:Math.min(amt,remaining)}]};
- await put('payments',pay);S.payments.push(pay);
+ let remaining=Math.max(0,r2(effNetOf(saved)-othersPaid));
+ if(amt>remaining+0.009){
+  if(!confirm('⚠️ المبلغ المدخل ('+fmt(amt)+') أكبر من المتبقي على هذا الطلب ('+fmt(remaining)+').\nالزائد سيُحفظ كرصيد دائن لهذه العميلة ويمكن تطبيقه لاحقًا على أي طلب.\n\nهل تريدين المتابعة؟')){
+   if(existing)inputEl.value=formatMoneyLive(existing.amount);else inputEl.value='';
+   return;
+  }
+ }
+ let alloc=[{orderId:saved.id,amount:Math.min(amt,remaining)}];
+ if(existing){
+  existing.amount=amt;existing.allocations=alloc;existing.date=existing.date||today();existing.method=saved.paymentMethod||existing.method||'';
+  await put('payments',existing);
+ }else{
+  let pay={id:id('pay'),orderId:saved.id,customerId:saved.customerId,customerName:saved.customerName,amount:amt,date:today(),method:saved.paymentMethod||'',reference:'دفعة من شاشة الطلب',orderNo:saved.no,quickEntry:true,allocations:alloc};
+  await put('payments',pay);S.payments.push(pay);
+ }
  await recalcOrderPayments();
- await event(saved.id,'تم تسجيل دفعة سريعة بقيمة '+fmt(amt)+' من داخل شاشة الطلب');
+ await event(saved.id,'تم تسجيل/تحديث دفعة بقيمة '+fmt(amt)+' من داخل شاشة الطلب');
  await load();
- await openOrder(saved.id);
- toast('✅ تم تسجيل الدفعة وإضافتها لحساب العميلة');
+ if(F){F.dataset.paid=orderPaid(saved.id)||0;recalcOrderForm()}
+ toast('✅ تم تسجيل الدفعة');
 }
 async function markInstallmentPaid(oid,iid){let o=S.orders.find(x=>x.id===oid);if(!o)return;let inst=(o.installments||[]).find(x=>x.id===iid);if(!inst)return;inst.paid=true;inst.paidDate=today();await put('orders',o);let idx=o.installments.indexOf(inst);let pay={id:id('pay'),orderId:oid,customerId:o.customerId,customerName:o.customerName,amount:inst.amount,date:today(),method:o.paymentMethod||'',reference:'قسط '+(idx+1)};await put('payments',pay);await recalcOrderPayments();await event(oid,'تم سداد القسط رقم '+(idx+1)+' بقيمة '+fmt(inst.amount));closeModal(true);await load();await openOrder(oid);toast('تم تسجيل سداد القسط وربطه بالدفعات')}
 async function deleteInstallment(oid,iid){let o=S.orders.find(x=>x.id===oid);if(!o)return;let inst=(o.installments||[]).find(x=>x.id===iid);let msg=inst&&inst.paid?'هذا القسط مُسدَّد بالفعل. حذفه من الخطة لن يحذف الدفعة المسجَّلة له في تبويب الدفعات، وستبقى محسوبة ضمن مدفوعات الطلب. متابعة حذف القسط من الخطة فقط؟':'حذف هذا القسط من الخطة؟';if(!confirm(msg))return;o.installments=(o.installments||[]).filter(x=>x.id!==iid);await put('orders',o);closeModal(true);await load();await openOrder(oid)}
@@ -1549,7 +1608,7 @@ async function openProduct(pid,draft){
 
 <details class="fs" open><summary>💰 التسعير والمصدر <span class="hint">هذا السعر يُجلب تلقائيًا عند اختيار المنتج في الطلبات، ويبقى قابلًا للتعديل حينها</span></summary>
  <div class="form">
-  ${fld('السعر للعميلة','price',p.price,'number')}${fld('تكلفة الوحدة من المصنع','cost',p.cost,'number')}${sel('المصنع / المورد الافتراضي','supplier',sups)}
+  ${fldMoney('السعر للعميلة','price',p.price)}${fldMoney('تكلفة الوحدة من المصنع','cost',p.cost)}${sel('المصنع / المورد الافتراضي','supplier',sups)}
  </div>
  ${p.price&&p.cost?`<div class="notice info" style="margin-top:8px">هامش الربح التقديري للوحدة: <b>${fmt(p.price-p.cost)}</b> (${Math.round((p.price-p.cost)/p.price*100)}%)</div>`:''}
 </details>
@@ -1570,7 +1629,7 @@ ${existing?`<details class="fs" open><summary>📊 أداء المنتج <span c
 <div class="actions full"><button class="btn primary">حفظ</button><button class="btn" type="button" onclick="printProduct('${p.id}')">PDF</button>${existing?`<button class="btn" type="button" onclick="duplicateProduct('${p.id}')">⧉ نسخ كمنتج جديد</button><button class="btn danger" type="button" onclick="deleteProduct('${p.id}')">حذف</button>`:''}</div>
 </form>`);
 
- document.getElementById('productF').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));x.price=+x.price||0;x.cost=+x.cost||0;x.id=p.id;x.createdAt=p.createdAt||new Date().toISOString();let f=document.getElementById('pimg').files[0];x.image=f?await compressImage(f):(p.image||'');await addToListIfNew('الألوان',x.color);await put('products',x);closeModal();await load();render();toast('تم حفظ المنتج')}
+ document.getElementById('productF').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));x.price=moneyValue(x.price);x.cost=moneyValue(x.cost);x.id=p.id;x.createdAt=p.createdAt||new Date().toISOString();let f=document.getElementById('pimg').files[0];x.image=f?await compressImage(f):(p.image||'');await addToListIfNew('الألوان',x.color);await put('products',x);closeModal();await load();render();toast('تم حفظ المنتج')}
 }
 async function deleteProduct(pid){
  let p=S.products.find(x=>x.id===pid);if(!p)return;
@@ -1791,7 +1850,7 @@ async function openPayment(presetCid,focusOrderId,editPid){
  let cs=S.customers.map(c=>`<option value="${c.id}" ${c.id===presetCid?'selected':''}>${esc(c.name)} — ${esc(c.phone||'')}</option>`).join('');
  modal(ep?'تعديل الدفعة (المبلغ والتوزيع)':'تسجيل دفعة وتوزيعها على الطلبات',`<form id="payF" class="form">
  ${sel('العميلة','customerId','<option value="">اختر العميلة</option>'+cs)}
- ${fld('المبلغ المستلم','amount',ep?ep.amount:0,'number',true)}
+ ${fldMoney('المبلغ المستلم','amount',ep?ep.amount:0,true)}
  <div id="amtLive" class="notice info full" style="font-size:12.5px;line-height:1.9">اختاري العميلة وأدخلي المبلغ.</div>
  ${fld('التاريخ','date',ep?ep.date:today(),'date')}${sel('طريقة الدفع','method',await opts('طرق الدفع',ep?ep.method:''))}${fld('المرجع','reference',ep?ep.reference:'')}${fld('المستلم بواسطة','receivedBy',ep?ep.receivedBy:S.settings.owner)}
  <div class="field full"><label>ملاحظة</label><textarea name="note">${esc(ep?ep.note||'':'')}</textarea></div>
@@ -1803,7 +1862,6 @@ async function openPayment(presetCid,focusOrderId,editPid){
 </form>`);
 
  let cf=document.querySelector('#payF [name=customerId]'),af=document.querySelector('#payF [name=amount]'),box=document.getElementById('payOrdersBox'),pv=document.getElementById('payPreview'),live=document.getElementById('amtLive');
- af.step='any';
  if(ep)cf.disabled=true;
  let userEditedRows=false;
 
@@ -1813,19 +1871,19 @@ async function openPayment(presetCid,focusOrderId,editPid){
   let orders=S.orders.filter(o=>o.customerId===cid&&!isVoid(o)&&(remOf(o)>0||epOf(o.id)>0)).sort((a,b)=>((epOf(b.id)>0)-(epOf(a.id)>0))||(a.date||'').localeCompare(b.date||''));
   let credit=customerAvailableCredit(cid);
   box.innerHTML=orders.length?orders.map(o=>{let own=epOf(o.id),max=r2(remOf(o)+own),before=r2(orderPaid(o.id)-own);
-   return `<div class="pay-row" style="flex-wrap:wrap"><label style="flex:1;min-width:190px"><input type="checkbox" class="poc" data-oid="${o.id}"> ${esc(o.no)} — ${esc(o.productName||'طلب')}<br><span class="meta">قيمة الطلب ${fmt(effNetOf(o))} · مدفوع سابقًا ${fmt(before)} · <b>المتبقي ${fmt(max)}</b></span></label><input type="number" class="poa" data-oid="${o.id}" data-max="${max}" placeholder="0" step="any" style="width:110px"><div class="meta poafter" data-oid="${o.id}" style="width:100%"></div></div>`}).join(''):'<div class="empty">لا توجد طلبات مفتوحة لهذه العميلة — ستُسجَّل الدفعة كدفعة مقدّمة (رصيد دائن) وتُربط بأي طلب لاحقًا.</div>';
+   return `<div class="pay-row" style="flex-wrap:wrap"><label style="flex:1;min-width:190px"><input type="checkbox" class="poc" data-oid="${o.id}"> ${esc(o.no)} — ${esc(o.productName||'طلب')}<br><span class="meta">قيمة الطلب ${fmt(effNetOf(o))} · مدفوع سابقًا ${fmt(before)} · <b>المتبقي ${fmt(max)}</b></span></label><input type="text" inputmode="decimal" data-money="1" class="poa" data-oid="${o.id}" data-max="${max}" placeholder="0" style="width:110px"><div class="meta poafter" data-oid="${o.id}" style="width:100%"></div></div>`}).join(''):'<div class="empty">لا توجد طلبات مفتوحة لهذه العميلة — ستُسجَّل الدفعة كدفعة مقدّمة (رصيد دائن) وتُربط بأي طلب لاحقًا.</div>';
   if(credit&&!ep)box.insertAdjacentHTML('beforeend',`<div class="meta" style="margin-top:6px">رصيد دائن سابق غير موزّع لهذه العميلة: <b>${fmt(credit)}</b> (يمكن نقله لاحقًا عبر «نقل رصيد دائن»)</div>`);
-  box.querySelectorAll('.poa').forEach(inp=>inp.addEventListener('input',()=>{userEditedRows=true;let cb=box.querySelector(`.poc[data-oid="${inp.dataset.oid}"]`);cb.checked=Number(inp.value||0)>0;refreshPreview()}));
-  box.querySelectorAll('.poc').forEach(cb=>cb.addEventListener('change',()=>{userEditedRows=true;let inp=box.querySelector(`.poa[data-oid="${cb.dataset.oid}"]`);if(!cb.checked)inp.value='';else if(!Number(inp.value||0)){let used=[...box.querySelectorAll('.poa')].reduce((t,i)=>t+(i===inp?0:Number(i.value||0)),0);let free=Math.max(0,r2(Number(af.value||0)-used));inp.value=Number(af.value||0)>0?Math.min(Number(inp.dataset.max),free)||inp.dataset.max:inp.dataset.max}refreshPreview()}));
-  if(ep){orders.forEach(o=>{let own=epOf(o.id);if(own>0){let cb=box.querySelector(`.poc[data-oid="${o.id}"]`),inp=box.querySelector(`.poa[data-oid="${o.id}"]`);cb.checked=true;inp.value=own}});userEditedRows=orders.filter(o=>epOf(o.id)>0).length>1}
-  else if(focusOrderId){let cb=box.querySelector(`.poc[data-oid="${focusOrderId}"]`),inp=box.querySelector(`.poa[data-oid="${focusOrderId}"]`);if(cb&&inp){cb.checked=true;inp.value=inp.dataset.max;if(!Number(af.value||0))af.value=inp.dataset.max;userEditedRows=true}}
-  else if(orders.length&&Number(af.value||0)>0){autoDistributePayment(true)}
+  box.querySelectorAll('.poa').forEach(inp=>inp.addEventListener('input',()=>{userEditedRows=true;let cb=box.querySelector(`.poc[data-oid="${inp.dataset.oid}"]`);cb.checked=moneyValue(inp.value)>0;refreshPreview()}));
+  box.querySelectorAll('.poc').forEach(cb=>cb.addEventListener('change',()=>{userEditedRows=true;let inp=box.querySelector(`.poa[data-oid="${cb.dataset.oid}"]`);if(!cb.checked)inp.value='';else if(!moneyValue(inp.value)){let used=[...box.querySelectorAll('.poa')].reduce((t,i)=>t+(i===inp?0:moneyValue(i.value)),0);let free=Math.max(0,r2(moneyValue(af.value)-used));let v=moneyValue(af.value)>0?Math.min(Number(inp.dataset.max),free)||Number(inp.dataset.max):Number(inp.dataset.max);inp.value=formatMoneyLive(v)}refreshPreview()}));
+  if(ep){orders.forEach(o=>{let own=epOf(o.id);if(own>0){let cb=box.querySelector(`.poc[data-oid="${o.id}"]`),inp=box.querySelector(`.poa[data-oid="${o.id}"]`);cb.checked=true;inp.value=formatMoneyLive(own)}});userEditedRows=orders.filter(o=>epOf(o.id)>0).length>1}
+  else if(focusOrderId){let cb=box.querySelector(`.poc[data-oid="${focusOrderId}"]`),inp=box.querySelector(`.poa[data-oid="${focusOrderId}"]`);if(cb&&inp){cb.checked=true;inp.value=formatMoneyLive(inp.dataset.max);if(!moneyValue(af.value))af.value=formatMoneyLive(inp.dataset.max);userEditedRows=true}}
+  else if(orders.length&&moneyValue(af.value)>0){autoDistributePayment(true)}
  }
  function refreshPreview(){
-  let cid=cf.value,amt=Number(af.value||0),cur=S.settings.currency||'ر.س';
+  let cid=cf.value,amt=moneyValue(af.value),cur=S.settings.currency||'ر.س';
   let els=[...box.querySelectorAll('.poa')];
   let allocated=0,over=false,totalRem=0;
-  els.forEach(i=>{let v=Number(i.value||0),max=Number(i.dataset.max||0);allocated+=v;totalRem+=max;
+  els.forEach(i=>{let v=moneyValue(i.value),max=Number(i.dataset.max||0);allocated+=v;totalRem+=max;
    let af2=box.querySelector(`.poafter[data-oid="${i.dataset.oid}"]`);
    if(v>max+0.009){over=true;i.style.borderColor='#a33d38';af2.innerHTML=`<b style="color:#a33d38">⚠️ المبلغ أكبر من المتبقي على هذا الطلب (${fmt(max)})</b>`}
    else{i.style.borderColor='';let left=r2(max-v);af2.innerHTML=v>0?(left>0?`بعد هذه الدفعة يتبقى على الطلب: <b>${fmt(left)}</b>`:`<b style="color:#277353">✓ سيصبح الطلب مسدَّدًا بالكامل</b>`):''}
@@ -1841,13 +1899,13 @@ async function openPayment(presetCid,focusOrderId,editPid){
   pv.innerHTML=amt<=0?'أدخلي المبلغ المستلم.':(over?`<b style="color:#a33d38">تنبيه: مبلغ أحد الطلبات أكبر من المتبقي عليه. صححي الأرقام قبل الحفظ.</b>`:diff>0?(els.length?`سيُوزَّع <b>${fmt(allocated)}</b> على الطلبات المحددة، ويبقى <b>${fmt(diff)}</b> كرصيد دائن غير موزّع لهذه العميلة (لا يضيع، ويمكن تطبيقه لاحقًا على أي طلب من «نقل رصيد دائن»).`:`سيُسجَّل <b>${fmt(diff)}</b> كرصيد دائن للعميلة.`):diff<0?`<b style="color:#a33d38">تنبيه: مجموع التوزيع (${fmt(allocated)}) أكبر من المبلغ المستلم (${fmt(amt)}). صححي الأرقام قبل الحفظ.</b>`:`سيُوزَّع كامل المبلغ (${fmt(allocated)}) على الطلبات المحددة، بدون رصيد دائن متبقٍ.`);
  }
  window.autoDistributePayment=function(silent){
-  let amt=Number(af.value||0);if(!amt){if(!silent)toast('أدخلي المبلغ أولًا');return}
+  let amt=moneyValue(af.value);if(!amt){if(!silent)toast('أدخلي المبلغ أولًا');return}
   userEditedRows=false;
   let left=amt;
   box.querySelectorAll('.pay-row').forEach(row=>{
    let cb=row.querySelector('.poc'),inp=row.querySelector('.poa'),max=Number(inp.dataset.max||0);
    let use=Math.max(0,Math.min(max,left));
-   inp.value=use>0?use:'';cb.checked=use>0;left=r2(left-use);
+   inp.value=use>0?formatMoneyLive(use):'';cb.checked=use>0;left=r2(left-use);
   });
   refreshPreview();
  };
@@ -1859,11 +1917,11 @@ async function openPayment(presetCid,focusOrderId,editPid){
  document.getElementById('payF').onsubmit=async e=>{
   e.preventDefault();
   let x=Object.fromEntries(new FormData(e.target));
-  let cid=cf.value,amt=r2(+x.amount||0);
+  let cid=cf.value,amt=r2(moneyValue(x.amount));
   if(!cid||amt<=0){toast('اختاري العميلة وأدخلي المبلغ');return}
   let els=[...box.querySelectorAll('.poa')];
-  if(els.some(i=>Number(i.value||0)>Number(i.dataset.max||0)+0.009)){toast('مبلغ أحد الطلبات أكبر من المتبقي عليه — صححي الرقم');return}
-  let rows=els.map(i=>({orderId:i.dataset.oid,amount:r2(Number(i.value||0))})).filter(r=>r.amount>0);
+  if(els.some(i=>moneyValue(i.value)>Number(i.dataset.max||0)+0.009)){toast('مبلغ أحد الطلبات أكبر من المتبقي عليه — صححي الرقم');return}
+  let rows=els.map(i=>({orderId:i.dataset.oid,amount:r2(moneyValue(i.value))})).filter(r=>r.amount>0);
   if(ep)epAl.forEach(a=>{if(!els.some(i=>i.dataset.oid===a.orderId))rows.push({orderId:a.orderId,amount:a.amount})});
   let allocated=r2(rows.reduce((t,r)=>t+r.amount,0));
   if(allocated>amt+0.009){toast('مجموع التوزيع أكبر من المبلغ المستلم — صححي الأرقام');return}
@@ -1871,8 +1929,8 @@ async function openPayment(presetCid,focusOrderId,editPid){
   let totalRem=r2(els.reduce((t,i)=>t+Number(i.dataset.max||0),0));
   if(els.length&&amt>totalRem+0.009){
    if(!confirm('⚠️ المبلغ المدخل ('+fmt(amt)+') أكبر من المتبقي على طلبات العميلة ('+fmt(totalRem)+') بمقدار '+fmt(r2(amt-totalRem))+'.\n\nالزائد سيُحفظ كرصيد دائن للعميلة، ويمكنك تعديل المبلغ لاحقًا من قائمة الدفعات.\n\nهل تريدين المتابعة؟'))return;
-  }else if(leftover>0&&els.some(i=>!Number(i.value||0))){
-   if(!confirm('⚠️ لم توزّعي كامل المبلغ على الطلبات المفتوحة لهذه العميلة (يوجد '+els.filter(i=>!Number(i.value||0)).length+' طلب آخر لم يُحدَّد). المبلغ المتبقي '+fmt(leftover)+' سيُحفظ كرصيد دائن غير مرتبط بأي طلب، ولن يظهر كسداد على طلب معيّن حتى يُنقل يدويًا لاحقًا.\n\nهل تريدين المتابعة هكذا؟ اضغطي إلغاء للعودة وتحديد التوزيع الصحيح.'))return;
+  }else if(leftover>0&&els.some(i=>!moneyValue(i.value))){
+   if(!confirm('⚠️ لم توزّعي كامل المبلغ على الطلبات المفتوحة لهذه العميلة (يوجد '+els.filter(i=>!moneyValue(i.value)).length+' طلب آخر لم يُحدَّد). المبلغ المتبقي '+fmt(leftover)+' سيُحفظ كرصيد دائن غير مرتبط بأي طلب، ولن يظهر كسداد على طلب معيّن حتى يُنقل يدويًا لاحقًا.\n\nهل تريدين المتابعة هكذا؟ اضغطي إلغاء للعودة وتحديد التوزيع الصحيح.'))return;
   }
   let cust=S.customers.find(c=>c.id===cid);
   let firstNo=rows.length?(S.orders.find(o=>o.id===rows[0].orderId)||{}).no:'';
