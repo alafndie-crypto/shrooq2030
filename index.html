@@ -407,6 +407,40 @@ tr:hover td{background:#fbf8f3}
  .actions .btn{min-width:0}
 }
 
+
+/* ===== Client entry form: larger, balanced fields and less empty space ===== */
+.customer-entry-form{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px 16px;
+  align-items:start;
+}
+.customer-entry-form .field label{
+  font-size:11px;
+  font-weight:700;
+  color:#655d55;
+  margin-bottom:7px;
+}
+.customer-entry-form input,
+.customer-entry-form select,
+.customer-entry-form textarea{
+  width:100%;
+  min-height:50px;
+  padding:12px 14px;
+  font-size:14px;
+  border-radius:12px;
+  box-sizing:border-box;
+}
+.customer-entry-form textarea{min-height:96px;resize:vertical;line-height:1.7}
+.customer-entry-form .full{grid-column:1/-1}
+.customer-entry-form .hint{font-size:10px}
+@media(max-width:760px){
+  .customer-entry-form{grid-template-columns:1fr;gap:10px}
+  .customer-entry-form .full{grid-column:auto}
+  .customer-entry-form input,
+  .customer-entry-form select,
+  .customer-entry-form textarea{min-height:46px;font-size:13px;padding:10px 12px}
+}
+
 /* ===== Mobile-first phone presentation ===== */
 @media (max-width: 760px){
   html,body{width:100%;min-width:0;overflow-x:hidden}
@@ -1222,7 +1256,7 @@ function applyCustomerToOrder(cid){
  let dup=document.getElementById('dupCustBox');if(dup)dup.innerHTML='';
  if(!cid){if(box)box.innerHTML='<div class="notice">عميلة جديدة — عبّئي البيانات يدويًا وسيتم إنشاء ملف لها تلقائيًا عند الحفظ.</div>';return}
  let c=S.customers.find(x=>x.id===cid);if(!c)return;
- oset('customerName',c.name||'');oset('phone',c.phone||'');oset('city',c.city||'');oset('district',c.district||'');oset('address',c.address||'');
+ oset('customerName',c.name||'');oset('phone',c.phone||'');oset('shortAddress',c.shortAddress||'');oset('phone2',c.phone2||'');oset('city',c.city||'');oset('district',c.district||'');oset('address',c.address||'');
  if(ofld('customerPrefs'))oset('customerPrefs',c.notes||'');
  if(box){
   let os=S.orders.filter(x=>x.customerId===cid);
@@ -1269,7 +1303,7 @@ async function quickSaveCustomer(){
  let cid=otxt('customerId');
  let c=S.customers.find(x=>x.id===cid)||(phone?S.customers.find(x=>x.phone===phone):null)||{id:id('cus'),createdAt:new Date().toISOString()};
  let isNew=!S.customers.find(x=>x.id===c.id);
- c.name=name;c.phone=phone;c.city=otxt('city');c.address=otxt('address');
+ c.name=name;c.phone=phone;c.shortAddress=otxt('shortAddress');c.phone2=otxt('phone2');c.city=otxt('city');c.address=otxt('address');
  let pr=otxt('customerPrefs');if(pr)c.notes=pr;
  await put('customers',c);await auditLogAction(isNew?'create':'update','customers',c.id,(isNew?'إضافة':'تعديل')+' العميلة '+(c.name||''));await load();
  let selEl=ofld('customerId');if(selEl)selEl.innerHTML=orderCustomerOptions(c.id);
@@ -1379,6 +1413,8 @@ function normalizeDigits(s){
  const map={'٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9','۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9','٫':'.','،':','};
  return s.replace(/[٠-٩۰-۹٫،]/g,c=>map[c]||c);
 }
+function normalizeShortAddress(v){return String(v??'').replace(/[^A-Za-z0-9]/g,'').toUpperCase().slice(0,8)}
+function validShortAddress(v){return !v || /^[A-Z]{4}[0-9]{4}$/.test(String(v).trim().toUpperCase())}
 document.addEventListener('input',e=>{
  let t=e.target;
  if(!t||t.tagName!=='INPUT')return;
@@ -1397,6 +1433,11 @@ document.addEventListener('input',e=>{
    for(let i=0;i<after.length;i++){if(/[0-9]/.test(after[i]))count++;if(count===digitsBefore){newPos=i+1;break}}
    try{t.setSelectionRange(newPos,newPos)}catch(err){}
   }
+  return;
+ }
+ if(t.classList.contains('short-address')){
+  let before=t.value, after=normalizeShortAddress(before);
+  if(after!==before){t.value=after;try{t.setSelectionRange(after.length,after.length)}catch(err){}}
   return;
  }
  if(t.dataset.phoneStrict==='1'){
@@ -1504,12 +1545,14 @@ async function openOrder(oid,draft){
  </div>
  <div id="custInfo" style="margin-top:10px"></div>
  <div id="dupCustBox"></div>
- <div class="form">
+ <div class="form customer-entry-form">
   ${fld('اسم العميلة','customerName',o.customerName,'text',true)}
   <div class="field"><label>الجوال <span style="color:#b44">*</span></label><input name="phone" data-phone-strict="1" required value="${esc(o.phone||'')}"><div id="phoneHint" class="hint" style="margin-top:4px"></div></div>
+  <div class="field"><label>العنوان الوطني المختصر</label><input name="shortAddress" class="short-address" inputmode="text" maxlength="8" pattern="[A-Za-z]{4}[0-9]{4}" autocomplete="off" value="${esc(o.shortAddress||'')}" placeholder="ABCD1234 — اختياري"></div>
+  <div class="field"><label>هاتف إضافي</label><input name="phone2" data-phone-strict="1" inputmode="tel" value="${esc(o.phone2||'')}" placeholder="اختياري"></div>
   ${sel('المدينة','city',cityOpts)}${fld('الحي','district',o.district)}
   <div class="field full"><label>العنوان بالتفصيل</label><input name="address" value="${esc(o.address||'')}"></div>
-  <div class="field full"><label>تفضيلات العميلة (طول، لون، كثافة، مقاس...)</label><textarea name="customerPrefs" rows="2">${esc(prefs)}</textarea></div>
+  <div class="field full"><label>تفضيلات العميلة (طول، لون، كثافة، مقاس...)</label><textarea name="customerPrefs" rows="3">${esc(prefs)}</textarea></div>
  </div>
 </details>
 
@@ -1593,7 +1636,7 @@ async function openOrder(oid,draft){
 
 <details class="fs"><summary>🏭 المصنع والتكليف</summary>
  <div class="form">
-  ${sel('الشركة / المصنع','supplier',sups)}${fld('رقم طلب المصنع','factoryOrderNo',o.factoryOrderNo)}${sel('حالة المصنع','factoryStatus',fs)}
+  ${sel('الشركة / المصنع','supplier',sups)}${sel('حالة المصنع','factoryStatus',fs)}
   ${fld('شركة شحن المصنع → شروق','factoryShipmentCompany',o.factoryShipmentCompany)}${fld('رقم شحنة المصنع','factoryShipmentNo',o.factoryShipmentNo)}${fld('رابط تتبع شحنة المصنع','factoryTrackingUrl',o.factoryTrackingUrl)}
  </div>
 </details>
@@ -1667,7 +1710,10 @@ async function openOrder(oid,draft){
  async function saveOrderForm(closeAfter){
   if(!otxt('customerName').trim()){alert('أدخلي اسم العميلة أولًا.');return null}
   if(!otxt('phone').trim()){alert('رقم الهاتف إجباري لإتمام حفظ الطلب.');document.querySelector('[name=phone]')?.focus();return null}
+  let sa=otxt('shortAddress').trim().toUpperCase();
+  if(sa && !validShortAddress(sa)){alert('العنوان الوطني المختصر يجب أن يتكون من 4 أحرف إنجليزية ثم 4 أرقام، مثل ABCD1234.');document.querySelector('[name=shortAddress]')?.focus();return null}
   let x=Object.fromEntries(new FormData(F));
+  x.shortAddress=sa;
   for(let k of ['qty','productionDays','discountValue'])x[k]=Number(x[k]||0);
   for(let k of ['unitPrice','unitCost','factoryShipping','packaging','localShipping','otherCost','customerShipping','paymentFees','paidLegacy'])x[k]=moneyValue(x[k]);
   x.qty=Math.max(1,x.qty||1);
@@ -1695,7 +1741,7 @@ async function openOrder(oid,draft){
      (String(x.address||'').trim()!==String(o._duplicateSourceAddress||'').trim());
    if(changed){
     let newCid=id('cus');
-    let nc={id:newCid,createdAt:new Date().toISOString(),name:(x.customerName||'').trim(),phone:(x.phone||'').trim(),city:(x.city||'').trim(),district:(x.district||'').trim(),address:(x.address||'').trim(),notes:(x.customerPrefs||'').trim()};
+    let nc={id:newCid,createdAt:new Date().toISOString(),name:(x.customerName||'').trim(),phone:(x.phone||'').trim(),shortAddress:(x.shortAddress||'').trim(),phone2:(x.phone2||'').trim(),city:(x.city||'').trim(),district:(x.district||'').trim(),address:(x.address||'').trim(),notes:(x.customerPrefs||'').trim()};
     await put('customers',nc);
     x.customerId=newCid;
    }
@@ -2036,7 +2082,7 @@ function customers(){return `<div class="card"><div class="toolbar no-print">
 function topCustomerIds(topN){return S.customers.map(c=>({id:c.id,sales:customerStats(c.id).sales})).sort((a,b)=>b.sales-a.sales).filter(x=>x.sales>0).slice(0,topN).map(x=>x.id)}
 let custSort={key:'recent'};
 function customerSortBy(v){custSort.key=v;drawCustomers()}
-async function newOrderForCustomer(cid){let c=S.customers.find(x=>x.id===cid);if(!c)return;closeModal();await openOrderWithData({id:id('ord'),no:nextOrderNo(),date:today(),orderDate:today(),qty:1,status:'جديد',productType:'باروكة',factoryStatus:'لم يُكلّف',paymentMethod:'تحويل بنكي',channel:S.settings.defaultChannel||'واتساب',productionDays:S.settings.defaultProductionDays||7,createdAt:new Date().toISOString(),customerId:c.id,customerName:c.name,phone:c.phone,city:c.city,address:c.address,customerPrefs:c.notes})}
+async function newOrderForCustomer(cid){let c=S.customers.find(x=>x.id===cid);if(!c)return;closeModal();await openOrderWithData({id:id('ord'),no:nextOrderNo(),date:today(),orderDate:today(),qty:1,status:'جديد',productType:'باروكة',factoryStatus:'لم يُكلّف',paymentMethod:'تحويل بنكي',channel:S.settings.defaultChannel||'واتساب',productionDays:S.settings.defaultProductionDays||7,createdAt:new Date().toISOString(),customerId:c.id,customerName:c.name,phone:c.phone,shortAddress:c.shortAddress||'',phone2:c.phone2||'',city:c.city,address:c.address,customerPrefs:c.notes})}
 async function repeatLastOrderForCustomer(cid){let z=customerStats(cid);let last=z.o.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''))[0];if(!last){toast('لا يوجد طلب سابق لتكراره');return}closeModal();await duplicateOrder(last.id)}
 function paymentAllocations(p){if(Array.isArray(p.allocations)&&p.allocations.length)return p.allocations;return p.orderId?[{orderId:p.orderId,amount:Number(p.amount||0)}]:[]}
 function orderPaid(oid){return cache().paidByOrder.get(oid)||0}
@@ -2120,7 +2166,7 @@ async function openCustomer(cid){
  modal(existing?'ملف العميلة — '+c.name:'عميلة جديدة',`<form id="cf" class="form">
 <details class="fs" open><summary>👤 البيانات الأساسية</summary>
  <div class="form">
-  ${fld('الاسم','name',c.name,'text',true)}<div class="field"><label>الجوال</label><input name="phone" data-phone-strict="1" value="${esc(c.phone||'')}"></div>${sel('المدينة','city',cityOpts)}${fld('الحي','district',c.district)}
+  ${fld('الاسم','name',c.name,'text',true)}<div class="field"><label>الجوال</label><input name="phone" data-phone-strict="1" value="${esc(c.phone||'')}"></div><div class="field"><label>العنوان الوطني المختصر</label><input name="shortAddress" class="short-address" inputmode="text" maxlength="8" pattern="[A-Za-z]{4}[0-9]{4}" autocomplete="off" value="${esc(c.shortAddress||'')}" placeholder="ABCD1234 — اختياري"></div><div class="field"><label>هاتف إضافي</label><input name="phone2" data-phone-strict="1" inputmode="tel" value="${esc(c.phone2||'')}" placeholder="اختياري"></div>${sel('المدينة','city',cityOpts)}${fld('الحي','district',c.district)}
   <div class="field full"><label>العنوان بالتفصيل</label><input name="address" value="${esc(c.address||'')}"></div>
   <div class="field full"><label>التفضيلات (الطول، اللون، الكثافة، المقاس...)</label><textarea name="notes" rows="3">${esc(c.notes||'')}</textarea></div>
  </div>
@@ -2130,7 +2176,7 @@ async function openCustomer(cid){
  ${existing?`<button type="button" class="btn gold" onclick="newOrderForCustomer('${c.id}')">🧾 طلب جديد لهذه العميلة</button>${z.o.length?`<button type="button" class="btn" onclick="repeatLastOrderForCustomer('${c.id}')">🔁 تكرار آخر طلب</button>`:''}<button type="button" class="btn" onclick="openPayment('${c.id}')">💳 تسجيل دفعة</button>${z.credit>0?`<button type="button" class="btn blue" onclick="openCreditTransfer('${c.id}')">↔ نقل رصيد دائن</button>`:''}<button type="button" class="btn blue" onclick="customerStatementPrint('${c.id}')">كشف الحساب PDF</button><button type="button" class="btn blue" onclick="customerHistoryPrint('${c.id}')">السجل PDF</button><button type="button" class="btn danger" onclick="deleteCustomer('${c.id}')">حذف</button>`:''}
 </div>
 </form>${existing?`<div class="section">${customerHistoryHtml(c.id)}</div>`:''}`);
- document.getElementById('cf').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));x.id=c.id;x.createdAt=c.createdAt||new Date().toISOString();await put('customers',x);await auditLogAction(existing?'update':'create','customers',x.id,(existing?'تعديل':'إضافة')+' العميلة '+(x.name||''));closeModal();await load();render();toast('تم حفظ ملف العميلة')};
+ document.getElementById('cf').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));x.shortAddress=String(x.shortAddress||'').trim().toUpperCase();if(x.shortAddress&&!validShortAddress(x.shortAddress)){alert('العنوان الوطني المختصر يجب أن يتكون من 4 أحرف إنجليزية ثم 4 أرقام، مثل ABCD1234.');e.target.querySelector('[name=shortAddress]')?.focus();return}x.id=c.id;x.createdAt=c.createdAt||new Date().toISOString();await put('customers',x);await auditLogAction(existing?'update':'create','customers',x.id,(existing?'تعديل':'إضافة')+' العميلة '+(x.name||''));closeModal();await load();render();toast('تم حفظ ملف العميلة')};
 }
 async function deleteCustomer(cid){
  let c=S.customers.find(x=>x.id===cid);if(!c)return;let mode=await askDeleteMode('ملف العميلة '+c.name);if(!mode)return;
