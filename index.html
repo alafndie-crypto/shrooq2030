@@ -124,6 +124,18 @@ background:#f0ece6;font-size:10px;border:1px solid #e6ddd2
 .progress{height:8px;background:#eee8e0;border-radius:99px;overflow:hidden}
 .progress span{display:block;height:100%;background:linear-gradient(90deg,#b58c34,#ead28c);border-radius:99px}
 .form{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.customer-form{display:block;width:100%;}
+.customer-details{width:100%;}
+.customer-fields{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:16px;margin-top:14px;width:100%;}
+.customer-fields .field{min-width:0;}
+.customer-fields input,.customer-fields select,.customer-fields textarea{box-sizing:border-box;min-height:46px;font-size:14px;padding:12px 14px;}
+.customer-fields textarea{min-height:105px;resize:vertical;line-height:1.7;}
+.customer-fields .field label{font-size:11px;font-weight:700;margin-bottom:7px;color:#5e574f;}
+.customer-fields .full{grid-column:1/-1;}
+.customer-actions{margin-top:18px;display:flex;gap:9px;flex-wrap:wrap;}
+.customer-actions .btn{min-height:44px;}
+@media(max-width:900px){.customer-fields{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.customer-fields{grid-template-columns:1fr;gap:12px;}.customer-fields .full{grid-column:auto;}.customer-actions .btn{width:100%;}}
 .field label{display:block;color:var(--muted);font-size:10px;margin-bottom:6px}
 .full{grid-column:1/-1}
 
@@ -2163,15 +2175,15 @@ async function openCustomer(cid){
  let existing=!!S.customers.find(x=>x.id===cid);
  let z=existing?customerStats(c.id):null;
  let cityOpts=await opts('المدن',c.city);
- modal(existing?'ملف العميلة — '+c.name:'عميلة جديدة',`<form id="cf" class="form">
-<details class="fs" open><summary>👤 البيانات الأساسية</summary>
- <div class="form">
+ modal(existing?'ملف العميلة — '+c.name:'عميلة جديدة',`<form id="cf" class="customer-form">
+<details class="fs customer-details" open><summary>👤 البيانات الأساسية</summary>
+ <div class="customer-fields">
   ${fld('الاسم','name',c.name,'text',true)}<div class="field"><label>الجوال</label><input name="phone" data-phone-strict="1" value="${esc(c.phone||'')}"></div><div class="field"><label>العنوان الوطني المختصر</label><input name="shortAddress" class="short-address" inputmode="text" maxlength="8" pattern="[A-Za-z]{4}[0-9]{4}" autocomplete="off" value="${esc(c.shortAddress||'')}" placeholder="ABCD1234 — اختياري"></div><div class="field"><label>هاتف إضافي</label><input name="phone2" data-phone-strict="1" inputmode="tel" value="${esc(c.phone2||'')}" placeholder="اختياري"></div>${sel('المدينة','city',cityOpts)}${fld('الحي','district',c.district)}
   <div class="field full"><label>العنوان بالتفصيل</label><input name="address" value="${esc(c.address||'')}"></div>
   <div class="field full"><label>التفضيلات (الطول، اللون، الكثافة، المقاس...)</label><textarea name="notes" rows="3">${esc(c.notes||'')}</textarea></div>
  </div>
 </details>
-<div class="actions full">
+<div class="actions customer-actions">
  <button class="btn primary">💾 حفظ البيانات</button>
  ${existing?`<button type="button" class="btn gold" onclick="newOrderForCustomer('${c.id}')">🧾 طلب جديد لهذه العميلة</button>${z.o.length?`<button type="button" class="btn" onclick="repeatLastOrderForCustomer('${c.id}')">🔁 تكرار آخر طلب</button>`:''}<button type="button" class="btn" onclick="openPayment('${c.id}')">💳 تسجيل دفعة</button>${z.credit>0?`<button type="button" class="btn blue" onclick="openCreditTransfer('${c.id}')">↔ نقل رصيد دائن</button>`:''}<button type="button" class="btn blue" onclick="customerStatementPrint('${c.id}')">كشف الحساب PDF</button><button type="button" class="btn blue" onclick="customerHistoryPrint('${c.id}')">السجل PDF</button><button type="button" class="btn danger" onclick="deleteCustomer('${c.id}')">حذف</button>`:''}
 </div>
