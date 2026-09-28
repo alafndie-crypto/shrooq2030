@@ -338,8 +338,225 @@ border-radius:24px;padding:22px 24px;margin-bottom:15px;box-shadow:0 18px 45px #
 body{background:#fff}.side,.top,.no-print,.modal{display:none!important}.main{margin:0;width:100%;padding:0}
 .card{box-shadow:none;border:0}.print-only{display:block!important}
 }
+
+/* UI polish pass — cleaner hierarchy, spacing and responsive touch targets */
+:root{--shadow:0 10px 30px rgba(15,43,32,.06);--r:16px}
+body{letter-spacing:-.05px}
+.side{width:264px;padding:16px 13px;box-shadow:-10px 0 30px rgba(0,0,0,.07)}
+.brand{padding:3px 5px 16px}
+.brand img{width:174px;border-radius:16px}
+.nav{gap:4px;margin-top:13px}
+.nav button{min-height:44px;padding:10px 12px;border-radius:12px;font-weight:600}
+.nav button.active{background:linear-gradient(90deg,#c3993f25,#c3993f0b);box-shadow:inset -3px 0 0 var(--gold),0 5px 16px rgba(0,0,0,.06)}
+.main{margin-right:264px;width:calc(100% - 264px);padding:22px 26px 38px}
+.top{margin:-22px -26px 20px;padding:16px 26px;min-height:82px}
+.hero-top{box-shadow:0 12px 32px #123b2e30}
+.hero-top #title{font-size:21px}
+.title h1{font-size:25px}
+.card{padding:17px;border-radius:16px;box-shadow:var(--shadow)}
+.card:hover{box-shadow:0 13px 32px rgba(15,43,32,.08)}
+.kpi{min-height:118px}
+.kpi .num{font-size:24px}
+.section{margin-top:15px}
+.section-head{margin-bottom:10px}
+.section-head h2{font-size:16px}
+.toolbar{gap:7px;margin-bottom:10px}
+.toolbar input{min-width:180px}
+input,select,textarea{min-height:42px;border-radius:10px;padding:9px 11px}
+.btn{min-height:40px;padding:8px 12px;border-radius:10px;font-weight:600}
+.actions .btn{min-height:38px}
+.table-wrap{border-radius:13px;box-shadow:0 3px 14px rgba(15,43,32,.035)}
+th,td{padding:10px 11px}
+th{background:#f8f5f0}
+tr:hover td{background:#fbf8f3}
+.notice{border-radius:12px!important}
+.empty{border:1px dashed #d9d0c5!important;border-radius:13px!important;background:#fffaf5!important;padding:28px 16px!important}
+.modal{backdrop-filter:blur(4px)}
+.modal .box{border-radius:18px!important;box-shadow:0 22px 60px rgba(0,0,0,.18)!important}
+@media(max-width:1100px){
+ .side{position:sticky;top:0;bottom:auto;width:100%;height:auto;padding:8px 10px;box-shadow:0 5px 22px rgba(0,0,0,.08)}
+ .brand{display:flex;align-items:center;gap:10px;text-align:right;padding:4px 5px 8px}
+ .brand img{width:112px;height:42px;object-fit:contain}
+ .brand .owner{margin-top:0;font-size:10px}
+ .nav{grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;margin-top:7px}
+ .nav button{min-height:50px;padding:7px 3px}
+ .main{margin-right:0;width:100%;padding:16px 14px 32px}
+ .top{margin:-16px -14px 17px;padding:13px 14px}
+}
+@media(max-width:700px){
+ .nav{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .hero-right{gap:7px}
+ .hero-quick{grid-template-columns:repeat(2,1fr)}
+ .grid{grid-template-columns:repeat(2,1fr);gap:9px}
+ .two,.three{grid-template-columns:1fr;gap:10px}
+ .card{padding:13px}
+ .title h1{font-size:21px}
+ .actions{gap:6px}
+ .actions .btn{flex:1;min-width:105px}
+}
+@media(max-width:480px){
+ .nav{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .nav button{font-size:9px}
+ .grid{grid-template-columns:1fr}
+ .hero-top #title{font-size:18px}
+ .hero-top #subtitle{font-size:10px}
+ .top{align-items:flex-start}
+ .hero-right{width:100%;justify-content:flex-start}
+ .hero-quick{width:100%}
+ .toolbar>*{width:100%;min-width:0!important}
+ .actions .btn{min-width:0}
+}
+
+/* ===== Mobile-first phone presentation ===== */
+@media (max-width: 760px){
+  html,body{width:100%;min-width:0;overflow-x:hidden}
+  body{font-size:14px;padding-bottom:72px}
+  .app{display:block;min-height:100vh}
+  .side{
+    position:fixed;right:0;left:0;top:auto;bottom:0;width:100%;height:66px;
+    padding:5px 6px calc(5px + env(safe-area-inset-bottom));
+    border:0;border-top:1px solid #ffffff18;border-radius:18px 18px 0 0;
+    box-shadow:0 -10px 30px rgba(0,0,0,.18);overflow:hidden;z-index:120
+  }
+  .brand{display:none}
+  .nav{
+    height:100%;display:flex;gap:4px;margin:0;overflow-x:auto;overflow-y:hidden;
+    scrollbar-width:none;align-items:stretch;justify-content:flex-start
+  }
+  .nav::-webkit-scrollbar{display:none}
+  .nav button{
+    flex:0 0 67px;min-width:67px;height:56px;padding:5px 3px;border-radius:12px;
+    flex-direction:column;justify-content:center;align-items:center;gap:2px;
+    text-align:center;font-size:8px;color:#cfcac4;white-space:nowrap
+  }
+  .nav button.active{box-shadow:inset 0 2px 0 var(--gold);background:#ffffff10;color:#f0dcae}
+  .nav .ico{width:auto;font-size:17px;line-height:18px}
+  .main{margin:0;width:100%;padding:10px 10px 18px}
+  .top{
+    position:sticky;top:0;margin:-10px -10px 12px;padding:10px 12px;
+    min-height:56px;border-radius:0 0 16px 16px;gap:8px
+  }
+  .hero-top{box-shadow:0 8px 20px #123b2e30}
+  .hero-top #title{font-size:16px;line-height:1.35}
+  .hero-top #subtitle{font-size:9px;margin-top:2px}
+  .hero-right{gap:5px}
+  .hero-quick{display:none}
+  .hero-notif-btn{width:38px;height:38px;padding:0}
+  .title h1{font-size:20px}
+  .title p{font-size:10px}
+  .actions{gap:5px;width:100%}
+  .actions .btn{flex:1 1 auto;min-width:100px}
+  .btn{min-height:40px;padding:9px 11px;border-radius:11px;font-size:11px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .card{border-radius:15px;padding:12px}
+  .kpi{min-height:96px}
+  .kpi .label{font-size:9px}
+  .kpi .num{font-size:20px;margin-top:6px}
+  .kpi .sub{font-size:8px}
+  .section{margin-top:11px}
+  .section-head{margin-bottom:8px;align-items:flex-start}
+  .section-head h2{font-size:14px}
+  .two,.three{grid-template-columns:1fr;gap:9px}
+  .form{grid-template-columns:1fr;gap:9px}
+  .full{grid-column:auto}
+  .toolbar{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:9px}
+  .toolbar input{min-width:0;grid-column:1/-1}
+  .toolbar select{min-width:0}
+  .toolbar .btn{width:100%}
+  input,select,textarea{min-height:42px;padding:9px 10px;border-radius:10px;font-size:12px}
+  textarea{min-height:85px}
+  .table-wrap{border-radius:12px;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{min-width:720px}
+  th,td{padding:9px 8px;font-size:9px}
+  .product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .product{border-radius:14px}
+  .product img{height:145px}
+  .product-body{padding:10px}
+  .product h3{font-size:12px;margin-bottom:4px}
+  .price{font-size:15px}
+  .mini-grid{grid-template-columns:repeat(2,1fr);gap:6px}
+  .mini{padding:9px;border-radius:10px}
+  .mini b{font-size:8px}
+  .mini span{font-size:10px}
+  .alert-grid{grid-template-columns:1fr;gap:7px}
+  .alert-card{padding:11px;border-radius:13px}
+  .stage-wrap{padding:10px;border-radius:14px}
+  .stage-title b{font-size:12px}
+  .stage-title span{font-size:8px}
+  .stage-track{grid-template-columns:repeat(10,74px);gap:5px}
+  .stage{min-width:74px;padding:7px 4px;font-size:8px}
+  .stage-dot{width:24px;height:24px}
+  .fs{padding:10px 11px;border-radius:14px;margin-bottom:8px}
+  .fs>summary{font-size:12px}
+  .fs .form{margin-top:9px}
+  .pick{grid-template-columns:1fr;gap:7px;padding:9px;border-radius:12px}
+  .modal{padding:8px;align-items:flex-end}
+  .modal-box{width:100%;max-height:92vh;border-radius:20px 20px 8px 8px;padding:14px}
+  .modal-head{margin-bottom:10px}
+  .modal-head h2{font-size:16px}
+  .close{width:36px;height:36px}
+  .tabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;font-size:10px;padding:8px 10px;white-space:nowrap}
+  .order-layout{gap:9px}
+  .order-side-tabs{overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}
+  .order-side-tabs .tab{width:auto;flex:0 0 auto}
+  .dashboard-hero,.greet-hero{padding:15px;border-radius:17px;margin-bottom:9px;gap:10px}
+  .dashboard-hero h2,.greet-hero h2{font-size:17px}
+  .dashboard-hero p,.greet-hero p{font-size:9px}
+  .greet-hero .hero-mark,.dashboard-hero .hero-mark{font-size:27px}
+  .quick-grid{grid-template-columns:repeat(2,1fr);gap:6px}
+  .quick-grid .btn{min-width:0;font-size:9px;padding:8px 5px}
+  .notif-panel{position:fixed;left:8px;right:8px;top:66px;width:auto;max-height:60vh;border-radius:14px}
+  .timeline{padding-right:14px}
+  .event:before{right:-22px}
+  .toast{left:10px;right:10px;bottom:75px;text-align:center;font-size:11px}
+}
+@media (max-width:380px){
+  .main{padding-left:7px;padding-right:7px}
+  .top{margin-left:-7px;margin-right:-7px;padding-left:9px;padding-right:9px}
+  .grid{gap:6px}
+  .card{padding:10px}
+  .kpi .num{font-size:18px}
+  .product-grid{grid-template-columns:1fr 1fr}
+  .nav button{flex-basis:61px;min-width:61px;font-size:7px}
+}
+
 </style>
 
+
+<style id="mobile-modal-layer-fix">
+/* Mobile modal layering: dialogs must always cover the fixed bottom navigation */
+@media (max-width:760px){
+  body{padding-bottom:calc(92px + env(safe-area-inset-bottom));}
+  .main{padding-bottom:calc(105px + env(safe-area-inset-bottom));}
+  .side{z-index:120;}
+  .modal{
+    position:fixed !important;
+    inset:0 !important;
+    z-index:2000 !important;
+    display:none;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:16px !important;
+    background:rgba(23,18,13,.82) !important;
+    pointer-events:auto;
+  }
+  .modal.open{display:flex !important;}
+  .modal-box{
+    position:relative !important;
+    z-index:2001 !important;
+    width:min(100%, 560px) !important;
+    max-height:calc(88vh - env(safe-area-inset-bottom)) !important;
+    overflow:auto !important;
+    -webkit-overflow-scrolling:touch;
+    margin:0 auto !important;
+    border-radius:22px !important;
+  }
+  .pin-gate{z-index:3000 !important;}
+  .toast{z-index:3100 !important;bottom:calc(82px + env(safe-area-inset-bottom)) !important;}
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -357,6 +574,7 @@ body{background:#fff}.side,.top,.no-print,.modal{display:none!important}.main{ma
   <button data-p="expenses"><span class="ico">−</span>المصروفات</button>
   <button data-p="reports"><span class="ico">◫</span>التقارير</button>
   <button data-p="archive"><span class="ico">🗑</span>الأرشيف<span class="nav-badge" id="nb-archive"></span></button>
+  <button data-p="audit"><span class="ico">◌</span>سجل العمليات<span class="nav-badge" id="nb-audit"></span></button>
   <button data-p="settings"><span class="ico">⚙</span>الإعدادات والنسخ</button>
  </div>
 </aside>
@@ -389,13 +607,13 @@ body{background:#fff}.side,.top,.no-print,.modal{display:none!important}.main{ma
 <input type="file" id="restoreInput" accept=".json" hidden>
 
 <script>
-const DB='LW_PRO_DB',VER=3;
-const DEFAULT_LISTS={"المدن": ["الرياض","جدة","مكة المكرمة","المدينة المنورة","الدمام","الخبر","الظهران","الأحساء","الطائف","تبوك","بريدة","عنيزة","حائل","نجران","جازان","أبها","خميس مشيط","ينبع","القطيف","الجبيل","سكاكا","عرعر","الباحة","القريات","بيشة","رابغ","الخرج","حفر الباطن","أخرى"],"المصانع": ["غير محدد", "مصنع 1 - عدّلي الاسم", "مصنع 2 - عدّلي الاسم"], "طرق الدفع": ["تحويل بنكي", "مدى", "فيزا/ماستركارد", "Apple Pay", "تابي", "تمارا", "نقدي", "أخرى"], "حالات الطلب": ["جديد", "بانتظار الدفع", "مؤكد", "قيد التصنيع", "جاهز للشحن", "تم الشحن", "مكتمل", "ملغي", "مرتجع"], "حالات المصنع": ["لم يُكلّف", "تم التكليف", "قيد التصنيع", "بانتظار تعديل", "جاهز", "تم الاستلام", "ملغي"], "قنوات الطلب": ["متجر سلة", "واتساب", "إنستغرام", "تيك توك", "طلب مباشر", "أخرى"], "أنواع المنتجات": ["باروكة", "توبر", "فرونتال", "كلوجر", "إكستنشن", "إكسسوار", "أخرى"], "شركات الشحن": ["سمسا", "أرامكس", "سبل", "ناقل", "DHL", "أخرى"]};
+const DB='LW_PRO_DB',VER=4;
+const DEFAULT_LISTS={"المدن": ["الرياض","جدة","مكة المكرمة","المدينة المنورة","الدمام","الخبر","الظهران","الأحساء","الطائف","تبوك","بريدة","عنيزة","حائل","نجران","جازان","أبها","خميس مشيط","ينبع","القطيف","الجبيل","سكاكا","عرعر","الباحة","القريات","بيشة","رابغ","الخرج","حفر الباطن","أخرى"],"المصانع": ["غير محدد", "مصنع 1 - عدّلي الاسم", "مصنع 2 - عدّلي الاسم"], "طرق الدفع": ["تحويل بنكي", "مدى", "فيزا/ماستركارد", "Apple Pay", "تابي", "تمارا", "نقدي", "أخرى"], "حالات الطلب": ["جديد", "بانتظار الدفع", "تم الدفع", "مؤكد", "تم التكليف", "قيد التفصيل", "بانتظار تعديل", "جاهز للاستلام من المصنع", "تم الشحن من المصنع", "تم الاستلام", "تم الشحن للعميلة", "تم التسليم", "مكتمل", "مرتجع", "ملغي"], "حالات المصنع": ["لم يُكلّف", "تم التكليف", "قيد التصنيع", "بانتظار تعديل", "جاهز", "تم الاستلام", "ملغي"], "قنوات الطلب": ["متجر سلة", "واتساب", "إنستغرام", "تيك توك", "طلب مباشر", "أخرى"], "أنواع المنتجات": ["باروكة", "توبر", "فرونتال", "كلوجر", "إكستنشن", "إكسسوار", "أخرى"], "شركات الشحن": ["سمسا", "أرامكس", "سبل", "ناقل", "DHL", "أخرى"]};
 let db, page='dashboard';
-let S={orders:[],products:[],customers:[],suppliers:[],payments:[],expenses:[],settings:{company:'Luxurious Wigs',owner:'شروق عابد',role:'مسؤولة التسويق والمبيعات وإدارة الطلبات',currency:'ر.س'}};
+let S={orders:[],products:[],customers:[],suppliers:[],payments:[],expenses:[],audit:[],settings:{company:'Luxurious Wigs',owner:'شروق عابد',role:'مسؤولة التسويق والمبيعات وإدارة الطلبات',currency:'ر.س'}};
 
 const fallback={
-'حالات الطلب':['جديد','بانتظار الدفع','تم الدفع','مؤكد','تم التكليف','قيد التفصيل','بانتظار تعديل','جاهز للاستلام من المصنع','تم الشحن من المصنع','تم الاستلام','تم الشحن للعميلة','تم التسليم','مكتمل','ملغي','مرتجع'],
+'حالات الطلب':['جديد','بانتظار الدفع','تم الدفع','مؤكد','تم التكليف','قيد التفصيل','بانتظار تعديل','جاهز للاستلام من المصنع','تم الشحن من المصنع','تم الاستلام','تم الشحن للعميلة','تم التسليم','مكتمل','مرتجع','ملغي'],
 'حالات المصنع':['لم يُكلّف','تم التكليف','قيد التفصيل','بانتظار تعديل','جاهز','تم الشحن','تم الاستلام','ملغي'],
 'أنواع المنتجات':['باروكة','توبر','فرونتال','كلوجر','إكستنشن','إكسسوار','أخرى'],
 'طرق الدفع':['تحويل بنكي','مدى','فيزا/ماستركارد','Apple Pay','تابي','تمارا','نقدي','أخرى'],
@@ -405,11 +623,12 @@ const fallback={
 };
 function fmt(n){return Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+(S.settings.currency||'ر.س')}
 function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-function today(){return new Date().toISOString().slice(0,10)}
+function localISO(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function today(){return localISO(new Date())}
 function id(p){return p+'_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7)}
 function toast(t){let e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2300)}
 function status(s){let c=/مكتمل|تم التسليم|تم الاستلام/.test(s)?'ok':/ملغي|مرتجع/.test(s)?'bad':/جديد|بانتظار|قيد|تم التكليف|جاهز|تم الشحن/.test(s)?'warn':'info';return `<span class="badge ${c}">${esc(s||'—')}</span>`}
-const STORES=['orders','products','customers','suppliers','payments','expenses','settings','lists','events','archive'];
+const STORES=['orders','products','customers','suppliers','payments','expenses','settings','lists','events','archive','audit'];
 let memMode=false;const MEM={};
 function openDB(){return new Promise((res,rej)=>{
  try{
@@ -442,23 +661,90 @@ function memArr(n){return MEM[n]||(MEM[n]=new Map())}
 function all(n){if(memMode)return Promise.resolve([...memArr(n).values()]);return new Promise((r,j)=>{try{let q=store(n).getAll();q.onsuccess=()=>r(q.result);q.onerror=()=>j(q.error)}catch(e){console.warn('store read failed',n,e);r([])}})}
 function put(n,o){dataVer++;if(memMode){memArr(n).set(o.id,o);return Promise.resolve(o)}return new Promise((r,j)=>{try{let q=store(n,'readwrite').put(o);q.onsuccess=()=>r(o);q.onerror=()=>j(q.error)}catch(e){j(e)}})}
 function del(n,k){dataVer++;if(memMode){memArr(n).delete(k);return Promise.resolve()}return new Promise((r,j)=>{try{let q=store(n,'readwrite').delete(k);q.onsuccess=()=>r();q.onerror=()=>j(q.error)}catch(e){j(e)}})}
-async function load(){dataVer++;for(let k of ['orders','products','customers','suppliers','payments','expenses','events'])S[k]=await all(k);let st=await all('settings');if(st[0])S.settings={...S.settings,...st[0]};applyEffAll()}
+async function load(){dataVer++;for(let k of ['orders','products','customers','suppliers','payments','expenses','events','audit'])S[k]=await all(k);let st=await all('settings');if(st[0])S.settings={...S.settings,...st[0]};applyEffAll()}
+// ===== Safe deletion workflow =====
+let _deleteModeResolver=null;
+async function finishDeleteMode(value){
+ const r=_deleteModeResolver;_deleteModeResolver=null;
+ closeModal(true);
+ if(!r)return;
+ if(!value){r(null);return}
+ const isArchive=value==='archive';
+ const ok=await confirmAction(
+  isArchive?'تأكيد الأرشفة':'تأكيد الحذف النهائي',
+  isArchive
+   ? `<b>هل أنت متأكدة أنك تريدين أرشفة هذا السجل؟</b><br><span class="hint">سيختفي من الحسابات الحالية ولن يُحتسب كدفعة/سجل نشط، ويمكن استعادته لاحقًا.</span>`
+   : `<b>هل أنت متأكدة أنك تريدين الحذف النهائي؟</b><br><span class="hint">هذا الإجراء لا يمكن التراجع عنه بعد الحذف النهائي.</span>`,
+  isArchive?'نعم، أرشفة':'نعم، حذف نهائي',
+  !isArchive
+ );
+ r(ok?value:null);
+}
+async function askDeleteMode(label){
+ return new Promise(resolve=>{
+  _deleteModeResolver=resolve;
+  modal('اختيار طريقة الحذف',`<div class="delete-choice" style="display:grid;gap:12px">
+   <div class="notice info"><b>${esc(label)}</b><br><span class="hint">اختاري ماذا تريدين أن يحدث للسجل.</span></div>
+   <button type="button" class="btn primary" style="width:100%;padding:14px" onclick="finishDeleteMode('archive')">🗄️ أرشفة — يمكن الاستعادة لاحقًا</button>
+   <button type="button" class="btn danger" style="width:100%;padding:14px" onclick="finishDeleteMode('permanent')">🗑️ حذف نهائي — لا يمكن الاستعادة</button>
+   <button type="button" class="btn" style="width:100%" onclick="finishDeleteMode(null)">إلغاء</button>
+  </div>`);
+ });
+}
+let _actionConfirmResolver=null;
+function finishActionConfirm(value){
+ const r=_actionConfirmResolver;_actionConfirmResolver=null;
+ closeModal(true);
+ if(r)r(!!value);
+}
+function confirmAction(title,message,confirmText='متابعة',danger=false){
+ return new Promise(resolve=>{
+  _actionConfirmResolver=resolve;
+  modal(title,`<div style="display:grid;gap:14px">
+   <div class="notice ${danger?'danger':'info'}" style="line-height:1.9">${message}</div>
+   <div class="actions full" style="justify-content:flex-start;gap:8px">
+    <button type="button" class="btn ${danger?'danger':'primary'}" onclick="finishActionConfirm(true)">${confirmText}</button>
+    <button type="button" class="btn" onclick="finishActionConfirm(false)">إلغاء</button>
+   </div>
+  </div>`);
+ });
+}
+function permanentDeleteWithPin(actionFn,title){requirePinThen(actionFn,title||'تأكيد الحذف النهائي')}
+
 // ===== Archive (soft-delete) =====
 async function archiveRecord(storeName,record,label){
  let arc={id:id('arc'),store:storeName,recordId:record.id,label:label||record.name||record.no||record.id,data:record,archivedAt:new Date().toISOString()};
  await put('archive',arc);
  await del(storeName,record.id);
+ await auditLogAction('archive',storeName,record.id,'أرشفة: '+(label||record.name||record.no||record.id));
 }
 async function restoreArchived(arcId){
  let arc=(await all('archive')).find(x=>x.id===arcId);if(!arc)return;
- await put(arc.store,arc.data);
+ let isPayment=arc.store==='payments';
+ let hasLinkedPayments=arc.store==='orders'&&Array.isArray(arc.data?.__linkedPayments)&&arc.data.__linkedPayments.length>0;
+ let ok=await confirmAction(
+  isPayment?'استعادة دفعة مالية':'تأكيد الاستعادة',
+  isPayment
+   ? `<b>تنبيه مالي:</b><br>استعادة هذه الدفعة ستعيدها إلى تبويب الدفعات والتحصيل، وسيُحتسب مبلغها كدفعة فعلية على العميل/الطلب مرة أخرى.`
+   : hasLinkedPayments
+     ? `سيتم إعادة الطلب كما كان، مع استعادة ${arc.data.__linkedPayments.length} دفعة مرتبطة به وأثرها المالي.`
+     : `سيتم إعادة هذا السجل إلى النظام كما كان قبل الأرشفة.`,
+  'نعم، استعادة',false
+ );
+ if(!ok)return;
+ let data=arc.data||{};
+ let linkedPayments=Array.isArray(data.__linkedPayments)?data.__linkedPayments:[];
+ if(arc.store==='orders'){let clean={...data};delete clean.__linkedPayments;await put('orders',clean);for(let p of linkedPayments)await put('payments',p)}else{await put(arc.store,data)}
  await del('archive',arcId);
- await load();render();toast('تمت الاستعادة من الأرشيف');
+ await auditLogAction('restore',arc.store,arc.recordId,'استعادة: '+(arc.label||arc.recordId)+(linkedPayments.length?' مع '+linkedPayments.length+' دفعة مرتبطة':''));
+ await load();render();
+ toast(isPayment?'تمت استعادة الدفعة وسيظهر أثرها المالي من جديد':linkedPayments.length?'تمت استعادة الطلب والدفعات المرتبطة به':'تمت الاستعادة من الأرشيف');
 }
 async function purgeArchived(arcId){
- if(!confirm('حذف هذا العنصر نهائيًا من الأرشيف؟ لا يمكن التراجع عن هذا الإجراء.'))return;
- await del('archive',arcId);
- await load();render();
+ let arc=(await all('archive')).find(x=>x.id===arcId);if(!arc)return;
+ let ok=await confirmAction('تأكيد الحذف النهائي',`<b>هل أنت متأكدة من حذف «${esc(arc.label||arc.recordId)}» نهائيًا؟</b><br><span class="hint">لن يمكن استعادته بعد ذلك.</span>`,'نعم، حذف نهائي',true);
+ if(!ok)return;
+ permanentDeleteWithPin(async()=>{await del('archive',arcId);await auditLogAction('delete','archive',arcId,'حذف نهائي من الأرشيف: '+(arc.label||arc.recordId));await load();render();toast('تم الحذف نهائيًا بنجاح')},'تأكيد الحذف النهائي من الأرشيف');
 }
 async function archiveSectionHtml(){
  let arc=(await all('archive')).sort((a,b)=>(b.archivedAt||'').localeCompare(a.archivedAt||''));
@@ -580,6 +866,7 @@ function globalSearchInput(q){
  box.classList.add('open');
 }
 function closeGlobalSearch(){let box=document.getElementById('globalSearchResults');if(box){box.classList.remove('open');box.innerHTML=''}let inp=document.getElementById('globalSearch');if(inp)inp.value=''}
+document.addEventListener('change',e=>{if(e.target?.name==='fulfillmentMode')updateFulfillmentFields()});
 document.addEventListener('click',e=>{if(!e.target.closest||!e.target.closest('.hero-search'))closeGlobalSearch()});
 document.addEventListener('keydown',e=>{
  if(e.key!=='Enter')return;
@@ -596,6 +883,21 @@ document.addEventListener('keydown',e=>{
 async function vals(k){let a=await all('lists');let x=a.find(z=>z.id===k);return x?.values?.length?x.values:(fallback[k]||DEFAULT_LISTS[k]||[])}
 async function opts(k,sel=''){return '<option value="">— اختر —</option>'+(await vals(k)).map(x=>`<option ${x===sel?'selected':''}>${esc(x)}</option>`).join('')}
 async function event(orderId,text){await put('events',{id:id('ev'),orderId,text,date:new Date().toISOString()})}
+async function auditLogAction(action,entity,entityId,details=''){
+ try{await put('audit',{id:id('aud'),date:new Date().toISOString(),action,entity,entityId:entityId||'',details,user:S.settings.owner||'المسؤولة'})}catch(e){console.warn('audit failed',e)}
+}
+function auditEntityLabel(a){return a.entity==='orders'?'طلب':a.entity==='payments'?'دفعة':a.entity==='customers'?'عميلة':a.entity==='products'?'منتج':a.entity==='suppliers'?'مصدر':a.entity==='expenses'?'مصروف':a.entity==='archive'?'أرشيف':a.entity||'سجل'}
+function auditActionLabel(a){return a.action==='create'?'إضافة':a.action==='update'?'تعديل':a.action==='delete'?'حذف':a.action==='archive'?'أرشفة':a.action==='restore'?'استعادة':a.action==='payment'?'تحصيل دفعة':a.action==='status'?'تغيير حالة':a.action==='backup'?'نسخة احتياطية':a.action==='restoreBackup'?'استعادة نسخة':'عملية'}
+function auditDate(a){try{return new Date(a).toLocaleString('ar-SA',{dateStyle:'medium',timeStyle:'short'})}catch(e){return a||''}}
+async function auditLog(){
+ let a=(await all('audit')).sort((x,y)=>(y.date||'').localeCompare(x.date||''));
+ return `<div class="card"><div class="toolbar no-print"><div><h2 style="margin:0">◌ سجل العمليات</h2><div class="hint">آخر التعديلات والدفعات والحذف والأرشفة والاستعادة.</div></div><button class="btn" onclick="exportAuditCSV()">تصدير CSV</button></div>
+ <div class="field no-print" style="margin:12px 0"><label>بحث في السجل</label><input id="auditQ" placeholder="ابحثي باسم العميلة أو الطلب أو العملية..." oninput="filterAuditLog(this.value)"></div>
+ <div id="auditRows">${auditRowsHtml(a)}</div></div>`
+}
+function auditRowsHtml(a){return a.length?`<div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>العملية</th><th>النوع</th><th>المعرف</th><th>التفاصيل</th><th>المستخدم</th></tr></thead><tbody>${a.slice(0,500).map(x=>`<tr><td>${esc(auditDate(x.date))}</td><td>${esc(auditActionLabel(x))}</td><td>${esc(auditEntityLabel(x))}</td><td>${esc(x.entityId||'—')}</td><td>${esc(x.details||'—')}</td><td>${esc(x.user||'—')}</td></tr>`).join('')}</tbody></table></div><div class="meta" style="text-align:center;margin-top:8px">عرض ${Math.min(a.length,500)} من ${a.length} عملية</div>`:'<div class="empty">لا توجد عمليات مسجلة بعد.</div>'}
+async function filterAuditLog(q){let allA=(await all('audit')).sort((x,y)=>(y.date||'').localeCompare(x.date||''));q=String(q||'').trim().toLowerCase();let a=!q?allA:allA.filter(x=>[x.action,x.entity,x.entityId,x.details,x.user].join(' ').toLowerCase().includes(q));let box=document.getElementById('auditRows');if(box)box.innerHTML=a.length?auditRowsHtml(a):'<div class="empty">لا توجد نتائج.</div>'}
+async function exportAuditCSV(){let a=(await all('audit')).sort((x,y)=>(y.date||'').localeCompare(x.date||''));let rows=[['التاريخ','العملية','النوع','المعرف','التفاصيل','المستخدم'],...a.map(x=>[auditDate(x.date),auditActionLabel(x),auditEntityLabel(x),x.entityId||'',x.details||'',x.user||''])];let csv='\uFEFF'+rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n');let blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),u=URL.createObjectURL(blob),el=document.createElement('a');el.href=u;el.download='Luxurious_Wigs_Audit_'+today()+'.csv';el.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
 function setPage(p){page=p;document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.p===p));render()}
 async function updateNavBadges(){
  const setBadge=(id,n)=>{let el=document.getElementById(id);if(!el)return;el.textContent=n>0?n:'';el.style.display=n>0?'inline-block':'none'};
@@ -606,14 +908,14 @@ async function updateNavBadges(){
  setBadge('nb-payments',remainCount);
  let todayEvents=Object.keys(calendarEventsForMonth(new Date().getFullYear(),new Date().getMonth())).includes(today())?(calendarEventsForMonth(new Date().getFullYear(),new Date().getMonth())[today()]||[]).length:0;
  setBadge('nb-calendar',todayEvents);
- try{let arc=await all('archive');setBadge('nb-archive',arc.length)}catch(e){}
+ try{let arc=await all('archive');setBadge('nb-archive',arc.length);let au=await all('audit');setBadge('nb-audit',Math.min(au.length,99))}catch(e){}
 }
 async function render(){
  updateNavBadges();
- const meta={dashboard:['لوحة التحكم','المبيعات والطلبات والتحصيل والتنبيهات في مكان واحد'],calendar:['التقويم','كل الطلبات والشحنات والمواعيد والأقساط في نظرة شهرية واحدة'],orders:['الطلبات','من استفسار العميل إلى الشراء والتصنيع والشحن والتسليم'],products:['كتالوج الباروكات','منتجات وصور ومواصفات وأسعار جاهزة للعرض والطباعة'],customers:['العملاء','ملفات العملاء وتفضيلاتهم وسجل الطلبات والمدفوعات'],suppliers:['الشركات والمصانع','مصادر الشراء وأرقام الطلبات والتكاليف'],shipments:['الشحن والتسليم','تتبع كل شحنة وتاريخ خروجها ووصولها وتسليمها'],payments:['الدفعات والتحصيل','دفعات متعددة لكل طلب مع سجل التحصيل والمتبقي'],expenses:['المصروفات','مصروفات التشغيل والشحن والتسويق وغيرها'],reports:['التقارير','تقارير المبيعات والربح والتحصيل والمصروفات'],settings:['الإعدادات والنسخ','القوائم والبيانات والنسخ الاحتياطي والاستعادة'],archive:['الأرشيف','كل ما حذفتِه قابل للاستعادة من هنا']}[page];
+ const meta={dashboard:['لوحة التحكم','المبيعات والطلبات والتحصيل والتنبيهات في مكان واحد'],calendar:['التقويم','كل الطلبات والشحنات والمواعيد والأقساط في نظرة شهرية واحدة'],orders:['الطلبات','من استفسار العميل إلى الشراء والتصنيع والشحن والتسليم'],products:['كتالوج الباروكات','منتجات وصور ومواصفات وأسعار جاهزة للعرض والطباعة'],customers:['العملاء','ملفات العملاء وتفضيلاتهم وسجل الطلبات والمدفوعات'],suppliers:['الشركات والمصانع','مصادر الشراء وأرقام الطلبات والتكاليف'],shipments:['الشحن والتسليم','تتبع كل شحنة وتاريخ خروجها ووصولها وتسليمها'],payments:['الدفعات والتحصيل','دفعات متعددة لكل طلب مع سجل التحصيل والمتبقي'],expenses:['المصروفات','مصروفات التشغيل والشحن والتسويق وغيرها'],reports:['التقارير','تقارير المبيعات والربح والتحصيل والمصروفات'],settings:['الإعدادات والنسخ','القوائم والبيانات والنسخ الاحتياطي والاستعادة'],archive:['الأرشيف','كل ما حذفتِه قابل للاستعادة من هنا'],audit:['سجل العمليات','تاريخ التعديلات والحذف والاستعادة والدفعات والطلبات']}[page];
 if(page==='dashboard'){document.getElementById('title').innerHTML='🌷 '+greetingWord()+'، '+esc(S.settings.owner);document.getElementById('subtitle').innerHTML=arabicFullDate()+' — لديك <b>'+activeOrdersCount()+'</b> طلب نشط الآن'}
 else{document.getElementById('title').textContent=meta[0];document.getElementById('subtitle').textContent=meta[1]}
-let fn={dashboard:dashboard,calendar:calendar,orders:orders,products:products,customers:customers,suppliers:suppliers,shipments:shipments,payments:payments,expenses:expenses,reports:reports,settings:settings,archive:archive}[page];
+let fn={dashboard:dashboard,calendar:calendar,orders:orders,products:products,customers:customers,suppliers:suppliers,shipments:shipments,payments:payments,expenses:expenses,reports:reports,settings:settings,archive:archive,audit:auditLog}[page];
 try{document.getElementById('app').innerHTML=await fn();bind();refreshNotifBadge()}catch(err){showFatal(err)}}
 
 function dashboard(){
@@ -643,9 +945,9 @@ function kpi(a,b,c){return `<div class="card kpi"><div class="label">${a}</div><
 function sum(a,k){return a.reduce((x,o)=>x+Number(o[k]||0),0)}
 function dateOnly(v){return v?String(v).slice(0,10):''}
 function daysBetween(a,b){let x=new Date(dateOnly(a)+'T00:00:00'),y=new Date(dateOnly(b)+'T00:00:00');return Math.round((y-x)/86400000)}
-function addDays(date,n){let d=new Date(date+'T00:00:00');d.setDate(d.getDate()+Number(n||0));return d.toISOString().slice(0,10)}
+function addDays(date,n){let d=new Date(date+'T00:00:00');d.setDate(d.getDate()+Number(n||0));return localISO(d)}
 function stageReadyIndex(){return 4}
-function getFactoryAlerts(){let t=today(),out=[];for(let o of S.orders){if(/ملغي|مرتجع|تم التسليم|مكتمل/.test(o.status||''))continue;let expected=dateOnly(o.expectedDate);if(!expected)continue;let idx=stageIndex(o);if(idx>=stageReadyIndex())continue;let diff=daysBetween(expected,t);if(diff<0)out.push({...o,kind:'late',daysLate:Math.abs(diff)});else if(diff===0)out.push({...o,kind:'due',daysLate:0});else if(diff<=3)out.push({...o,kind:'soon',daysLate:0,daysLeft:diff});}return out.sort((a,b)=>a.expectedDate.localeCompare(b.expectedDate))}
+function getFactoryAlerts(){let t=today(),out=[];for(let o of S.orders){if(/ملغي|مرتجع|تم التسليم|مكتمل/.test(o.status||''))continue;let expected=dateOnly(o.expectedDate);if(!expected)continue;let idx=stageIndex(o);if(idx>=stageReadyIndex())continue;let diff=daysBetween(t,expected);if(diff<0)out.push({...o,kind:'late',daysLate:Math.abs(diff)});else if(diff===0)out.push({...o,kind:'due',daysLate:0});else if(diff<=3)out.push({...o,kind:'soon',daysLate:0,daysLeft:diff});}return out.sort((a,b)=>a.expectedDate.localeCompare(b.expectedDate))}
 function factoryAlertsHtml(){let a=getFactoryAlerts();if(!a.length)return '<div class="empty">لا توجد طلبات متأخرة أو مستحقة للتجهيز قريبًا. ممتاز ✨</div>';return a.slice(0,12).map(o=>{let text=o.kind==='late'?`متأخر ${o.daysLate} يوم`:o.kind==='due'?'موعد التجهيز اليوم':`متبقي ${o.daysLeft} يوم`;let cls=o.kind==='late'?'danger':o.kind==='due'?'notice':'info';return `<div class="notice ${cls}" style="margin:7px 0"><b>${esc(o.no)}</b> — ${esc(o.customerName)} — ${esc(o.productName)}<br><b>${text}</b> · الموعد المحدد: ${esc(o.expectedDate)} · المرحلة: ${esc(o.status||'جديد')} <button class="btn" style="float:left;padding:5px 8px" onclick="openOrder('${o.id}')">فتح</button></div>`}).join('')}
 const AR_MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
 const AR_DAYS=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
@@ -665,9 +967,9 @@ document.addEventListener('click',e=>{let w=document.querySelector('.notif-wrap'
 function monthKey(v){return dateOnly(v).slice(0,7)}
 function monthLabel(k){if(!k)return '—';let [y,m]=k.split('-');return AR_MONTHS[Number(m)-1]+' '+y}
 function monthSummary(k){let o=S.orders.filter(x=>monthKey(x.date||x.orderDate||x.createdAt)===k);let e=S.expenses.filter(x=>monthKey(x.date||x.createdAt)===k);let sales=sum(o,'effNet'),cost=sum(o,'effCost'),fees=sum(o,'effFees'),exp=sum(e,'amount');return {key:k,label:monthLabel(k),orders:o.length,sales,cost,fees,exp,profit:sales-cost-fees-exp,paid:sum(S.payments.filter(p=>monthKey(p.date||p.createdAt)===k),'amount')}}
-function lastMonths(n=12){let out=[],d=new Date();d.setDate(1);for(let i=0;i<n;i++){let k=d.toISOString().slice(0,7);out.push(monthSummary(k));d.setMonth(d.getMonth()-1)}return out}
+function lastMonths(n=12){let out=[],d=new Date();d.setDate(1);for(let i=0;i<n;i++){let k=localISO(d).slice(0,7);out.push(monthSummary(k));d.setMonth(d.getMonth()-1)}return out}
 function currentMonthSummary(){return monthSummary(today().slice(0,7))}
-function prevMonthSummary(){let d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return monthSummary(d.toISOString().slice(0,7))}
+function prevMonthSummary(){let d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return monthSummary(localISO(d).slice(0,7))}
 function monthlyMini(){let a=lastMonths(6);return `<div class="table-wrap"><table class="month-table"><thead><tr><th>الشهر</th><th>المبيعات</th><th>التكاليف</th><th>المصروفات</th><th>الربح</th></tr></thead><tbody>${a.map(m=>`<tr><td>${esc(m.label)}</td><td>${fmt(m.sales)}</td><td>${fmt(m.cost+m.fees)}</td><td>${fmt(m.exp)}</td><td class="${m.profit>=0?'profit-positive':'profit-negative'}">${fmt(m.profit)}</td></tr>`).join('')}</tbody></table></div>`}
 function recent(){let a=S.orders.slice().sort((x,y)=>(y.createdAt||'').localeCompare(x.createdAt||'')).slice(0,9);if(!a.length)return '<div class="empty">لا توجد طلبات.</div>';return `<div class="table-wrap"><table><thead><tr><th>الطلب</th><th>العميلة</th><th>المنتج</th><th>القيمة</th><th>الحالة</th></tr></thead><tbody>${a.map(o=>`<tr><td>${esc(o.no)}</td><td>${esc(o.customerName)}</td><td>${esc(o.productName)}</td><td>${fmt(o.net)}</td><td>${status(o.status)}</td></tr>`).join('')}</tbody></table></div>`}
 function alerts(){let a=S.orders.filter(o=>Number(o.remaining||0)>0||/بانتظار|قيد|جديد|جاهز/.test(o.status||'')).slice(0,10);return a.length?a.map(o=>`<div class="notice" style="margin:7px 0"><b>${esc(o.no)}</b> — ${esc(o.customerName)}<br>${status(o.status)} ${Number(o.remaining||0)>0?' • متبقي '+fmt(o.remaining):''}</div>`).join(''):'<div class="empty">لا توجد تنبيهات حالية.</div>'}
@@ -804,9 +1106,9 @@ let ordersSort={key:'date',dir:-1};
 let ordersPage=1;const ORDERS_PAGE_SIZE=50;
 
 async function optsFullStatus(sel){return '<option value="">— اختر —</option>'+(await fullStatusList()).map(x=>`<option ${x===sel?'selected':''}>${esc(x)}</option>`).join('')}
-async function fullStatusList(){let base=await vals('حالات الطلب');let stageStatuses=STAGES.map(s=>s.status);return [...new Set([...stageStatuses,...base])]}
+async function fullStatusList(){let base=await vals('حالات الطلب');let stageStatuses=STAGES.map(s=>s.status);let extra=stageStatuses.filter(s=>!base.includes(s));return [...base,...extra]}
 function statusQuickSelect(o,list){let opts=list.includes(o.status)?list:[o.status,...list];return `<select class="status-quick badge ${status(o.status).match(/badge (\w+)/)?.[1]||'info'}" onchange="quickChangeOrderStatus('${o.id}',this.value)">${opts.map(s=>`<option value="${esc(s)}" ${s===o.status?'selected':''}>${esc(s)}</option>`).join('')}</select>`}
-async function quickChangeOrderStatus(oid,newStatus){let o=S.orders.find(x=>x.id===oid);if(!o||newStatus===o.status)return;if(/ملغي|مرتجع/.test(newStatus)&&!isVoid(o)){await cancelOrder(oid,false,newStatus);render();return}o.status=newStatus;await put('orders',o);await event(oid,'تغيير سريع للحالة إلى: '+newStatus);await recalcOrderPayments();await load();render();toast('تم تحديث حالة الطلب')}
+async function quickChangeOrderStatus(oid,newStatus){let o=S.orders.find(x=>x.id===oid);if(!o||newStatus===o.status)return;if(/ملغي|مرتجع/.test(newStatus)&&!isVoid(o)){await cancelOrder(oid,false,newStatus);render();return}if(/تم التسليم|مكتمل/.test(newStatus)){let remaining=Math.max(0,r2(effNetOf(o)-orderPaid(o.id)));if(remaining>0.009){if(!confirm('⚠️ لا يزال على هذا الطلب مبلغ متبقٍ: '+fmt(remaining)+'.\n\nإذا تابعتِ، سيُعتبر هذا المبلغ دينًا على العميلة «'+(o.customerName||'')+'» ويظهر في قسم «ديون العملاء» بقائمة الطلبات للمتابعة لاحقًا حتى تحصيله.\n\nهل تريدين تأكيد التسليم مع بقاء هذا الدين مسجّلًا؟'))return}}o.status=newStatus;await put('orders',o);await auditLogAction('status','orders',oid,'تغيير الحالة إلى: '+newStatus);await event(oid,'تغيير سريع للحالة إلى: '+newStatus);await recalcOrderPayments();await load();render();toast('تم تحديث حالة الطلب')}
 function ordersSortBy(key){if(ordersSort.key===key)ordersSort.dir*=-1;else{ordersSort.key=key;ordersSort.dir=key==='date'?-1:1}ordersPage=1;drawOrders()}
 function ordersGoPage(p){ordersPage=p;drawOrders()}
 function orderShipmentNo(o){return o.customerShipmentNo||o.shipmentNo||''}
@@ -853,8 +1155,11 @@ async function drawOrders(){
  let statusList=await fullStatusList();
 
  let allFiltered=filteredOrders();
- let isDone=o=>(/تم التسليم|مكتمل/.test(o.status||'')||isVoid(o))&&Number(o.remaining||0)<=0.009;
- let active=allFiltered.filter(o=>!isDone(o));
+ let isDelivered=o=>/تم التسليم|مكتمل/.test(o.status||'');
+ let isDebt=o=>isDelivered(o)&&!isVoid(o)&&Number(o.remaining||0)>0.009;
+ let isDone=o=>(isDelivered(o)||isVoid(o))&&Number(o.remaining||0)<=0.009;
+ let active=allFiltered.filter(o=>!isDone(o)&&!isDebt(o));
+ let debts=allFiltered.filter(o=>isDebt(o));
  let completed=allFiltered.filter(o=>isDone(o));
 
  let pages=Math.max(1,Math.ceil(active.length/ORDERS_PAGE_SIZE));
@@ -863,12 +1168,15 @@ async function drawOrders(){
  const arrow=k=>ordersSort.key===k?(ordersSort.dir===1?' ▲':' ▼'):'';
  const th=(label,key)=>`<th style="cursor:pointer;user-select:none" onclick="ordersSortBy('${key}')">${label}${arrow(key)}</th>`;
  const theadRow=`<tr>${th('الطلب','no')}${th('التاريخ','date')}${th('العميلة','customerName')}${th('المنتج','productName')}${th('المصنع','supplier')}${th('التكلفة','totalCost')}${th('الخصم','discount')}${th('الصافي','net')}${th('الربح','profit')}${th('المدفوع','paid')}${th('المتبقي','remaining')}${th('الحالة','status')}<th>الشحنة</th><th></th></tr>`;
- const rowHTML=o=>`<tr><td>${esc(o.no)}</td><td>${esc(o.date)}</td><td>${esc(o.customerName)}<br>${esc(o.phone)}</td><td>${esc(o.productName)}<br>${esc(o.specs)}</td><td>${esc(o.supplier)}</td><td>${fmt(o.totalCost)}</td><td>${Number(o.discount||0)>0?'<b style="color:#a33d38">− '+fmt(o.discount)+'</b>':'—'}</td><td>${fmt(o.net)}</td><td class="${Number(o.effProfit??o.profit??0)>=0?'profit-positive':'profit-negative'}">${fmt(o.effProfit??o.profit)}</td><td>${fmt(o.paid)}</td><td>${fmt(o.remaining)}</td><td>${statusQuickSelect(o,statusList)}</td><td>${esc(orderShipmentNo(o)||'—')}</td><td><button class="btn" onclick="openOrder('${o.id}')">فتح</button>${Number(o.remaining||0)>0.009?`<button class="btn gold" onclick="openPaymentForOrder('${o.id}')" title="تسجيل دفعة لهذا الطلب">💰 دفعة</button>`:''}<button class="btn" onclick="duplicateOrder('${o.id}')" title="نسخ كطلب جديد">⧉ نسخ</button><button class="btn blue" onclick="customerTrackingPrint('${o.id}')">متابعة PDF</button></td></tr>`;
+ const rowHTML=o=>`<tr>${isDebt(o)?'<td style="width:4px;padding:0;background:var(--red)"></td>':''}<td>${esc(o.no)}</td><td>${esc(o.date)}</td><td>${esc(o.customerName)}<br>${esc(o.phone)}</td><td>${esc(o.productName)}<br>${esc(o.specs)}</td><td>${esc(o.supplier)}</td><td>${fmt(o.totalCost)}</td><td>${Number(o.discount||0)>0?'<b style="color:#a33d38">− '+fmt(o.discount)+'</b>':'—'}</td><td>${fmt(o.net)}</td><td class="${Number(o.effProfit??o.profit??0)>=0?'profit-positive':'profit-negative'}">${fmt(o.effProfit??o.profit)}</td><td>${fmt(o.paid)}</td><td>${fmt(o.remaining)}</td><td>${statusQuickSelect(o,statusList)}</td><td>${esc(orderShipmentNo(o)||'—')}</td><td><button class="btn" onclick="openOrder('${o.id}')">فتح</button>${Number(o.remaining||0)>0.009?`<button class="btn gold" onclick="openPaymentForOrder('${o.id}')" title="تسجيل دفعة لهذا الطلب">💰 دفعة</button>`:''}<button class="btn" onclick="duplicateOrder('${o.id}')" title="تنشئ طلبًا جديدًا لنفس العميلة بنفس تفاصيل المنتج والسعر — مفيد لو طلبت نفس الباروكة مرة أخرى">⧉ طلب مشابه</button><button class="btn blue" onclick="customerTrackingPrint('${o.id}')">متابعة PDF</button></td></tr>`;
 
  document.getElementById('ordersT').innerHTML=allFiltered.length?`
 ${active.length?`<div class="table-wrap"><table><thead>${theadRow}</thead><tbody>${a.map(rowHTML).join('')}</tbody></table></div>
 ${pages>1?`<div class="pager no-print" style="display:flex;gap:6px;justify-content:center;margin-top:12px;flex-wrap:wrap">${Array.from({length:pages},(_,i)=>i+1).map(n=>`<button class="btn ${n===ordersPage?'primary':''}" style="padding:6px 12px" onclick="ordersGoPage(${n})">${n}</button>`).join('')}</div>`:''}
 <div class="meta" style="text-align:center;margin-top:8px;color:var(--muted);font-size:11px">عرض ${a.length} من ${active.length} طلب نشط</div>`:'<div class="empty">🎉 لا توجد طلبات نشطة — كل الطلبات مسلَّمة ومسدَّدة بالكامل.</div>'}
+${debts.length?`<details class="fs" open style="margin-top:16px;border-color:var(--red)"><summary>💸 ديون العملاء — طلبات مُسلَّمة ولم تُسدَّد بالكامل (${debts.length}) <span class="hint">تسلَّمتها العميلة لكن يبقى عليها مبلغ — تحتاج متابعة تحصيل</span></summary>
+ <div class="table-wrap"><table><thead>${theadRow}</thead><tbody>${debts.map(rowHTML).join('')}</tbody></table></div>
+</details>`:''}
 ${completed.length?`<details class="fs" style="margin-top:16px"><summary>✅ طلبات مكتملة ومُسلَّمة (${completed.length}) <span class="hint">تم تسليمها وتحصيل كامل المبلغ — لا تحتاج متابعة</span></summary>
  <div class="table-wrap"><table><thead>${theadRow}</thead><tbody>${completed.map(rowHTML).join('')}</tbody></table></div>
 </details>`:''}`:'<div class="empty">لا توجد نتائج.</div>';
@@ -880,7 +1188,9 @@ async function duplicateOrder(oid){
   assignedDate:'',expectedDate:'',productionStartDate:'',productionEndDate:'',factoryShippedDate:'',receivedDate:'',
   customerShippedDate:'',deliveredDate:'',completedDate:'',paymentDate:'',factoryOrderNo:'',factoryShipmentNo:'',factoryTrackingUrl:'',
   customerShipmentNo:'',customerTrackingUrl:'',shipmentNo:'',trackingUrl:'',paid:0,paidLegacy:0,remaining:Number(src.net||0),
-  internalNotes:'',createdAt:new Date().toISOString()};
+  internalNotes:'',createdAt:new Date().toISOString(),
+  _duplicateSourceCustomerId:src.customerId||'',_duplicateSourceCustomerName:src.customerName||'',_duplicateSourcePhone:src.phone||'',
+  _duplicateSourceCity:src.city||'',_duplicateSourceAddress:src.address||''};
  await openOrderWithData(o);
 }
 
@@ -903,7 +1213,7 @@ function nextOrderNo(){let mx=0;for(let o of S.orders){let m=/(\d+)\s*$/.exec(St
 function orderCustomerOptions(selId){return '<option value="">— عميلة جديدة (إدخال يدوي) —</option>'+S.customers.slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'ar')).map(c=>`<option value="${c.id}" ${c.id===selId?'selected':''}>${esc(c.name||'بدون اسم')}${c.phone?' — '+esc(c.phone):''}${c.city?' — '+esc(c.city):''}</option>`).join('')}
 function orderProductOptions(selId){return '<option value="">— إدخال يدوي —</option>'+S.products.slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'ar')).map(p=>`<option value="${p.id}" ${p.id===selId?'selected':''}>${esc(p.name||'بدون اسم')}${p.model?' — '+esc(p.model):''}${p.color?' — '+esc(p.color):''}${p.length?' — '+esc(p.length):''} • ${fmt(p.price)}</option>`).join('')}
 function ofld(n){let f=document.getElementById('orderF');return f?f.querySelector('[name="'+n+'"]'):null}
-function oval(n){let e=ofld(n);return e?Number(String(e.value||0).replace(/,/g,'')):0}
+function oval(n){let e=ofld(n);return e?moneyValue(e.value):0}
 function otxt(n){let e=ofld(n);return e?e.value:''}
 function oset(n,v){let e=ofld(n);if(e&&(v!==undefined&&v!==null))e.value=v}
 
@@ -932,10 +1242,24 @@ async function applyCreditToCurrentOrder(cid){
  let os=customerOpenOrders(cid).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
  if(!os.length){toast('لا توجد طلبات مفتوحة لتطبيق الرصيد عليها');return}
  let left=credit,allocations=[];
- for(let o of os){if(left<=0)break;let use=Math.min(left,Number(o.remaining||0));if(use>0){allocations.push({orderId:o.id,amount:use});left-=use}}
+ for(let o of os){if(left<=0)break;let use=Math.min(left,Number(o.remaining||0));if(use>0){allocations.push({orderId:o.id,amount:r2(use)});left=r2(left-use)}}
  if(!allocations.length){toast('تعذر تطبيق الرصيد');return}
- let pay={id:id('pay'),customerId:cid,customerName:(S.customers.find(x=>x.id===cid)||{}).name||'',amount:r2(allocations.reduce((t,a)=>t+a.amount,0)),date:today(),method:'رصيد دائن سابق',reference:'تطبيق رصيد دائن تلقائي',allocations};
- await put('payments',pay);await recalcOrderPayments();await load();render();toast('تم تطبيق الرصيد الدائن على الطلب المفتوح');
+ /* نستهلك الرصيد الدائن من الدفعات الأصلية نفسها (بدون إنشاء دفعة جديدة) حتى لا يُحتسب المال مرتين */
+ let ps=S.payments.filter(p=>p.customerId===cid&&paymentCredit(p)>0.009);
+ for(let a of allocations){
+  let rem=a.amount;
+  for(let p of ps){
+   if(rem<=0.009)break;
+   let c=paymentCredit(p);if(c<=0.009)continue;
+   let use=r2(Math.min(c,rem));
+   p.allocations=[...paymentAllocations(p),{orderId:a.orderId,amount:use}];
+   await put('payments',p);
+   rem=r2(rem-use);
+  }
+ }
+ await recalcOrderPayments();
+ for(let a of allocations)await event(a.orderId,'تم تطبيق رصيد دائن سابق بقيمة '+fmt(a.amount));
+ await load();render();toast('تم تطبيق الرصيد الدائن على الطلب المفتوح');
 }
 
 async function quickSaveCustomer(){
@@ -947,7 +1271,7 @@ async function quickSaveCustomer(){
  let isNew=!S.customers.find(x=>x.id===c.id);
  c.name=name;c.phone=phone;c.city=otxt('city');c.address=otxt('address');
  let pr=otxt('customerPrefs');if(pr)c.notes=pr;
- await put('customers',c);await load();
+ await put('customers',c);await auditLogAction(isNew?'create':'update','customers',c.id,(isNew?'إضافة':'تعديل')+' العميلة '+(c.name||''));await load();
  let selEl=ofld('customerId');if(selEl)selEl.innerHTML=orderCustomerOptions(c.id);
  applyCustomerToOrder(c.id);
  toast(isNew?'تمت إضافة ملف العميلة':'تم تحديث ملف العميلة');
@@ -1029,7 +1353,7 @@ function scheduleDraftSave(){
  clearTimeout(draftSaveTimer);
  draftSaveTimer=setTimeout(()=>{
   let f=document.getElementById('orderF');if(!f||!f.dataset.oid)return;
-  try{let data=Object.fromEntries(new FormData(f));localStorage.setItem(orderDraftKey(f.dataset.oid),JSON.stringify({data,ts:Date.now()}))}catch(e){}
+  try{let data=Object.fromEntries(new FormData(f));localStorage.setItem(orderDraftKey(f.dataset.draftid||f.dataset.oid),JSON.stringify({data,ts:Date.now()}))}catch(e){}
  },900);
 }
 function renderRefImagesPreview(){
@@ -1049,8 +1373,8 @@ function formatMoneyLive(raw){
  let dec=parts.length>1?'.'+parts[1].slice(0,2):'';
  return withCommas+dec;
 }
-function moneyValue(str){return Number(String(str??'0').replace(/,/g,''))||0}
-function fldMoney(l,n,v,req=false){let isEmpty=(v===0||v==='0'||v===undefined||v===null||v==='');let val=isEmpty?'':formatMoneyLive(v);return `<div class="field"><label>${l}</label><input name="${n}" type="text" inputmode="decimal" data-money="1" value="${esc(val)}" placeholder="0" ${req?'required':''}></div>`}
+function moneyValue(str){let v=normalizeDigits(String(str??'0')).replace(/,/g,'');return Number(v)||0}
+function fldMoney(l,n,v,req=false){let isEmpty=(v===0||v==='0'||v===undefined||v===null||v==='');let val=isEmpty?'':formatMoneyLive(v);return `<div class="field"><label>${l}</label><input name="${n}" type="text" inputmode="decimal" data-money="1" value="${esc(val)}" placeholder="0" oninput="recalcOrderForm()" onchange="recalcOrderForm()" ${req?'required':''}></div>`}
 function normalizeDigits(s){
  const map={'٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9','۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9','٫':'.','،':','};
  return s.replace(/[٠-٩۰-۹٫،]/g,c=>map[c]||c);
@@ -1132,17 +1456,33 @@ function recalcOrderForm(){
  P('sumNet',fmt(net));P('sumPaid',fmt(paid));P('sumRemain',fmt(remaining));
  P('sumProfit',fmt(profit)+(net>0?` (${margin}%)`:''),profit>=0?'profit-positive':'profit-negative');
  P('sumCost',fmt(cost));
+ let liveBox=document.getElementById('profitBreakdownLive');
+ if(liveBox){liveBox.innerHTML=profitBreakdownHtml({net:net,costProduct:r2(oval('unitCost')*qty),factoryShipping:oval('factoryShipping'),packaging:oval('packaging'),localShipping:oval('localShipping'),otherCost:oval('otherCost'),paymentFees:fees});}
  let dl=document.getElementById('discLabel');if(dl)dl.textContent=dType==='percent'?'قيمة الخصم (%)':'قيمة الخصم ('+(S.settings.currency||'ر.س')+')';
  let lp=document.getElementById('lineTotal');if(lp)lp.textContent=fmt(gross);
 }
 
+function profitBreakdown(o){
+ const sales=Number(o?.net||0), product=Number(o?.costProduct||0), fs=Number(o?.factoryShipping||0), pack=Number(o?.packaging||0), local=Number(o?.localShipping||0), other=Number(o?.otherCost||0), fees=Number(o?.paymentFees||0);
+ const total=product+fs+pack+local+other+fees;
+ return {sales,product,fs,pack,local,other,fees,total,profit:r2(sales-total)};
+}
+function profitBreakdownHtml(o){const z=profitBreakdown(o);return `<div class="mini-grid" style="margin-top:10px">
+ <div class="mini"><b>صافي البيع</b>${fmt(z.sales)}</div><div class="mini"><b>تكلفة المنتج</b>${fmt(z.product)}</div>
+ <div class="mini"><b>شحن المصنع</b>${fmt(z.fs)}</div><div class="mini"><b>التغليف</b>${fmt(z.pack)}</div>
+ <div class="mini"><b>الشحن المحلي</b>${fmt(z.local)}</div><div class="mini"><b>مصاريف أخرى</b>${fmt(z.other)}</div>
+ <div class="mini"><b>رسوم الدفع</b>${fmt(z.fees)}</div><div class="mini"><b>صافي الربح</b><span class="${z.profit>=0?'profit-positive':'profit-negative'}">${fmt(z.profit)}</span></div>
+ </div>`}
+async function readFileData(file){return new Promise(resolve=>{if(!file)return resolve(null);let r=new FileReader();r.onload=()=>resolve({name:file.name,type:file.type,size:file.size,data:r.result});r.onerror=()=>resolve(null);r.readAsDataURL(file)})}
+function orderAttachmentsHtml(a){a=Array.isArray(a)?a:[];return a.length?`<div style="display:flex;gap:8px;flex-wrap:wrap">${a.map((x,i)=>x.type?.startsWith('image/')?`<div class="mini" style="width:115px"><img src="${x.data}" style="width:100%;height:78px;object-fit:cover;border-radius:9px"><div style="font-size:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(x.name||'')}">${esc(x.name||'مرفق')}</div></div>`:`<a class="btn" href="${x.data}" target="_blank" download="${esc(x.name||'attachment')}">📎 ${esc(x.name||'مرفق')}</a>`).join('')}</div>`:'<div class="hint">لا توجد مرفقات.</div>'}
 async function openOrderWithData(draft){return openOrder(null,draft)}
 async function openOrder(oid,draft){
  let o=draft||S.orders.find(x=>x.id===oid)||{id:id('ord'),no:nextOrderNo(),date:today(),orderDate:today(),qty:1,status:'جديد',productType:'باروكة',factoryStatus:'لم يُكلّف',paymentMethod:'تحويل بنكي',productionDays:S.settings.defaultProductionDays||7,createdAt:new Date().toISOString()};
  if(draft)oid=null;
  pendingNewProductImage=null;
  pendingRefImages=(o.referenceImages||[]).slice();
- let existingDraft=null;try{let raw=localStorage.getItem(orderDraftKey(o.id));if(raw)existingDraft=JSON.parse(raw)}catch(e){}
+ let pendingAttachments=(o.attachments||[]).slice();
+ let draftId=S.orders.find(x=>x.id===o.id)?o.id:'new';let existingDraft=null;if(!draft){try{let raw=localStorage.getItem(orderDraftKey(draftId));if(raw)existingDraft=JSON.parse(raw)}catch(e){}}
  let [st,fs,tp,ch,pm,sh,sups,cityOpts,colorList]=await Promise.all([optsFullStatus(o.status),opts('حالات المصنع',o.factoryStatus),opts('أنواع المنتجات',o.productType),opts('قنوات الطلب',o.channel),opts('طرق الدفع',o.paymentMethod),opts('شركات الشحن',o.customerShipmentCompany||o.shipmentCompany),supplierOptions(o.supplier),opts('المدن',o.city),vals('الألوان')]);
  let qty=Math.max(1,Number(o.qty||1));
  let unitPrice=Number(o.unitPrice!==undefined?o.unitPrice:r2(Number(o.productPrice||0)/qty));
@@ -1188,9 +1528,10 @@ async function openOrder(oid,draft){
  <div id="prodPreview" style="margin-top:10px"></div>
  <div class="form">
   ${fld('اسم المنتج','productName',o.productName,'text',true)}${sel('نوع المنتج','productType',tp)}${fld('الموديل','model',o.model)}
+  ${sel('طريقة التوريد','fulfillmentMode',`<option value="custom" ${o.fulfillmentMode!=='ready'?'selected':''}>تفصيل / طلب من المصنع</option><option value="ready" ${o.fulfillmentMode==='ready'?'selected':''}>جاهز من الشركة</option>`)}<div id="source-mode-help" class="muted full" style="margin-top:-4px">التوريد يتم بعد طلب العميل: إما منتج جاهز من الشركة أو تفصيل حسب المواصفات.</div>
   ${fld('الطول','hairLength',o.hairLength||o.length)}${selWithOther('اللون','color',colorOptsHTML(colorList,o.color),o.color,!!(o.color&&!colorList.includes(o.color)))}${fld('المقاس','size',o.size)}
   ${fld('الخامة','material',o.material)}${fld('الكثافة','density',o.density)}${fld('الكمية','qty',qty,'number')}
-  <div class="field full"><label>المواصفات / ملاحظات التفصيل</label><input name="specs" value="${esc(o.specs||'')}"></div>
+  <div class="field full" data-fulfillment="custom"><label>المواصفات / ملاحظات التفصيل</label><input name="specs" value="${esc(o.specs||'')}"></div>
  </div>
  <div id="newProdBox" class="notice info" style="display:none;margin-top:10px">
   🆕 هذا اسم منتج غير موجود في كتالوج الباروكات.
@@ -1209,6 +1550,11 @@ async function openOrder(oid,draft){
   <input type="file" id="refImgs" accept="image/*" multiple>
  </div>
  <div id="refImgsPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
+</details>
+
+<details class="fs"><summary>📎 مرفقات الطلب <span class="hint">إثبات دفع، بوليصة شحن، صورة، أو مستند</span></summary>
+ <div class="field full"><label>إضافة مرفقات</label><input type="file" id="orderAttachments" accept="image/*,.pdf,.jpg,.jpeg,.png" multiple></div>
+ <div id="orderAttachmentsPreview" style="margin-top:8px">${orderAttachmentsHtml(pendingAttachments)}</div>
 </details>
 
 <details class="fs" open><summary>💰 التسعير والخصم</summary>
@@ -1242,6 +1588,7 @@ async function openOrder(oid,draft){
   ${fldMoney('تكلفة الوحدة من المصنع','unitCost',unitCost)}${fldMoney('شحن المصنع','factoryShipping',o.factoryShipping||0)}${fldMoney('التغليف','packaging',o.packaging||0)}
   ${fldMoney('الشحن المحلي','localShipping',o.localShipping||0)}${fldMoney('مصاريف أخرى','otherCost',o.otherCost||0)}
  </div>
+ <div id="profitBreakdownLive">${profitBreakdownHtml(o)}</div>
 </details>
 
 <details class="fs"><summary>🏭 المصنع والتكليف</summary>
@@ -1255,7 +1602,7 @@ async function openOrder(oid,draft){
  <div class="form">
   ${fld('تاريخ التكليف','assignedDate',o.assignedDate,'date')}${fld('مدة التجهيز (يوم)','productionDays',o.productionDays||7,'number')}
   <div class="field"><label>موعد التجهيز المتوقع</label><input name="expectedDate" type="date" lang="en" value="${esc(o.expectedDate||'')}"><button class="btn" type="button" style="margin-top:6px;padding:5px 9px;font-size:11px" onclick="calcExpectedDate()">احسب من تاريخ التكليف</button></div>
-  ${fld('بداية التفصيل','productionStartDate',o.productionStartDate,'date')}${fld('اكتمال التفصيل','productionEndDate',o.productionEndDate,'date')}${fld('تاريخ شحن المصنع','factoryShippedDate',o.factoryShippedDate,'date')}
+  <div class="grid full" data-fulfillment="custom">${fld('بداية التفصيل','productionStartDate',o.productionStartDate,'date')}${fld('اكتمال التفصيل','productionEndDate',o.productionEndDate,'date')}${fld('تاريخ شحن المصنع','factoryShippedDate',o.factoryShippedDate,'date')}</div>
   ${fld('تاريخ استلام شروق','receivedDate',o.receivedDate,'date')}${fld('تاريخ الشحن للعميلة','customerShippedDate',o.customerShippedDate,'date')}${fld('تاريخ التسليم','deliveredDate',o.deliveredDate,'date')}
   ${fld('تاريخ اكتمال الطلب','completedDate',o.completedDate,'date')}${fld('تاريخ سداد كامل المبلغ','paymentDate',o.paymentDate,'date')}
  </div>
@@ -1285,7 +1632,7 @@ async function openOrder(oid,draft){
 </form>${installmentsHtml(o)}<div class="section"><h3>سجل الأحداث والانتقالات</h3><div id="orderTimeline">${await timeline(o.id)}</div></div>`);
 
  let F=document.getElementById('orderF');
- F.dataset.oid=o.id;
+ F.dataset.oid=o.id;F.dataset.draftid=draftId;
  F.dataset.paid=orderPaid(o.id)||0;
  F.addEventListener('input',recalcOrderForm);
  F.addEventListener('change',recalcOrderForm);
@@ -1313,9 +1660,10 @@ async function openOrder(oid,draft){
   if(confirm('وُجدت مسودة غير محفوظة لهذا الطلب من محاولة سابقة. هل تريدين استعادتها؟')){
    for(let k in existingDraft.data){try{oset(k,existingDraft.data[k])}catch(err){}}
    recalcOrderForm();checkNewProduct();checkDuplicateCustomer();checkPhoneFormat();markModalDirty();
-  }else{try{localStorage.removeItem(orderDraftKey(o.id))}catch(err){}}
+  }else{try{localStorage.removeItem(orderDraftKey(draftId))}catch(err){}}
  }
 
+ document.getElementById('orderAttachments')?.addEventListener('change',async e=>{for(let f of Array.from(e.target.files||[])){let d=await readFileData(f);if(d)pendingAttachments.push(d)}e.target.value='';let box=document.getElementById('orderAttachmentsPreview');if(box)box.innerHTML=orderAttachmentsHtml(pendingAttachments);markModalDirty()});
  async function saveOrderForm(closeAfter){
   if(!otxt('customerName').trim()){alert('أدخلي اسم العميلة أولًا.');return null}
   let x=Object.fromEntries(new FormData(F));
@@ -1337,6 +1685,20 @@ async function openOrder(oid,draft){
   x.customerId=x.customerId||o.customerId||id('cus');
   x.orderDate=x.date||today();
   x.length=x.hairLength||'';
+  // عند إنشاء طلب مشابه: إذا غيّرتِ بيانات العميل عن العميل الأصلي، أنشئ ملف عميل جديد بدل تعديل العميل الأصلي.
+  // إذا بقيت البيانات نفسها، يبقى الطلب الجديد مرتبطًا بالعميل الأصلي بشكل طبيعي.
+  if(o._duplicateSourceCustomerId && x.customerId===o._duplicateSourceCustomerId){
+   let changed=(String(x.customerName||'').trim()!==String(o._duplicateSourceCustomerName||'').trim())||
+     (String(x.phone||'').trim()!==String(o._duplicateSourcePhone||'').trim())||
+     (String(x.city||'').trim()!==String(o._duplicateSourceCity||'').trim())||
+     (String(x.address||'').trim()!==String(o._duplicateSourceAddress||'').trim());
+   if(changed){
+    let newCid=id('cus');
+    let nc={id:newCid,createdAt:new Date().toISOString(),name:(x.customerName||'').trim(),phone:(x.phone||'').trim(),city:(x.city||'').trim(),district:(x.district||'').trim(),address:(x.address||'').trim(),notes:(x.customerPrefs||'').trim()};
+    await put('customers',nc);
+    x.customerId=newCid;
+   }
+  }
   if(!x.shipmentCompany)x.shipmentCompany=x.customerShipmentCompany||'';
   if(!x.shipmentNo)x.shipmentNo=x.customerShipmentNo||'';
   for(let k of ['installments','keptAmount','cancelCost','cancelReason','cancelledDate']){if(x[k]===undefined&&o[k]!==undefined)x[k]=o[k]}
@@ -1344,6 +1706,8 @@ async function openOrder(oid,draft){
   if(x.paid>=effNetOf(x)&&effNetOf(x)>0&&!x.paymentDate)x.paymentDate=today();
   let wasVoid=isVoid(o);
   x.referenceImages=pendingRefImages.slice();
+  x.attachments=pendingAttachments.slice();
+  x.fulfillmentMode=x.fulfillmentMode==='ready'?'ready':'custom';
   await addToListIfNew('الألوان',x.color);
   if(!x.productId){
    let matchProd=S.products.find(p=>(p.name||'').trim().toLowerCase()===(x.productName||'').trim().toLowerCase());
@@ -1356,7 +1720,7 @@ async function openOrder(oid,draft){
   }
   await put('orders',x);await syncCustomer(x);await event(x.id,'تم حفظ/تحديث بيانات الطلب — '+x.status);
   o=x;S.orders=S.orders.filter(y=>y.id!==x.id).concat([x]);
-  clearOrderDraft(x.id);
+  clearOrderDraft(x.id);clearOrderDraft('new');
   if(closeAfter){modalDirty=false;closeModal(true);await load();render();toast('تم حفظ الطلب');if(isVoid(x)&&!wasVoid&&Number(x.paid||0)>0){await cancelOrder(x.id,true,x.status)}}
   else{await load();modalDirty=false;}
   return x;
@@ -1365,7 +1729,7 @@ async function openOrder(oid,draft){
  F.onsubmit=async e=>{e.preventDefault();await saveOrderForm(true)};
 }
 
-async function advanceStage(oid,key){let o=S.orders.find(x=>x.id===oid);if(!o)return;let st=STAGES.find(x=>x.key===key);if(!st)return;let warnMsg='تأكيد نقل الطلب إلى: '+st.label+'؟';if((key==='delivered'||key==='closed')&&Number(o.remaining||0)>0)warnMsg='⚠️ تنبيه: على هذا الطلب مبلغ متبقٍ قدره '+fmt(o.remaining)+' لم يُسدد بعد.\n\n'+warnMsg+'\nستبقى العملية ممكنة، لكن المبلغ سيظل مسجلًا كمتبقٍ في النظام حتى تُسجَّل الدفعة.';if(!confirm(warnMsg))return;o.status=st.status;o[st.date]=today();if(key==='assigned'){o.factoryStatus='تم التكليف';o.assignedDate=o.assignedDate||today();o.productionDays=Number(o.productionDays||7);o.expectedDate=o.expectedDate||addDays(o.assignedDate,o.productionDays);}if(key==='making')o.factoryStatus='قيد التفصيل';if(key==='ready')o.factoryStatus='جاهز';if(key==='factoryShipped')o.factoryStatus='تم الشحن';if(key==='received')o.factoryStatus='تم الاستلام';if(key==='payment'&&o.paid<o.net)toast('تنبيه: المرحلة تم تغييرها، لكن تأكدي من تسجيل الدفعة');if(key==='delivered'&&!o.deliveredDate)o.deliveredDate=today();if(key==='closed')o.completedDate=today();await put('orders',o);await event(o.id,'انتقال المرحلة: '+st.label);await recalcOrderPayments();await load();closeModal(true);await openOrder(o.id);toast('تم تحديث مرحلة الطلب')}
+async function advanceStage(oid,key){let o=S.orders.find(x=>x.id===oid);if(!o)return;let st=STAGES.find(x=>x.key===key);if(!st)return;let warnMsg='تأكيد نقل الطلب إلى: '+st.label+'؟';if((key==='delivered'||key==='closed')&&Number(o.remaining||0)>0)warnMsg='⚠️ تنبيه: على هذا الطلب مبلغ متبقٍ قدره '+fmt(o.remaining)+' لم يُسدد بعد.\n\n'+warnMsg+'\nستبقى العملية ممكنة، لكن المبلغ سيظل مسجلًا كمتبقٍ في النظام حتى تُسجَّل الدفعة.';if(!confirm(warnMsg))return;o.status=st.status;o[st.date]=today();if(key==='assigned'){o.factoryStatus='تم التكليف';o.assignedDate=o.assignedDate||today();o.productionDays=Number(o.productionDays||7);o.expectedDate=o.expectedDate||addDays(o.assignedDate,o.productionDays);}if(key==='making')o.factoryStatus='قيد التفصيل';if(key==='ready')o.factoryStatus='جاهز';if(key==='factoryShipped')o.factoryStatus='تم الشحن';if(key==='received')o.factoryStatus='تم الاستلام';if(key==='payment'&&o.paid<o.net)toast('تنبيه: المرحلة تم تغييرها، لكن تأكدي من تسجيل الدفعة');if(key==='delivered'&&!o.deliveredDate)o.deliveredDate=today();if(key==='closed')o.completedDate=today();await put('orders',o);await auditLogAction('status','orders',oid,'انتقال المرحلة: '+st.label);await event(o.id,'انتقال المرحلة: '+st.label);await recalcOrderPayments();await load();closeModal(true);await openOrder(o.id);toast('تم تحديث مرحلة الطلب')}
 async function openPaymentForOrder(oid){
  let o=S.orders.find(x=>x.id===oid);
  if(!o&&window.saveOrderFormSilently){o=await window.saveOrderFormSilently();if(!o)return;oid=o.id}
@@ -1426,14 +1790,24 @@ async function syncQuickPayment(){
  if(F){F.dataset.paid=orderPaid(saved.id)||0;recalcOrderForm()}
  toast('✅ تم تسجيل الدفعة');
 }
-async function markInstallmentPaid(oid,iid){let o=S.orders.find(x=>x.id===oid);if(!o)return;let inst=(o.installments||[]).find(x=>x.id===iid);if(!inst)return;inst.paid=true;inst.paidDate=today();await put('orders',o);let idx=o.installments.indexOf(inst);let pay={id:id('pay'),orderId:oid,customerId:o.customerId,customerName:o.customerName,amount:inst.amount,date:today(),method:o.paymentMethod||'',reference:'قسط '+(idx+1)};await put('payments',pay);await recalcOrderPayments();await event(oid,'تم سداد القسط رقم '+(idx+1)+' بقيمة '+fmt(inst.amount));closeModal(true);await load();await openOrder(oid);toast('تم تسجيل سداد القسط وربطه بالدفعات')}
+async function markInstallmentPaid(oid,iid){let o=S.orders.find(x=>x.id===oid);if(!o)return;let inst=(o.installments||[]).find(x=>x.id===iid);if(!inst)return;inst.paid=true;inst.paidDate=today();await put('orders',o);let idx=o.installments.indexOf(inst);let pay={id:id('pay'),orderId:oid,customerId:o.customerId,customerName:o.customerName,amount:inst.amount,date:today(),method:o.paymentMethod||'',reference:'قسط '+(idx+1)};await put('payments',pay);S.payments.push(pay);await recalcOrderPayments();await event(oid,'تم سداد القسط رقم '+(idx+1)+' بقيمة '+fmt(inst.amount));closeModal(true);await load();await openOrder(oid);toast('تم تسجيل سداد القسط وربطه بالدفعات')}
 async function deleteInstallment(oid,iid){let o=S.orders.find(x=>x.id===oid);if(!o)return;let inst=(o.installments||[]).find(x=>x.id===iid);let msg=inst&&inst.paid?'هذا القسط مُسدَّد بالفعل. حذفه من الخطة لن يحذف الدفعة المسجَّلة له في تبويب الدفعات، وستبقى محسوبة ضمن مدفوعات الطلب. متابعة حذف القسط من الخطة فقط؟':'حذف هذا القسط من الخطة؟';if(!confirm(msg))return;o.installments=(o.installments||[]).filter(x=>x.id!==iid);await put('orders',o);closeModal(true);await load();await openOrder(oid)}
-function daysSinceBackup(){let v=localStorage.getItem('lw_last_backup');if(!v)return null;return daysBetween(v.slice(0,10),today())}
+function safeStorageGet(key){try{return localStorage.getItem(key)}catch(e){return null}}
+function safeStorageSet(key,value){try{localStorage.setItem(key,value)}catch(e){} }
+function daysSinceBackup(){let v=safeStorageGet('lw_last_backup');if(!v)return null;return daysBetween(v.slice(0,10),today())}
 function backupReminderHtml(){let d=daysSinceBackup();if(d===null&&S.orders.length===0)return '';if(d===null)return `<div class="notice danger" style="margin-bottom:15px">💾 لم يتم أخذ أي نسخة احتياطية بعد. <button class="btn" style="float:left;padding:5px 9px" onclick="setPage('settings')">أخذ نسخة الآن</button></div>`;if(d>=7)return `<div class="notice ${d>=14?'danger':'info'}" style="margin-bottom:15px">💾 مر ${d} يوم منذ آخر نسخة احتياطية. يفضّل أخذ نسخة جديدة الآن لحماية بياناتك. <button class="btn" style="float:left;padding:5px 9px" onclick="setPage('settings')">أخذ نسخة الآن</button></div>`;return ''}
 function backupStatusText(){let d=daysSinceBackup();if(d===null)return 'لم يتم أخذ نسخة احتياطية بعد';if(d===0)return 'تم أخذ نسخة اليوم';return 'قبل '+d+' يوم'}
 
 function fld(l,n,v,type='text',req=false){let isZero=type==='number'&&(v===0||v==='0'||v===undefined||v===null||v==='');let val=isZero?'':v;return `<div class="field"><label>${l}</label><input name="${n}" type="${type}" value="${esc(val??'')}" ${type==='date'?'lang="en"':''} ${type==='number'?'placeholder="0"':''} ${req?'required':''}></div>`}
 function sel(l,n,v){return `<div class="field"><label>${l}</label><select name="${n}">${v}</select></div>`}
+
+function updateFulfillmentFields(){
+ const m=document.querySelector('[name="fulfillmentMode"]');
+ if(!m)return;
+ const custom=m.value==='custom';
+ document.querySelectorAll('[data-fulfillment="custom"]').forEach(e=>e.style.display=custom?'':'none');
+}
+setTimeout(updateFulfillmentFields,0);
 async function supplierOptions(selv){let a=await all('suppliers');return '<option value="">— لا يوجد —</option>'+a.map(x=>`<option ${x.name===selv?'selected':''}>${esc(x.name)}</option>`).join('')}
 function supplierStats(name){
  let os=S.orders.filter(o=>o.supplier===name);
@@ -1479,7 +1853,7 @@ async function openSupplier(sid){
  modal(existing?'ملف المصدر — '+s.name:'إضافة شركة / مصنع',`<form id="sf" class="form">
 <details class="fs" open><summary>🏭 البيانات الأساسية</summary>
  <div class="form">
-  ${fld('اسم الشركة / المصنع','name',s.name,'text',true)}${fld('نوع المصدر','type',s.type)}${fld('جهة الاتصال','contact',s.contact)}${fld('الجوال / البريد','phone',s.phone)}
+  ${fld('اسم الشركة / المصنع','name',s.name,'text',true)}${sel('نوع المصدر','type',`<option value="مصنع تفصيل" ${s.type==='مصنع تفصيل'?'selected':''}>مصنع تفصيل</option><option value="شركة منتجات جاهزة" ${s.type==='شركة منتجات جاهزة'?'selected':''}>شركة منتجات جاهزة</option><option value="مصنع / شركة أخرى" ${!['مصنع تفصيل','شركة منتجات جاهزة'].includes(s.type)?'selected':''}>مصنع / شركة أخرى</option>`)}${fld('جهة الاتصال','contact',s.contact)}${fld('الجوال / البريد','phone',s.phone)}
   <div class="field full"><label>ملاحظات وشروط الشراء</label><textarea name="notes" rows="3">${esc(s.notes||'')}</textarea></div>
  </div>
 </details>
@@ -1500,6 +1874,8 @@ ${existing?`<details class="fs" open><summary>📊 أداء المصدر <span c
  </div>
 </details>`:''}
 
+
+
 <div class="actions full">
  <button class="btn primary">💾 حفظ</button>
  ${existing&&s.phone?`<button type="button" class="btn gold" onclick="waSend('${esc(s.phone)}','مرحباً ${esc(s.contact||s.name)} 🌸')">📩 مراسلة واتساب</button>`:''}
@@ -1507,7 +1883,7 @@ ${existing?`<details class="fs" open><summary>📊 أداء المصدر <span c
 </div>
 </form>`);
 
- document.getElementById('sf').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));let oldName=s.name;x.id=s.id;x.createdAt=s.createdAt||new Date().toISOString();await put('suppliers',x);
+ document.getElementById('sf').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));let oldName=s.name;x.id=s.id;x.createdAt=s.createdAt||new Date().toISOString();await put('suppliers',x);await auditLogAction(existing?'update':'create','suppliers',x.id,(existing?'تعديل':'إضافة')+' المصدر '+(x.name||''));
   if(existing&&oldName&&oldName!==x.name){
    for(let o of S.orders.filter(o=>o.supplier===oldName)){o.supplier=x.name;await put('orders',o)}
    for(let p of S.products.filter(p=>p.supplier===oldName)){p.supplier=x.name;await put('products',p)}
@@ -1515,14 +1891,24 @@ ${existing?`<details class="fs" open><summary>📊 أداء المصدر <span c
   closeModal();await load();render();toast('تم حفظ بيانات المصدر')};
 }
 async function deleteSupplier(sid){
- let s=S.suppliers.find(x=>x.id===sid);if(!s)return;
- let z=supplierStats(s.name);
- let msg=(z.count>0||z.products.length>0)?`هذا المصدر مرتبط بـ ${z.count} طلب و${z.products.length} منتج في الكتالوج. نقله للأرشيف لن يؤثر على الطلبات أو المنتجات المحفوظة، لكنها ستفقد اسم المصدر المرتبط بها. متابعة النقل للأرشيف؟`:'نقل هذا المصدر إلى الأرشيف؟';
- if(confirm(msg)){await archiveRecord('suppliers',s,s.name);closeModal();load().then(render);toast('تم نقل المصدر إلى الأرشيف')}
+ let s=S.suppliers.find(x=>x.id===sid);if(!s)return;let mode=await askDeleteMode('المصدر '+s.name);if(!mode)return;
+ if(mode==='archive'){await archiveRecord('suppliers',s,s.name);closeModal();await load();render();toast('تم نقل المصدر إلى الأرشيف');return}
+ permanentDeleteWithPin(async()=>{await del('suppliers',sid);closeModal();await load();render();toast('تم الحذف نهائيًا بنجاح')},'تأكيد الحذف النهائي للمصدر');
 }
 
 async function timeline(oid){let a=(await all('events')).filter(x=>x.orderId===oid).sort((x,y)=>y.date.localeCompare(x.date));return a.length?`<div class="timeline">${a.map(e=>{let d=new Date(e.date);return `<div class="event"><div>${esc(e.text)}</div><div class="date">${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}</div></div>`}).join('')}</div>`:'<div class="empty">لا يوجد سجل مراحل بعد.</div>'}
-async function deleteOrder(idv){let o=S.orders.find(x=>x.id===idv);if(!o)return;if(confirm('نقل هذا الطلب إلى الأرشيف؟ يمكن استعادته لاحقًا من الإعدادات. الدفعات المسجلة له تبقى محفوظة في تبويب الدفعات.')){await archiveRecord('orders',o,o.no);closeModal();await load();render();toast('تم نقل الطلب إلى الأرشيف')}}
+async function deleteOrder(idv){
+ let o=S.orders.find(x=>x.id===idv);if(!o)return;let mode=await askDeleteMode('الطلب '+o.no);if(!mode)return;
+ if(mode==='archive'){
+  let linkedPayments=(await all('payments')).filter(p=>p.orderId===idv||paymentAllocations(p).some(a=>a.orderId===idv));
+  let linkedEvents=(await all('events')).filter(e=>e.orderId===idv);
+  let archiveData={...o,__linkedPayments:linkedPayments,__linkedEvents:linkedEvents};
+  await archiveRecord('orders',archiveData,o.no);
+  for(let p of linkedPayments)await del('payments',p.id);
+  for(let e of linkedEvents)await del('events',e.id);
+  await load();await recalcOrderPayments();render();toast('تم نقل الطلب والدفعات والأحداث المرتبطة به إلى الأرشيف');return}
+ permanentDeleteWithPin(async()=>{for(let e of await all('events'))if(e.orderId===idv)await del('events',e.id);for(let p of await all('payments'))if(p.orderId===idv||paymentAllocations(p).some(a=>a.orderId===idv))await del('payments',p.id);await del('orders',idv);closeModal();await load();render();toast('تم الحذف نهائيًا بنجاح')},'تأكيد الحذف النهائي للطلب');
+}
 function productStats(pid,pname){
  let os=S.orders.filter(o=>o.productId===pid||(!o.productId&&pname&&o.productName===pname));
  let qty=sum(os,'qty')||os.length;
@@ -1629,13 +2015,12 @@ ${existing?`<details class="fs" open><summary>📊 أداء المنتج <span c
 <div class="actions full"><button class="btn primary">حفظ</button><button class="btn" type="button" onclick="printProduct('${p.id}')">PDF</button>${existing?`<button class="btn" type="button" onclick="duplicateProduct('${p.id}')">⧉ نسخ كمنتج جديد</button><button class="btn danger" type="button" onclick="deleteProduct('${p.id}')">حذف</button>`:''}</div>
 </form>`);
 
- document.getElementById('productF').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));x.price=moneyValue(x.price);x.cost=moneyValue(x.cost);x.id=p.id;x.createdAt=p.createdAt||new Date().toISOString();let f=document.getElementById('pimg').files[0];x.image=f?await compressImage(f):(p.image||'');await addToListIfNew('الألوان',x.color);await put('products',x);closeModal();await load();render();toast('تم حفظ المنتج')}
+ document.getElementById('productF').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));x.price=moneyValue(x.price);x.cost=moneyValue(x.cost);x.id=p.id;x.createdAt=p.createdAt||new Date().toISOString();let f=document.getElementById('pimg').files[0];x.image=f?await compressImage(f):(p.image||'');await addToListIfNew('الألوان',x.color);await put('products',x);await auditLogAction(existing?'update':'create','products',x.id,(existing?'تعديل':'إضافة')+' المنتج '+(x.name||''));closeModal();await load();render();toast('تم حفظ المنتج')}
 }
 async function deleteProduct(pid){
- let p=S.products.find(x=>x.id===pid);if(!p)return;
- let st=productStats(pid,p.name);
- let msg=st.count>0?`هذا المنتج مرتبط بـ ${st.count} طلب سابق. نقله للأرشيف لن يؤثر على الطلبات المحفوظة. متابعة النقل للأرشيف؟`:'نقل هذا المنتج إلى الأرشيف؟';
- if(confirm(msg)){await archiveRecord('products',p,p.name);closeModal();load().then(render);toast('تم نقل المنتج إلى الأرشيف')}
+ let p=S.products.find(x=>x.id===pid);if(!p)return;let mode=await askDeleteMode('المنتج '+p.name);if(!mode)return;
+ if(mode==='archive'){await archiveRecord('products',p,p.name);closeModal();await load();render();toast('تم نقل المنتج إلى الأرشيف');return}
+ permanentDeleteWithPin(async()=>{await del('products',pid);await auditLogAction('delete','products',pid,'حذف نهائي للمنتج '+(p.name||''));closeModal();await load();render();toast('تم الحذف نهائيًا بنجاح')},'تأكيد الحذف النهائي للمنتج');
 }
 
 function customers(){return `<div class="card"><div class="toolbar no-print">
@@ -1744,13 +2129,12 @@ async function openCustomer(cid){
  ${existing?`<button type="button" class="btn gold" onclick="newOrderForCustomer('${c.id}')">🧾 طلب جديد لهذه العميلة</button>${z.o.length?`<button type="button" class="btn" onclick="repeatLastOrderForCustomer('${c.id}')">🔁 تكرار آخر طلب</button>`:''}<button type="button" class="btn" onclick="openPayment('${c.id}')">💳 تسجيل دفعة</button>${z.credit>0?`<button type="button" class="btn blue" onclick="openCreditTransfer('${c.id}')">↔ نقل رصيد دائن</button>`:''}<button type="button" class="btn blue" onclick="customerStatementPrint('${c.id}')">كشف الحساب PDF</button><button type="button" class="btn blue" onclick="customerHistoryPrint('${c.id}')">السجل PDF</button><button type="button" class="btn danger" onclick="deleteCustomer('${c.id}')">حذف</button>`:''}
 </div>
 </form>${existing?`<div class="section">${customerHistoryHtml(c.id)}</div>`:''}`);
- document.getElementById('cf').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));x.id=c.id;x.createdAt=c.createdAt||new Date().toISOString();await put('customers',x);closeModal();await load();render();toast('تم حفظ ملف العميلة')};
+ document.getElementById('cf').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));x.id=c.id;x.createdAt=c.createdAt||new Date().toISOString();await put('customers',x);await auditLogAction(existing?'update':'create','customers',x.id,(existing?'تعديل':'إضافة')+' العميلة '+(x.name||''));closeModal();await load();render();toast('تم حفظ ملف العميلة')};
 }
 async function deleteCustomer(cid){
- let c=S.customers.find(x=>x.id===cid);if(!c)return;
- let z=customerStats(cid);
- let msg=z.o.length>0?`هذه العميلة مرتبطة بـ ${z.o.length} طلب سابق. نقل ملفها للأرشيف لن يحذف طلباتها المحفوظة. متابعة النقل للأرشيف؟`:'نقل ملف العميلة إلى الأرشيف؟';
- if(confirm(msg)){await archiveRecord('customers',c,c.name);closeModal();await load();render();toast('تم نقل العميلة إلى الأرشيف')}
+ let c=S.customers.find(x=>x.id===cid);if(!c)return;let mode=await askDeleteMode('ملف العميلة '+c.name);if(!mode)return;
+ if(mode==='archive'){await archiveRecord('customers',c,c.name);closeModal();await load();render();toast('تم نقل العميلة إلى الأرشيف');return}
+ permanentDeleteWithPin(async()=>{await del('customers',cid);closeModal();await load();render();toast('تم الحذف نهائيًا بنجاح')},'تأكيد الحذف النهائي لملف العميلة');
 }
 
 
@@ -1825,19 +2209,19 @@ function drawPayments(){
  const arrow=k=>paySort.key===k?(paySort.dir===1?' ▲':' ▼'):'';
  const th=(l,k)=>`<th style="cursor:pointer;user-select:none" onclick="paySortBy('${k}')">${l}${arrow(k)}</th>`;
 
- document.getElementById('payg').innerHTML=a.length?`<div class="table-wrap"><table><thead><tr>${th('التاريخ','date')}${th('العميلة','customerName')}${th('الدفعة','amount')}<th>توزيعها على الطلبات</th><th>رصيد دائن</th>${th('الطريقة','method')}<th>المرجع</th><th></th></tr></thead><tbody>${a.map(p=>{let al=paymentAllocations(p),credit=paymentCredit(p);return `<tr><td>${esc(p.date)}</td><td>${p.customerId?`<a href="#" onclick="event.preventDefault();openCustomer('${p.customerId}')">${esc(p.customerName)}</a>`:esc(p.customerName||'—')}</td><td>${payTypeTag(p)}<b${Number(p.amount)<0?' style="color:#a33d38"':''}>${fmt(p.amount)}</b></td><td>${al.length?al.map(a=>{let o=S.orders.find(z=>z.id===a.orderId);return o?`<a href="#" onclick="event.preventDefault();openOrder('${o.id}')">${esc(o.no)}</a>: ${fmt(a.amount)}`:`—: ${fmt(a.amount)}`}).join('<br>'):'—'}</td><td>${credit?`<b>${fmt(credit)}</b>`:'—'}</td><td>${esc(p.method)}</td><td>${esc(p.reference)}</td><td><button class="btn" onclick="editPayment('${p.id}')">تعديل</button><button class="btn danger" onclick="deletePayment('${p.id}')">حذف</button></td></tr>`}).join('')}</tbody></table></div><div class="meta" style="text-align:center;margin-top:8px;color:var(--muted);font-size:11px">عرض ${a.length} من ${S.payments.length} دفعة</div>`:'<div class="empty">لا توجد دفعات.</div>';
+ document.getElementById('payg').innerHTML=a.length?`<div class="table-wrap"><table><thead><tr>${th('التاريخ','date')}${th('العميلة','customerName')}${th('الدفعة','amount')}<th>توزيعها على الطلبات</th><th>رصيد دائن</th>${th('الطريقة','method')}<th>المرجع</th><th></th></tr></thead><tbody>${a.map(p=>{let al=paymentAllocations(p),credit=paymentCredit(p);return `<tr><td>${esc(p.date)}</td><td>${p.customerId?`<a href="#" onclick="event.preventDefault();openCustomer('${p.customerId}')">${esc(p.customerName)}</a>`:esc(p.customerName||'—')}</td><td>${payTypeTag(p)}<b${Number(p.amount)<0?' style="color:#a33d38"':''}>${fmt(p.amount)}</b></td><td>${al.length?al.map(a=>{let o=S.orders.find(z=>z.id===a.orderId);return o?`<a href="#" onclick="event.preventDefault();openOrder('${o.id}')">${esc(o.no)}</a>: ${fmt(a.amount)}`:`—: ${fmt(a.amount)}`}).join('<br>'):'—'}</td><td>${credit?`<b>${fmt(credit)}</b>`:'—'}</td><td>${esc(p.method)}</td><td>${esc(p.reference)}</td><td><button class="btn" onclick="editPayment('${p.id}')">تعديل / نقل</button><button class="btn danger" onclick="deletePayment('${p.id}')">حذف الدفعة</button></td></tr>`}).join('')}</tbody></table></div><div class="meta" style="text-align:center;margin-top:8px;color:var(--muted);font-size:11px">عرض ${a.length} من ${S.payments.length} دفعة</div>`:'<div class="empty">لا توجد دفعات.</div>';
 }
 
 async function editPayment(pid){
  let p=S.payments.find(x=>x.id===pid);if(!p)return;
  if(!p.type){return openPayment(p.customerId,null,pid)}
  modal('تعديل بيانات الدفعة',`<form id="editPayF" class="form">
- <div class="notice info full">تعديل هذه البيانات لا يغيّر توزيع المبلغ على الطلبات. لتغيير التوزيع احذفي الدفعة وأنشئي دفعة جديدة، أو استخدمي «نقل رصيد دائن».</div>
+ <div class="notice info full">يمكنك الآن تعديل <b>العميلة والمبلغ وتوزيع الدفعة على الطلبات</b>. إذا كانت الدفعة سُجلت لعميلة بالخطأ، اختاري العميلة الصحيحة وسيُزال توزيعها القديم تلقائيًا من العميلة السابقة ويُعاد احتساب أرصدة الطرفين.</div>
  ${fld('التاريخ','date',p.date,'date')}${fld('طريقة الدفع','method',p.method)}${fld('المرجع','reference',p.reference)}${fld('المستلم بواسطة','receivedBy',p.receivedBy)}
  <div class="field full"><label>ملاحظة</label><textarea name="note" rows="2">${esc(p.note||'')}</textarea></div>
  <div class="actions full"><button class="btn primary">حفظ التعديلات</button></div>
 </form>`);
- document.getElementById('editPayF').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));Object.assign(p,x);await put('payments',p);closeModal();await load();render();toast('تم تحديث بيانات الدفعة')};
+ document.getElementById('editPayF').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));Object.assign(p,x);await put('payments',p);await auditLogAction('update','payments',p.id,'تعديل بيانات الدفعة');closeModal();await load();render();toast('تم تحديث بيانات الدفعة')};
 }
 
 async function openPayment(presetCid,focusOrderId,editPid){
@@ -1862,7 +2246,6 @@ async function openPayment(presetCid,focusOrderId,editPid){
 </form>`);
 
  let cf=document.querySelector('#payF [name=customerId]'),af=document.querySelector('#payF [name=amount]'),box=document.getElementById('payOrdersBox'),pv=document.getElementById('payPreview'),live=document.getElementById('amtLive');
- if(ep)cf.disabled=true;
  let userEditedRows=false;
 
  function buildOrdersBox(){
@@ -1922,7 +2305,7 @@ async function openPayment(presetCid,focusOrderId,editPid){
   let els=[...box.querySelectorAll('.poa')];
   if(els.some(i=>moneyValue(i.value)>Number(i.dataset.max||0)+0.009)){toast('مبلغ أحد الطلبات أكبر من المتبقي عليه — صححي الرقم');return}
   let rows=els.map(i=>({orderId:i.dataset.oid,amount:r2(moneyValue(i.value))})).filter(r=>r.amount>0);
-  if(ep)epAl.forEach(a=>{if(!els.some(i=>i.dataset.oid===a.orderId))rows.push({orderId:a.orderId,amount:a.amount})});
+  if(ep&&cid===ep.customerId)epAl.forEach(a=>{if(!els.some(i=>i.dataset.oid===a.orderId))rows.push({orderId:a.orderId,amount:a.amount})});
   let allocated=r2(rows.reduce((t,r)=>t+r.amount,0));
   if(allocated>amt+0.009){toast('مجموع التوزيع أكبر من المبلغ المستلم — صححي الأرقام');return}
   let leftover=r2(amt-allocated);
@@ -1937,11 +2320,13 @@ async function openPayment(presetCid,focusOrderId,editPid){
   if(ep){
    Object.assign(ep,{customerId:cid,customerName:cust?.name||ep.customerName||'',amount:amt,date:x.date,method:x.method,reference:x.reference,receivedBy:x.receivedBy,note:x.note,allocations:rows,orderNo:firstNo});
    await put('payments',ep);
+   await auditLogAction('update','payments',ep.id,'تعديل دفعة '+fmt(amt)+' ونقل/إعادة توزيعها');
    await recalcOrderPayments();
    for(let r of rows)await event(r.orderId,'تم تعديل دفعة — حصة هذا الطلب '+fmt(r.amount));
   }else{
    x.id=id('pay');x.customerId=cid;x.amount=amt;x.customerName=cust?.name||'';x.allocations=rows;x.orderNo=firstNo;
    await put('payments',x);S.payments.push(x);
+   await auditLogAction('payment','payments',x.id,'تسجيل دفعة '+fmt(amt)+' للعميلة '+(cust?.name||''));
    await recalcOrderPayments();
    for(let r of rows)await event(r.orderId,'تم ربط دفعة '+fmt(r.amount)+' بالطلب');
    if(leftover>0&&rows.length)await event(rows[0].orderId,'تم إنشاء رصيد دائن للعميلة بقيمة '+fmt(leftover)+' بعد تجاوز قيمة المتبقي');
@@ -2064,12 +2449,32 @@ async function cancelOrder(oid,alreadyVoid,presetStatus){
  };
 }
 
-async function openCreditTransfer(presetCid){let cs=S.customers.filter(c=>customerAvailableCredit(c.id)>0).map(c=>`<option value="${c.id}" ${c.id===presetCid?'selected':''}>${esc(c.name)} — رصيد دائن ${fmt(customerAvailableCredit(c.id))}</option>`).join('');modal('نقل الرصيد الدائن إلى طلب آخر',`<form id="creditF" class="form">${sel('العميلة','customerId','<option value="">اختر العميلة</option>'+cs)}<div class="field full"><label>الطلب الذي سيستقبل الرصيد</label><select name="orderId" id="creditOrder"><option value="">اختر العميلة أولاً</option></select></div>${fld('المبلغ المراد نقله','amount',0,'number',true)}<div id="creditPreview" class="notice info full">سيظهر هنا الرصيد المتاح والمتبقي على الطلب.</div><div class="actions full"><button class="btn primary">نقل الرصيد</button></div></form>`);let cf=document.querySelector('#creditF [name=customerId]'),of=document.getElementById('creditOrder'),af=document.querySelector('#creditF [name=amount]'),pv=document.getElementById('creditPreview');function refresh(){let cid=cf.value,credit=customerAvailableCredit(cid),orders=customerOpenOrders(cid);of.innerHTML='<option value="">اختر الطلب</option>'+orders.map(o=>`<option value="${o.id}">${esc(o.no)} — المتبقي ${fmt(o.remaining)}</option>`).join('');let o=S.orders.find(z=>z.id===of.value),amt=Number(af.value||0);pv.innerHTML=cid?`الرصيد الدائن المتاح: <b>${fmt(credit)}</b>${o?`<br>المتبقي على ${esc(o.no)}: <b>${fmt(o.remaining)}</b>${amt>Math.min(credit,o.remaining)?`<br>الحد الأقصى للنقل: <b>${fmt(Math.min(credit,o.remaining))}</b>`:''}`:''}`:'اختر العميلة.'}cf.onchange=refresh;of.onchange=refresh;af.oninput=refresh;document.getElementById('creditF').onsubmit=async e=>{e.preventDefault();let cid=cf.value,oid=of.value,amt=+af.value||0,credit=customerAvailableCredit(cid),o=S.orders.find(z=>z.id===oid),max=Math.min(credit,Number(o?.remaining||0));if(!cid||!o||amt<=0||amt>max){toast('تحققي من العميلة والطلب والمبلغ المتاح');return}let ps=S.payments.filter(p=>p.customerId===cid&&paymentCredit(p)>0);let left=amt;for(let p of ps){let c=paymentCredit(p);if(c<=0)continue;let use=Math.min(c,left);p.allocations=[...paymentAllocations(p),{orderId:oid,amount:use}];await put('payments',p);left-=use;if(left<=0)break}await recalcOrderPayments();await event(oid,'تم نقل رصيد دائن للطلب بقيمة '+fmt(amt));closeModal();await load();render();toast('تم نقل الرصيد الدائن إلى الطلب')};refresh()}
-async function deletePayment(pid){let p=S.payments.find(x=>x.id===pid);if(!p)return;if(confirm('نقل هذه الدفعة إلى الأرشيف؟ سيُعاد احتساب أرصدة الطلبات والعميلة كأن الدفعة لم تُسجَّل، ويمكن استعادتها لاحقًا من الإعدادات.')){await archiveRecord('payments',p,fmt(p.amount)+' — '+(p.customerName||''));S.payments=S.payments.filter(x=>x.id!==pid);await recalcOrderPayments();load().then(render)}}
+async function openCreditTransfer(presetCid){let cs=S.customers.filter(c=>customerAvailableCredit(c.id)>0).map(c=>`<option value="${c.id}" ${c.id===presetCid?'selected':''}>${esc(c.name)} — رصيد دائن ${fmt(customerAvailableCredit(c.id))}</option>`).join('');modal('نقل الرصيد الدائن إلى طلب آخر',`<form id="creditF" class="form">${sel('العميلة','customerId','<option value="">اختر العميلة</option>'+cs)}<div class="field full"><label>الطلب الذي سيستقبل الرصيد</label><select name="orderId" id="creditOrder"><option value="">اختر العميلة أولاً</option></select></div>${fld('المبلغ المراد نقله','amount',0,'number',true)}<div id="creditPreview" class="notice info full">سيظهر هنا الرصيد المتاح والمتبقي على الطلب.</div><div class="actions full"><button class="btn primary">نقل الرصيد</button></div></form>`);let cf=document.querySelector('#creditF [name=customerId]'),of=document.getElementById('creditOrder'),af=document.querySelector('#creditF [name=amount]'),pv=document.getElementById('creditPreview');function refresh(){let cid=cf.value,credit=customerAvailableCredit(cid),selectedOrder=of.value,orders=customerOpenOrders(cid);of.innerHTML='<option value="">اختر الطلب</option>'+orders.map(o=>`<option value="${o.id}">${esc(o.no)} — المتبقي ${fmt(o.remaining)}</option>`).join('');if(orders.some(o=>o.id===selectedOrder))of.value=selectedOrder;let o=S.orders.find(z=>z.id===of.value),amt=Number(af.value||0);pv.innerHTML=cid?`الرصيد الدائن المتاح: <b>${fmt(credit)}</b>${o?`<br>المتبقي على ${esc(o.no)}: <b>${fmt(o.remaining)}</b>${amt>Math.min(credit,o.remaining)?`<br>الحد الأقصى للنقل: <b>${fmt(Math.min(credit,o.remaining))}</b>`:''}`:''}`:'اختر العميلة.'}cf.onchange=refresh;of.onchange=refresh;af.oninput=refresh;document.getElementById('creditF').onsubmit=async e=>{e.preventDefault();let cid=cf.value,oid=of.value,amt=+af.value||0,credit=customerAvailableCredit(cid),o=S.orders.find(z=>z.id===oid),max=Math.min(credit,Number(o?.remaining||0));if(!cid||!o||amt<=0||amt>max){toast('تحققي من العميلة والطلب والمبلغ المتاح');return}let ps=S.payments.filter(p=>p.customerId===cid&&paymentCredit(p)>0);let left=amt;for(let p of ps){let c=paymentCredit(p);if(c<=0)continue;let use=Math.min(c,left);p.allocations=[...paymentAllocations(p),{orderId:oid,amount:use}];await put('payments',p);left-=use;if(left<=0)break}await recalcOrderPayments();await event(oid,'تم نقل رصيد دائن للطلب بقيمة '+fmt(amt));closeModal();await load();render();toast('تم نقل الرصيد الدائن إلى الطلب')};refresh()}
+async function deletePayment(pid){
+ let p=S.payments.find(x=>x.id===pid);if(!p)return;
+ let al=paymentAllocations(p),allocated=sum(al,'amount'),credit=paymentCredit(p);
+ let label='الدفعة '+fmt(p.amount)+(p.customerName?' للعميلة '+p.customerName:'');
+ let mode=await askDeleteMode(label+'\n\nسيؤدي حذفها إلى إلغاء أثرها على الطلبات والرصيد الدائن، ثم إعادة حساب حساب العميلة.');if(!mode)return;
+ const finish=async permanent=>{
+  if(permanent){await del('payments',pid);await auditLogAction('delete','payments',pid,'حذف نهائي للدفعة '+fmt(p.amount)+' — '+(p.customerName||''));}else{await archiveRecord('payments',p,fmt(p.amount)+' — '+(p.customerName||''));await auditLogAction('archive','payments',pid,'أرشفة دفعة '+fmt(p.amount)+' — '+(p.customerName||''));}
+  S.payments=S.payments.filter(x=>x.id!==pid);
+  dataVer++;
+  await recalcOrderPayments();
+  await load();
+  render();
+  toast(permanent?'تم الحذف نهائيًا، وأُعيد احتساب الأرصدة':'تمت الأرشفة وإلغاء أثر الدفعة من الأرصدة');
+ };
+ if(mode==='archive'){await finish(false);return}
+ permanentDeleteWithPin(()=>finish(true),'تأكيد الحذف النهائي للدفعة');
+}
 function expenses(){return `<div class="card"><div class="toolbar"><input id="exq" placeholder="بحث في المصروفات..."><select id="excat"><option value="">كل التصنيفات</option><option>شحن</option><option>تسويق</option><option>تغليف</option><option>تشغيل</option><option>عمولة</option><option>أخرى</option></select><button class="btn primary" onclick="openExpense()">+ مصروف</button><button class="btn" onclick="window.print()">PDF</button></div><div id="exg"></div></div>`}
 function drawExpenses(){let q=(document.getElementById('exq')?.value||'').toLowerCase(),c=document.getElementById('excat')?.value||'',a=S.expenses.filter(x=>(!q||[x.category,x.description,x.reference].join(' ').toLowerCase().includes(q))&&(!c||x.category===c));document.getElementById('exg').innerHTML=`<div class="notice" style="margin-bottom:10px">إجمالي المصروفات الظاهرة: <b>${fmt(sum(a,'amount'))}</b></div>`+(a.length?`<div class="table-wrap"><table><thead><tr><th>التاريخ</th><th>التصنيف</th><th>المبلغ</th><th>الوصف</th><th>المرجع</th><th></th></tr></thead><tbody>${a.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.category)}</td><td>${fmt(x.amount)}</td><td>${esc(x.description)}</td><td>${esc(x.reference)}</td><td><button class="btn danger" onclick="deleteExpense('${x.id}')">حذف</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">لا توجد مصروفات.</div>') }
-function openExpense(){modal('إضافة مصروف',`<form id="exF" class="form">${fld('التاريخ','date',today(),'date')}${fld('المبلغ','amount',0,'number')}<div class="field"><label>التصنيف</label><select name="category"><option>شحن</option><option>تسويق</option><option>تغليف</option><option>تشغيل</option><option>عمولة</option><option>أخرى</option></select></div>${fld('الوصف','description','')}${fld('المرجع','reference','')}<div class="field full"><label>ملاحظة</label><textarea name="note"></textarea></div><div class="actions full"><button class="btn primary">حفظ</button></div></form>`);document.getElementById('exF').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));x.id=id('exp');x.amount=+x.amount||0;await put('expenses',x);closeModal();load().then(render)}}
-async function deleteExpense(eid){let ex=S.expenses.find(x=>x.id===eid);if(!ex)return;if(confirm('نقل هذا المصروف إلى الأرشيف؟')){await archiveRecord('expenses',ex,ex.title||ex.category||fmt(ex.amount));load().then(render)}}
+function openExpense(){modal('إضافة مصروف',`<form id="exF" class="form">${fld('التاريخ','date',today(),'date')}${fld('المبلغ','amount',0,'number')}<div class="field"><label>التصنيف</label><select name="category"><option>شحن</option><option>تسويق</option><option>تغليف</option><option>تشغيل</option><option>عمولة</option><option>أخرى</option></select></div>${fld('الوصف','description','')}${fld('المرجع','reference','')}<div class="field full"><label>ملاحظة</label><textarea name="note"></textarea></div><div class="actions full"><button class="btn primary">حفظ</button></div></form>`);document.getElementById('exF').onsubmit=async e=>{e.preventDefault();let x=Object.fromEntries(new FormData(e.target));x.id=id('exp');x.amount=+x.amount||0;await put('expenses',x);await auditLogAction('create','expenses',x.id,'إضافة مصروف '+fmt(x.amount)+' — '+(x.description||x.category||''));closeModal();load().then(render)}}
+async function deleteExpense(eid){
+ let ex=S.expenses.find(x=>x.id===eid);if(!ex)return;let mode=await askDeleteMode('المصروف '+(ex.description||ex.category||''));if(!mode)return;
+ if(mode==='archive'){await archiveRecord('expenses',ex,ex.title||ex.category||fmt(ex.amount));await load();render();toast('تم نقل المصروف إلى الأرشيف');return}
+ permanentDeleteWithPin(async()=>{await del('expenses',eid);await auditLogAction('delete','expenses',eid,'حذف نهائي للمصروف '+fmt(ex.amount)+' — '+(ex.description||ex.category||''));await load();render();toast('تم الحذف نهائيًا بنجاح')},'تأكيد الحذف النهائي للمصروف');
+}
 
 function reports(){let sales=sum(S.orders,'effNet'),cost=sum(S.orders,'effCost'),fees=sum(S.orders,'effFees'),paid=sum(S.payments,'amount'),exp=sum(S.expenses,'amount'),profit=sales-cost-fees-exp;let by={};S.orders.forEach(o=>by[o.productType||'غير محدد']=(by[o.productType||'غير محدد']||0)+effNetOf(o));let months=lastMonths(12);return `<div class="grid">${kpi('المبيعات',fmt(sales),'صافي الطلبات (بدون الملغاة)')}${kpi('تكلفة الطلبات',fmt(cost),'منتجات + شحن/تغليف')}${kpi('رسوم الدفع',fmt(fees),'رسوم مرتبطة بالطلبات')}${kpi('المصروفات',fmt(exp),'تشغيلية')}${kpi('الربح التشغيلي',fmt(profit),'المبيعات − التكلفة − الرسوم − المصروفات')}${kpi('التحصيل',fmt(paid),'كل الدفعات')}${kpi('ذمم العملاء',fmt(S.orders.reduce((t,o)=>t+Math.max(0,effNetOf(o)-orderPaid(o.id)),0)),'المتبقي')}${kpi('عدد العملاء',S.customers.length,'ملفات العملاء')}</div>
 <div class="card section"><div class="section-head"><h2>📊 ملخص الأرباح الشهري</h2><button class="btn" onclick="printMonthlyReport()">طباعة / PDF</button></div><p style="font-size:11px;color:var(--muted);margin-top:0">الربح الشهري = صافي المبيعات − تكاليف الطلبات − رسوم الدفع − المصروفات المسجلة في نفس الشهر.</p><div class="table-wrap"><table class="month-table"><thead><tr><th>الشهر</th><th>الطلبات</th><th>المبيعات</th><th>التكاليف</th><th>رسوم الدفع</th><th>المصروفات</th><th>الربح</th><th>الهامش</th></tr></thead><tbody>${months.map(m=>{let margin=m.sales?m.profit/m.sales*100:0;return `<tr><td><b>${esc(m.label)}</b></td><td>${m.orders}</td><td>${fmt(m.sales)}</td><td>${fmt(m.cost)}</td><td>${fmt(m.fees)}</td><td>${fmt(m.exp)}</td><td class="${m.profit>=0?'profit-positive':'profit-negative'}">${fmt(m.profit)}</td><td>${margin.toFixed(1)}%</td></tr>`}).join('')}</tbody></table></div></div>
@@ -2193,7 +2598,19 @@ function compressImage(file,maxW=900,quality=0.82){
  });
 }
 
-function printHTML(title,body){let w=window.open('','_blank');if(!w)return;const marketer=S.settings.owner||'';const role=S.settings.role||'';w.document.write(`<html dir="rtl"><head><meta charset="utf-8"><title>${esc(title)}</title><style>*{-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact}body{font-family:Tahoma,Arial;padding:32px;color:#222;min-height:calc(100vh - 64px);box-sizing:border-box}img{-webkit-print-color-adjust:exact;print-color-adjust:exact}h1{color:#9c6f34}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #ddd;padding:8px;text-align:right;font-size:12px}.head{display:flex;justify-content:space-between;border-bottom:2px solid #c3993f;padding-bottom:12px;margin-bottom:15px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.box{border:1px solid #ddd;padding:9px;border-radius:8px}.muted{color:#777;font-size:11px}.pdf-footer{margin-top:40px;padding-top:14px;border-top:2px solid #c3993f;text-align:center;color:#6b5726;font-size:12px;page-break-inside:avoid}.pdf-footer .name{font-size:15px;font-weight:700;margin-bottom:4px}.pdf-footer .role{font-size:10px;color:#777}@media print{.pdf-footer{position:relative;margin-top:40px}}</style></head><body>${body}<div class="pdf-footer"><div class="name">المسوقة: ${esc(marketer)}</div><div class="role">${esc(role)}</div></div></body></html>`);w.document.close();setTimeout(()=>w.print(),250)}
+function printHTML(title,body){let w=window.open('','_blank');if(!w)return;const marketer=S.settings.owner||'';const role=S.settings.role||'';w.document.write(`<html dir="rtl"><head><meta charset="utf-8"><title>${esc(title)}</title><style>*{-webkit-print-color-adjust:exact;print-color-adjust:exact;color-adjust:exact}body{font-family:Tahoma,Arial;padding:32px;color:#222;min-height:calc(100vh - 64px);box-sizing:border-box}img{-webkit-print-color-adjust:exact;print-color-adjust:exact}h1{color:#9c6f34}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #ddd;padding:8px;text-align:right;font-size:12px}.head{display:flex;justify-content:space-between;border-bottom:2px solid #c3993f;padding-bottom:12px;margin-bottom:15px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.box{border:1px solid #ddd;padding:9px;border-radius:8px}.muted{color:#777;font-size:11px}.pdf-footer{margin-top:40px;padding-top:14px;border-top:2px solid #c3993f;text-align:center;color:#6b5726;font-size:12px;page-break-inside:avoid}.pdf-footer .name{font-size:15px;font-weight:700;margin-bottom:4px}.pdf-footer .role{font-size:10px;color:#777}@media print{.pdf-footer{position:relative;margin-top:40px}}
+/* ===== Mobile bottom-navigation safe area fix ===== */
+@media (max-width:760px){
+  body{padding-bottom:calc(92px + env(safe-area-inset-bottom));}
+  .main{padding-bottom:calc(105px + env(safe-area-inset-bottom));}
+  .side{height:calc(66px + env(safe-area-inset-bottom));padding-bottom:calc(5px + env(safe-area-inset-bottom));}
+  .sumbar{bottom:calc(76px + env(safe-area-inset-bottom));}
+  /* Modal must always sit above the mobile bottom navigation */
+  .modal{padding-bottom:calc(8px + env(safe-area-inset-bottom));z-index:500;}
+  .modal-box{max-height:calc(92vh - env(safe-area-inset-bottom));position:relative;z-index:501;}
+  .toast{bottom:calc(82px + env(safe-area-inset-bottom));}
+}
+</style></head><body>${body}<div class="pdf-footer"><div class="name">المسوقة: ${esc(marketer)}</div><div class="role">${esc(role)}</div></div></body></html>`);w.document.close();setTimeout(()=>w.print(),250)}
 function safeOrderData(o){return {no:o.no,date:o.date,customerName:o.customerName,phone:o.phone,city:o.city,address:o.address,productName:o.productName,productType:o.productType,specs:o.specs,qty:o.qty,net:o.net,paid:o.paid,remaining:o.remaining,notes:o.notes,status:o.status,customerShipmentCompany:o.customerShipmentCompany||o.shipmentCompany,customerShipmentNo:o.customerShipmentNo||o.shipmentNo,customerTrackingUrl:o.customerTrackingUrl||o.trackingUrl,customerShippedDate:o.customerShippedDate,deliveredDate:o.deliveredDate,expectedDate:o.expectedDate};}
 function customerStageLabel(o){let labels={'جديد':'تم استلام الطلب','بانتظار الدفع':'بانتظار إتمام الدفع','تم الدفع':'تم تأكيد الدفع','تم التكليف':'تم تجهيز الطلب للتفصيل','قيد التفصيل':'الطلب قيد التفصيل','جاهز للاستلام من المصنع':'اكتمل التفصيل وجاهز للاستلام','تم الشحن من المصنع':'في الطريق إلى شروق','تم الاستلام':'وصل إلى شروق','تم الشحن للعميلة':'تم شحن الطلب إليك','تم التسليم':'تم التسليم','مكتمل':'اكتمل الطلب','ملغي':'تم إلغاء الطلب','مرتجع':'تم تسجيل المرتجع'};return labels[o.status]||o.status||'قيد المتابعة'}
 function printOrder(oid){let o=S.orders.find(x=>x.id===oid);if(!o)return;let z=safeOrderData(o);printHTML('فاتورة العميلة '+z.no,`<div class="head"><div><h1>${esc(S.settings.company)}</h1><div>${esc(S.settings.owner)}</div></div><div><b>فاتورة / طلب ${esc(z.no)}</b><br>${esc(z.date||'')}</div></div><div class="grid">${[['العميلة',z.customerName],['الجوال',z.phone],['المدينة',z.city],['المنتج',z.productName],['النوع',z.productType],['المواصفات',z.specs],['الكمية',z.qty],['الحالة',customerStageLabel(z)]].map(x=>`<div class="box"><div class="muted">${esc(x[0])}</div>${esc(x[1]||'—')}</div>`).join('')}</div><h3>الملخص المالي</h3><table><tr><th>السعر النهائي</th><th>المدفوع</th><th>المتبقي</th></tr><tr><td>${fmt(z.net)}</td><td>${fmt(z.paid)}</td><td>${fmt(z.remaining)}</td></tr></table><p>${esc(z.notes||'')}</p><div class="muted">هذه النسخة مخصصة للعميلة ولا تتضمن أي بيانات تكلفة أو ربح داخلي.</div>`)}
@@ -2343,9 +2760,9 @@ function catalogPrint(ids){
   </div>`;
  }).join('')||'<p>لا توجد منتجات محددة.</p>'}</div>`)}
 
-async function backup(){let data={version:4,exportedAt:new Date().toISOString(),settings:S.settings,orders:S.orders,products:S.products,customers:S.customers,suppliers:S.suppliers,payments:S.payments,expenses:S.expenses,events:await all('events')};let b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Luxurious_Wigs_Backup_'+today()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);localStorage.setItem('lw_last_backup',new Date().toISOString());toast('تم تصدير النسخة الاحتياطية')}
-async function restore(file){if(!file)return;let mode=document.getElementById('restoreMode')?.value||'merge';async function doIt(){try{let d=JSON.parse(await file.text());if(mode==='replace')for(let n of ['orders','products','customers','suppliers','payments','expenses','events'])for(let x of await all(n))await del(n,x.id);for(let k of ['orders','products','customers','suppliers','payments','expenses','events'])for(let x of d[k]||[])await put(k,x);if(d.settings){let keepPin={pinHash:S.settings.pinHash,pinAlways:S.settings.pinAlways,pinSetupDone:S.settings.pinSetupDone};await put('settings',{id:'main',...d.settings,...keepPin})}alert(mode==='replace'?'تمت الاستعادة الكاملة (استبدال) بنجاح.':'تمت الاستعادة/الإضافة بنجاح.');await load();render()}catch(e){alert('ملف النسخة الاحتياطية غير صالح.')}}if(mode==='replace'){if(!confirm('سيتم حذف كل البيانات الحالية نهائيًا (لن تذهب للأرشيف) واستبدالها بالكامل بمحتوى الملف المستورد. هل أنتِ متأكدة؟'))return;requirePinThen(doIt,'تأكيد الاستبدال الكامل للبيانات')}else{await doIt()}}
-async function wipe(){requirePinThen(async()=>{if(!confirm('سيتم حذف كل بيانات البرنامج من هذا المتصفح نهائيًا (لن تذهب للأرشيف). هل أنتِ متأكدة؟'))return;for(let n of ['orders','products','customers','suppliers','payments','expenses','events','archive'])for(let x of await all(n))await del(n,x.id);await load();render();toast('تم مسح البيانات')},'تأكيد مسح كل بيانات النظام')}
+async function backup(){let data={version:5,exportedAt:new Date().toISOString(),settings:S.settings,orders:S.orders,products:S.products,customers:S.customers,suppliers:S.suppliers,payments:S.payments,expenses:S.expenses,events:await all('events'),lists:await all('lists'),archive:await all('archive'),audit:await all('audit')};let b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Luxurious_Wigs_Backup_'+today()+'.json';a.click();await auditLogAction('backup','system','', 'تصدير نسخة احتياطية');setTimeout(()=>URL.revokeObjectURL(a.href),1000);safeStorageSet('lw_last_backup',new Date().toISOString());toast('تم تصدير النسخة الاحتياطية')}
+async function restore(file){if(!file)return;let mode=document.getElementById('restoreMode')?.value||'merge';async function doIt(){try{let d=JSON.parse(await file.text());let RS=['orders','products','customers','suppliers','payments','expenses','events'];if(Array.isArray(d.lists))RS.push('lists');if(Array.isArray(d.archive))RS.push('archive');if(Array.isArray(d.audit))RS.push('audit');if(mode==='replace')for(let n of RS)for(let x of await all(n))await del(n,x.id);for(let k of RS)for(let x of d[k]||[])await put(k,x);if(d.settings){let keepPin={pinHash:S.settings.pinHash,pinAlways:S.settings.pinAlways,pinSetupDone:S.settings.pinSetupDone};await put('settings',{id:'main',...d.settings,...keepPin})}alert(mode==='replace'?'تمت الاستعادة الكاملة (استبدال) بنجاح.':'تمت الاستعادة/الإضافة بنجاح.');await auditLogAction('restoreBackup','system','',mode==='replace'?'استعادة نسخة احتياطية بوضع الاستبدال':'استعادة/إضافة نسخة احتياطية');await load();render()}catch(e){alert('ملف النسخة الاحتياطية غير صالح.')}}if(mode==='replace'){let word=prompt('سيتم حذف البيانات الحالية نهائيًا واستبدالها بالنسخة. اكتب كلمة "تأكيد" للمتابعة.');if(word!=='تأكيد')return;requirePinThen(doIt,'تأكيد الاستبدال الكامل للبيانات')}else{await doIt()}}
+async function wipe(){let word=prompt('سيتم حذف كل بيانات البرنامج نهائيًا ولن يمكن استعادتها. اكتب كلمة "تأكيد" للمتابعة.');if(word!=='تأكيد')return;permanentDeleteWithPin(async()=>{for(let n of ['orders','products','customers','suppliers','payments','expenses','events','archive','audit'])for(let x of await all(n))await del(n,x.id);await load();render();toast('تم مسح البيانات نهائيًا')},'تأكيد مسح كل بيانات النظام')}
 async function syncCustomer(o){let c=S.customers.find(x=>x.id===o.customerId)||S.customers.find(x=>x.phone&&o.phone&&x.phone===o.phone)||{id:o.customerId||id('cus'),createdAt:new Date().toISOString()};o.customerId=c.id;c.name=o.customerName;c.phone=o.phone;c.city=o.city;c.district=o.district||c.district||'';c.address=o.address||c.address||'';if(o.customerPrefs)c.notes=o.customerPrefs;await put('customers',c);await put('orders',o)}
 async function enableBrowserNotifications(){if(!('Notification' in window)){toast('المتصفح لا يدعم إشعارات النظام');return}let p=await Notification.requestPermission();if(p==='granted'){let a=getFactoryAlerts();if(a.length)new Notification('Luxurious Wigs — تنبيهات الطلبات',{body:`لديك ${a.length} طلب يحتاج متابعة، منها ${a.filter(x=>x.kind==='late').length} متأخر.`});toast('تم تفعيل إشعارات المتصفح')}else toast('لم يتم السماح بالإشعارات')}
 function notifyFactoryAlerts(){if(!('Notification' in window)||Notification.permission!=='granted')return;let a=getFactoryAlerts();if(a.length)new Notification('Luxurious Wigs — متابعة المصنع',{body:`${a.filter(x=>x.kind==='late').length} متأخر، ${a.filter(x=>x.kind==='due').length} موعده اليوم، ${a.filter(x=>x.kind==='soon').length} قريب.`})}
@@ -2358,10 +2775,11 @@ function bind(){
  if(page==='customers'){wire(['cq','ccity','cstat'],drawCustomers)}
  if(page==='suppliers'){wire(['sq'],drawSuppliers)}
  if(page==='payments'){wire(['payq','paycust','paymethod','payfrom','payto'],drawPayments)}
+ if(page==='audit'){let q=document.getElementById('auditQ');if(q)q.focus()}
  if(page==='expenses'){wire(['exq','excat'],drawExpenses)}
  if(page==='archive'){wire(['arcq','arctype'],drawArchive)}
 }
-async function seed(){let ls=await all('lists');if(!ls.length){let src={...fallback,...DEFAULT_LISTS};for(let [k,v] of Object.entries(src))if(v?.length)await put('lists',{id:k,values:[...new Set(v)]})}else{for(let k of ['المدن','الألوان'])if(!ls.find(x=>x.id===k))await put('lists',{id:k,values:DEFAULT_LISTS[k]})}if(!(await all('settings')).length)await put('settings',{id:'main',...S.settings})}
+async function seed(){let ls=await all('lists');if(!ls.length){let src={...fallback,...DEFAULT_LISTS};for(let [k,v] of Object.entries(src))if(v?.length)await put('lists',{id:k,values:[...new Set(v)]})}else{for(let k of ['المدن','الألوان'])if(!ls.find(x=>x.id===k))await put('lists',{id:k,values:DEFAULT_LISTS[k]});let statusRow=ls.find(x=>x.id==='حالات الطلب');let OLD_STATUS_ORDER=['جديد','بانتظار الدفع','مؤكد','قيد التصنيع','جاهز للشحن','تم الشحن','مكتمل','ملغي','مرتجع'];if(statusRow&&JSON.stringify(statusRow.values)===JSON.stringify(OLD_STATUS_ORDER))await put('lists',{id:'حالات الطلب',values:DEFAULT_LISTS['حالات الطلب']})}if(!(await all('settings')).length)await put('settings',{id:'main',...S.settings})}
 // ربط التبويبات فورًا حتى لا تتوقف عن العمل إذا تأخر التحميل أو فشل
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>setPage(b.dataset.p));
 (function(){let a=document.getElementById('app');if(a&&!a.innerHTML)a.innerHTML='<div class="card" style="text-align:center;color:var(--muted)">⏳ جارٍ تحميل البيانات…</div>'})();
